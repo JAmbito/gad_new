@@ -11,7 +11,7 @@ $campus = \App\Campus::get();
 
             <div class="middle-header">
                 <div class="text-header-div">
-                    <span>GAD - BPSU - Test</span>
+                    <span>Gender and Development - BPSU</span>
                 </div>
                 <div class="img-header-div">
                     <img src="{{ asset('gad/img/log123.png') }}">

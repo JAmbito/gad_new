@@ -1,0 +1,47 @@
+#sidebar.hide .side-menu #warehouse-dropdown{
+	display: none;
+}
+
+#sidebar.hide:hover .side-menu #warehouse-dropdown{
+	display: block;
+}
+
+#warehouse-dropdown{
+	padding-left: 38px;
+	/*padding-top: 10px;*/
+	/*padding-bottom: 10px;*/
+}
+
+/*DASHBORAD DROP DOWN START*/
+
+#warehouse-dropdown{
+   opacity: 0;
+   max-height: 0px;  
+   overflow-y: hidden;
+   transition: .5s ease;
+}
+
+#warehouse-dropdown.warehouse-dash{
+   opacity: 1;
+   max-height: 1000px;
+   transition: .5s ease;
+}
+
+/*DASHBORAD DROP DOWN END*/
+
+#warehouse-chev-rotate{
+	transition: .5s ease;
+	transform: rotate(0deg);
+}
+
+#warehouse-chev-rotate.warehouse_chev{
+	transition: .5s ease;
+	transform: rotate(91deg);
+}
+
+
+#sidebar .side-menu li a .fa-chevron-right{
+	margin-left: auto;
+	margin-right: 13px;
+	color: #BCBCBC;
+}

@@ -1,0 +1,146 @@
+
+#content main {
+    padding: 95px 30px 24px 25px !important;
+}
+
+.dashboard-container {
+    padding: 30px !important;
+}
+
+
+.row>div.col-12 {
+    width: 100% !important;
+}
+.row>div.col-11 {
+    width: 91.63% !important;
+}
+.row>div.col-10 {
+    width: 83.3% !important;
+}
+.row>div.col-9 {
+    width: 74.97% !important;
+}
+.row>div.col-8 {
+    width: 66.64% !important;
+}
+.row>div.col-7 {
+    width: 58.31% !important;
+}
+.row>div.col-6 {
+    width: 49.98% !important;
+}
+.row>div.col-5 {
+    width: 41.62% !important;
+}
+.row>div.col-4 {
+    width: 33.32% !important;
+}
+.row>div.col-3 {
+    width: 24.99% !important;
+}
+.row>div.col-2 {
+    width: 16.66% !important;
+}
+.row>div.col-1 {
+    width: 8.33% !important;
+}
+
+a.btn-update {
+    display: block;
+}
+
+.label {
+    font-size: 15px;
+    font-weight: bold;
+}
+.full-name {
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+i.fi.fi-rr-menu-dots {
+    box-shadow: none !important;
+}
+
+.error-message {
+    display: block;
+    background: #f54b55;
+    color: #fff;
+    padding: 5px 10px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 15px;
+    color: #000;
+    margin-bottom: 10px;
+}
+
+.form-control {
+    padding: 10px;
+    font-size: 15px;
+    display: block;
+    width: 100%;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+}
+#toast-container {
+    z-index: 99999999999999 !important;
+    width: 300px;
+}
+
+.action-item {
+    text-align: right;
+}
+
+button.action-button {
+    font-size: 15px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    color: #3f3f3f;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button.action-button.primary {
+    background: #f54b55;
+    border-color: #f54b55;
+    color: #fff;
+}
+
+div#action-cont-id {
+    width: 150px !important;
+}
+
+.button-menu {
+    padding: 3px !important;
+    background: transparent !important;
+    color: #3f3f3f !important;
+    font-weight: bold !important;
+    font-size: 15px !important;
+    text-align: left !important;
+    font-family: system-ui !important;
+    border: 0px !important;
+    transition: .3s !important;
+    display: block !important;
+    width: 100% !important;
+    cursor: pointer !important;
+}
+
+.button-menu:hover {
+    background: #eee !important;
+}
+
+#content main .insert-cont {
+    z-index: 99999999!important;
+}
+
+.dataTables_filter {
+    padding: 20px !important;
+    text-align: left !important;
+}

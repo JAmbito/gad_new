@@ -1,0 +1,265 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&family=Roboto+Slab:wght@100;200;300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&family=Roboto+Slab:wght@100;200;300;400;500;600&family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,100;1,300;1,400;1,500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@200;300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Poppins:ital,wght@0,100;0,200;0,300;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&family=Roboto+Slab:wght@100;200;300;400;500;600&family=Roboto:ital,wght@0,300;0,500;0,700;1,100;1,300;1,400;1,500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@200;300;400;500;600;700&family=Ubuntu:wght@300;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anek+Telugu:wght@300;400;500&display=swap');
+@import url('http://fonts.cdnfonts.com/css/circular-std');
+
+
+@import url('https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css');
+@import url("https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css 477");
+@import url('https://cdn-uicons.flaticon.com/uicons-bold-rounded/css/uicons-bold-rounded.css');
+
+
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+a {
+	text-decoration: none;
+}
+
+li {
+	list-style: none;
+}
+
+:root {
+	--poppins: 'Poppins', sans-serif;
+
+	--light: #ffffff;
+	--blue: #3C91E6;
+	--light-blue: #CFE8FF;
+	--grey: #eee;
+	--dark-grey: #AAAAAA;
+	--dark: #34495F;
+	--red: #FF5A5A;
+	--lred: #FFF2F2; 
+	--light-red: #FFBCBC;
+	--yellow: #FFCE26;
+	--light-yellow: #FFF2C6;
+	--orange: #FD7238;
+	--light-orange: #FFE0D3;
+	--shadow:rgba(17,17,26,0.1) 2px 2px 16px;
+	--border: #E1E1E1;
+}
+
+html {
+	overflow-x: hidden;
+}
+
+body {
+	background-color: #3D9EFF;
+	overflow-x: hidden;
+	font-family: 'Poppins';
+}
+
+
+#content .main-cont{
+	position: fixed;
+	width: 100%;
+	height: 100vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	overflow-y: auto;
+	padding-bottom: 50px;
+	padding-top: 50px;
+}
+
+#content .main-cont .middle-cont{
+	padding-bottom: 20px;
+	/*height: 300px;*/
+	width: 500px;
+	border-radius: 12px;	
+	margin-top: auto;
+	margin-bottom: auto;
+	background: rgba( 255, 255, 255, 0.85 );
+	box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+	backdrop-filter: blur( 8.5px );
+	-webkit-backdrop-filter: blur( 8.5px );
+	border-radius: 10px;
+}
+
+
+
+
+
+/*HEADER*/
+
+
+#content .main-cont .middle-cont .middle-header{
+	padding: 40px 50px;
+	text-align: left;
+}
+
+#content .main-cont .middle-cont .middle-header .text-header-div{
+	margin-bottom: 58px;
+	display: flex;
+	align-items: center;
+}
+
+#content .main-cont .middle-cont .middle-header .text-header-div span{
+	font-family: 'poppins';
+	letter-spacing: -.2px;
+	font-size: 26px;
+	font-weight: 600;
+	color: #303D4D;
+}
+
+#content .main-cont .middle-cont .middle-header .text-header-div .home-ic-div{
+	margin-left: auto;
+	font-size: 21px;
+	cursor: pointer;
+	position: relative;
+	top: -20px;
+	right: -20px;
+}
+
+#content .main-cont .middle-cont .middle-header .text-header-div .home-ic-div a{
+	transition: .2s ease;
+	text-decoration: none;
+	color: #303D4D;
+}
+
+#content .main-cont .middle-cont .middle-header .text-header-div .home-ic-div a:hover{
+	color: #3D9EFF;;
+}
+
+
+
+
+/*FORM*/
+
+
+#content .main-cont .middle-cont .middle-form-cont{
+	text-align: center;
+	padding-left: 55px;
+	padding-right: 55px;
+}
+
+#content .main-cont .middle-cont .middle-form-cont .below-label{
+	text-align: left;
+	font-family: 'poppins';
+	letter-spacing: -.2px;
+	font-size: 16px;
+	font-weight: 500;
+	color: #303D4D;
+	margin-bottom: 15px;
+	margin-top: -60px;
+	margin-left: 2px;
+	display: flex;
+	flex-direction: column;
+	grid-gap: 40px;
+}
+
+#content .main-cont .middle-cont .middle-form-cont .below-label label{
+	margin-left: 3px;
+}
+
+#content .main-cont .middle-cont .middle-form-cont .input-cont{
+	display: flex;
+	text-align: center;
+	margin-bottom: 23px;
+	position: relative;
+}
+
+#content .main-cont .middle-cont .middle-form-cont input{
+	width: 100%;
+	outline: none;
+	border-radius: 25px;
+	border: none;
+	background-color: #FFF;
+	padding: 13px 16px;
+	font-size: 13px;
+	font-family: 'poppins';
+	padding-left: 43px;
+	padding-right: 45px;
+}
+
+#content .main-cont .middle-cont .middle-form-cont input:focus{
+	transition: .2s ease;
+	box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset;
+}
+
+#content .main-cont .middle-cont .middle-form-cont .fa-envelope{
+	position: absolute;
+	color: #959595;
+	top: 15px;
+	left: 18px;
+}
+
+#content .main-cont .middle-cont .middle-form-cont .fa-fingerprint{
+	position: absolute;
+	color: #959595;
+	top: 15px;
+	left: 18px;
+}
+
+#content .main-cont .middle-cont .middle-form-cont .fa-lock{
+	position: absolute;
+	color: #959595;
+	top: 14px;
+	left: 18px;
+}
+
+#content .main-cont .middle-cont .middle-form-cont .fa-eye{
+	position: absolute;
+	color: #959595;
+	top: 14px;
+	right: 21px;
+	font-size: 17px;
+	cursor: pointer;
+	transition: .2s ease;
+}
+
+#content .main-cont .middle-cont .middle-form-cont .fa-eye-slash{
+	position: absolute;
+	color: #959595;
+	top: 14px;
+	right: 20px;
+	font-size: 17px;
+	cursor: pointer;
+	transition: .2s ease;
+	display: none;
+}
+
+#content .main-cont .middle-cont .middle-form-cont .fa-eye:hover{
+	color: #454D54;
+}
+
+#content .main-cont .middle-cont .middle-form-cont .fa-eye-slash:hover{
+	color: #454D54;
+}
+
+
+
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: #959595;
+  letter-spacing: .9px;
+  font-weight: 300;
+}
+
+#content .main-cont .middle-cont .middle-form-cont .login-btn{
+	margin-top: 0px;
+	width: 100%;
+	border-radius: 25px;
+	border: none;
+	background-color: #3D9EFF;
+	color: #fff;
+	padding: 11px;
+	cursor: pointer;
+	font-family: 'poppins';
+	letter-spacing: .7px;
+	font-size: 13px;
+	transition: .3s ease;
+}
+
+#content .main-cont .middle-cont .middle-form-cont .login-btn:hover{	
+	background-color: #2989E8;
+}
+
+

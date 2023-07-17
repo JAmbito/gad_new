@@ -1,0 +1,40 @@
+#sidebar.hide .side-menu #receive-warehouse-dropdownn{
+	display: none;
+}
+
+#sidebar.hide:hover .side-menu #receive-warehouse-dropdownn{
+	display: block;
+}
+
+/*DASHBORAD DROP DOWN START*/
+
+#receive-warehouse-dropdown{
+   opacity: 1;
+   max-height: 1000px;
+   transition: .5s ease;
+}
+
+#receive-warehouse-dropdownn.receive-warehouse-dash{
+   opacity: 0;
+   max-height: 0px;  
+   transition: .5s ease;
+}
+
+/*DASHBORAD DROP DOWN END*/
+
+/*#bom-chev-rotate{
+	transition: .5s ease;
+	transform: rotate(91deg);
+}
+
+#bom-chev-rotate.bom_chev{
+	transition: .5s ease;
+	transform: rotate(0deg);
+}
+
+
+#sidebar .side-menu li a .fa-chevron-right{
+	margin-left: auto;
+	margin-right: 13px;
+	color: #BCBCBC;
+}*/

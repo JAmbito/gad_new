@@ -1,0 +1,18 @@
+.emp-down-li{
+	display: none;
+}
+
+
+#receive-warehouse-dropdown li{
+	display: block;
+}
+
+#release-contractor-dropdown li{
+	display: block;
+}
+
+#release-warehouse-dropdown li{
+	display: block;
+}
+
+

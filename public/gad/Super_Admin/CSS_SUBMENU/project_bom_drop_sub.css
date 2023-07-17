@@ -1,0 +1,51 @@
+#sidebar.hide .side-menu #proj-bom-dropdown{
+	display: none;
+}
+
+#sidebar.hide:hover .side-menu #proj-bom-dropdown{
+	display: block;
+}
+
+#proj-bom-dropdown{
+	padding-left: 38px;
+	/*padding-top: 10px;*/
+	/*padding-bottom: 10px;*/
+}
+
+/*DASHBORAD DROP DOWN START*/
+
+#proj-bom-dropdown{
+   opacity: 1;
+   max-height: 1000px;
+   transition: .5s ease;
+   margin-top: 10px;
+   margin-bottom: 10px;
+}
+
+#proj-bom-dropdown.proj-bom-dash{
+   opacity: 0;
+   max-height: 0px;  
+   transition: .5s ease;
+   margin-top: 0px;
+   margin-bottom: 0px;
+   overflow: hidden;
+}
+
+/*DASHBORAD DROP DOWN END*/
+
+#proj-bom-chev-rotate{
+	transition: .5s ease;
+	transform: rotate(91deg);
+}
+
+#proj-bom-chev-rotate.proj-bom_chev{
+	transition: .5s ease;
+	transform: rotate(0deg);
+}
+
+
+#sidebar .side-menu li a .fa-chevron-right{
+	margin-left: auto;
+	margin-right: 13px;
+	color: #BCBCBC;
+}

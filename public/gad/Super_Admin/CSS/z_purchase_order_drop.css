@@ -1,0 +1,65 @@
+#sidebar.hide .side-menu #p-order-dropdown{
+	display: none;
+}
+
+#sidebar.hide:hover .side-menu #p-order-dropdown{
+	display: block;
+}
+
+#p-order-dropdown{
+	padding-left: 38px;
+	/*padding-top: 10px;*/
+	/*padding-bottom: 10px;*/
+}
+
+/*DASHBORAD DROP DOWN START*/
+
+#p-order-dropdown{
+   opacity: 1;
+   max-height: 1000px;  
+   transition: .5s ease;
+   margin-top: 10px;
+   margin-bottom: 10px;
+}
+
+#p-order-dropdown.p-order-dash{
+   opacity: 0;
+   max-height: 0px;
+   transition: .5s ease;
+   margin-top: 0px;
+   margin-bottom: 0px;
+   overflow: hidden;
+}
+
+/*DASHBORAD DROP DOWN END*/
+
+#p-order-chev-rotate{
+	transition: .5s ease;
+	transform: rotate(91deg);
+}
+
+#p-order-chev-rotate.p_order_chev{
+	transition: .5s ease;
+	transform: rotate(0deg);
+}
+
+
+#sidebar .side-menu li a .fa-chevron-right{
+	margin-left: auto;
+	margin-right: 13px;
+	color: #BCBCBC;
+}
+
+
+
+#content main .table-data2 .table tr td .btn-view-new-record .fi-rr-edit{
+	font-size: 13px!important;
+	color: #ffffff!important;
+	top: 12px!important;
+	left: 18px!important;
+	position: absolute!important;
+}
+
+
+
+

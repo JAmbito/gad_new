@@ -1,0 +1,44 @@
+.div-tbl-cont{
+			padding-top: 30px;
+			display: block;
+			overflow-x: auto;
+		}
+
+		.div-tbl-cont .table-pdf-view{
+			width: 100%;
+			border-collapse: collapse;
+		}
+
+		.div-tbl-cont .table-pdf-view thead th{
+			border-bottom: 1.5px solid #2E3C4B;
+			padding: 5px;
+			font-size: 13px;
+			font-family: 'sora';
+			font-weight: 800;
+			color: #2E3C4B;
+			letter-spacing: .3px;
+			margin-left: -1.3px;
+			text-transform: uppercase;
+			white-space: normal;
+			text-align: center;
+		}
+
+		.div-tbl-cont .table-pdf-view tbody tr td{
+			border-bottom: 1px solid #CFCFCF;
+			font-size: 13px;
+			padding: 5px;
+			font-family: 'sora';
+			font-weight: 500;
+			color: #2E3C4B;
+			letter-spacing: .3px;
+			margin-left: -1.3px;
+			text-transform: uppercase;
+			white-space: normal;;
+			text-align: center
+		}
+
+		.tr-btm-border-cont td{
+			border-bottom: 2px solid #2E3C4B!important;
+			font-weight: 800!important;
+			padding: 18px 20px!important;
+		}

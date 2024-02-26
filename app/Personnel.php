@@ -54,12 +54,14 @@ class Personnel extends Model
             'tel_no',
             'mobile_no',
             'email',
-            'status'
+            'status',
+            'created_by',
+            'reviewed_by',
     ];
 
     public function academic_rank()
     {
-        return $this->belongsTo(Academic_rank::class, 'academic_rank_id');
+        return $this->belongsTo(AcademicRank::class, 'academic_rank_id');
     }
 
     public function administrative_rank()
@@ -145,5 +147,15 @@ class Personnel extends Model
     public function membership()
     {
         return $this->hasMany(PersonnelMembership::class);
+    }
+
+    public function created_by()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function reviewed_by()
+    {
+        return $this->belongsTo(User::class, 'reviewed_by');
     }
 }

@@ -10,6 +10,7 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css">
 	<link href="http://fonts.cdnfonts.com/css/circular-std" rel="stylesheet">
     <link href="{{asset('/plugins/toastr/toastr.min.css')}}" rel="stylesheet">
+    <script src="{{ asset('/plugins/faker/faker.js') }}"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js" integrity="sha512-AA1Bzp5Q0K1KanKKmvN/4d3IRKVlv9PYgwFPvm32nPO6QS8yH1HO7LbgB1pgiOxPtfeg5zEn2ba64MUcqJx6CA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 	<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 	<link rel="stylesheet" type="text/css" href="{{ asset('/gad/Super_Admin/CSS_SUBMENU/ADD_REMOVE_CLASS.css') }}">
@@ -30,7 +31,7 @@
     @yield('links')
 	@yield('styles')
 
-	<title>GAD</title>
+	<title>Bataan Peninsula State University - Gender and Development</title>
 </head>
 <body>
 
@@ -64,6 +65,7 @@
 	</style>
 
     @include('backend.partial.sidebar')
+    @include('layouts.alert')
 	@yield('content')
 
 	<script type="text/javascript" src="{{ asset('gad/Super_Admin/JS/script.js') }}"></script>

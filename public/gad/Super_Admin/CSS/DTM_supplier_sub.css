@@ -43,7 +43,7 @@ li {
 	--dark-grey: #AAAAAA;
 	--dark: #34495F;
 	--red: #FF5A5A;
-	--lred: #FFF2F2; 
+	--lred: #FFF2F2;
 	--light-red: #FFBCBC;
 	--yellow: #FFCE26;
 	--light-yellow: #FFF2C6;
@@ -145,7 +145,7 @@ body {
 }
 
 .fa-chevron-down1{
-	
+
 }
 
 
@@ -392,7 +392,7 @@ body {
 /*SIDEBAR ACTIVE NA MAY BILOG START*/
 
 #sidebar .side-menu li.active a{
-	background: #F1F8FF;   
+	background: #F1F8FF;
 	color: #007FFF;
 	border-radius: 10px;
 	font-weight: 500;
@@ -481,7 +481,7 @@ body {
 }
 
 #sidebar .side-menu .employee-list .emp-chev{
-	
+
 }
 
 #sidebar .side-menu .payroll-drop .fa-chevron-down{
@@ -605,7 +605,7 @@ body {
 }
 
 .emp-down-li .active{
-	background: #F1F8FF;   
+	background: #F1F8FF;
 	color: #007FFF;
 	border-radius: 9px;
 	font-weight: 500;
@@ -703,7 +703,7 @@ body {
 
 #dash-dropdown.drop-dash{
   opacity: 0;
-   max-height: 0px;  
+   max-height: 0px;
    overflow: hidden;
    transition: .5s ease;
 }
@@ -1018,7 +1018,7 @@ body {
 #content nav .profile .bxs-chevron-down{
 	color: #ffffff;
 	font-size: 14px;
-	margin-right: 5px; 
+	margin-right: 5px;
 }
 
 
@@ -1251,7 +1251,7 @@ body {
 }
 
 .review-btn{
-	background-color: #F8C471; 
+	background-color: #F8C471;
 	padding: 6.5px 12px;
 	border-radius: 4px;
 	color: #fff;
@@ -1825,7 +1825,7 @@ body {
 	width: 30px!important;
 	white-space: nowrap;
 	font-weight: 700!important;
-}	
+}
 
 #content main .table-data2 .table tr td:last-child{
 	border-right: none;
@@ -3146,7 +3146,7 @@ body {
 	box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
 }
 
-.view-func-cont span{ 
+.view-func-cont span{
 	color: #333C46;
 	font-family: 'sora';
 	font-weight: 500;
@@ -3158,7 +3158,7 @@ body {
 
 
 
-	
+
 /*SWEET ALERT*/
 
 .swal-overlay{

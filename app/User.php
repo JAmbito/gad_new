@@ -5,10 +5,12 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
     use Notifiable;
+    use HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -17,6 +19,10 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name', 'email', 'password', 'campus_id'
+    ];
+
+    protected $attributes = [
+        'is_password_default' => true
     ];
 
     /**
@@ -37,8 +43,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    
-    public function campus() {
+
+    public function campus()
+    {
         return $this->belongsTo(Campus::class, 'campus_id');
     }
 }

@@ -11,10 +11,11 @@ class DepartmentController extends Controller
 {
     protected $func;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->func = new Controller();
     }
-    
+
     public function index()
     {
         $departments = Department::orderBy('id')->get();
@@ -29,11 +30,10 @@ class DepartmentController extends Controller
 
         $request->request->add(['created_user' => Auth::user()->id]);
 
-        if($request->action === "save") {
+        if ($request->action === "save") {
             Department::create($request->except(['action', 'id']));
             $this->func->setLog("Department added", "Inserted", '"'.$request->department."\" was added at Department Record");
-        }
-        else {
+        } else {
             Department::find($request->id)->update($request->except(['action', 'id']));
             $this->func->setLog("Department Updated", "Update", '"'.$request->department."\" was updated at Department Record");
         }
@@ -41,8 +41,9 @@ class DepartmentController extends Controller
         return response()->json(compact('department'));
     }
 
-    public function get() {
-        if(request()->ajax()) {
+    public function get()
+    {
+        if (request()->ajax()) {
             return datatables()->of(
                 Department::orderBy('id', 'desc')->get()
             )
@@ -62,6 +63,6 @@ class DepartmentController extends Controller
         $destroy = Department::find($id);
         $destroy->delete();
         $this->func->setLog("Department Deleted", "Deleted", 'Record id "'.$id."\" was deleted at Department Record");
-        return redirect()->back()->with('success','Successfully Deleted!');
+        return redirect()->back()->with('success', 'Successfully Deleted!');
     }
 }

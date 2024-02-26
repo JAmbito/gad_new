@@ -11,7 +11,7 @@
                     <ul class="header-main">
                         <li style="margin-top: 6px;"><i class="fi fi-rr-chart-pie-alt" style="color:#C30000; margin-left: 15px;"></i></li>
                         <li><i class="fa-solid fa-chevron-right" style="font-size: 10px; margin-left: 10px; color: #585563;"></i></li>
-                        <li style="margin-top: 2px"><a href="#" class="active" style="color: #FFA6A6; margin-left: 10px; color: #585563; font-size: 14px;">Dashboard</a></li></li>
+                        <li style="margin-top: 2px"><a href="#" class="active" style="color: #FFA6A6; margin-left: 10px; color: #585563; font-size: 14px;">Dashboard</a></li>
                     </ul>
                 </div>
             </div>
@@ -28,8 +28,6 @@
                     <canvas id="management_graph"></canvas>
                 </div>
             </div>
-            <br>
-            <br>
             <div class="row">
                 <div class="col-4 dash-card">
                     <div class="dash-title">NO. OF EMPLOYEES DIFFERENTLY-ABLED</div>
@@ -95,7 +93,7 @@
                     <canvas id="children_graph_d"></canvas>
                 </div>
                 <div class="col-6">
-                    <h5>NO. OF EMPLOYEES PER EMPLOYEE STATUS</h5>
+                    <h5>NO. OF EMPLOYEES PER EMPLOYMENT STATUS</h5>
                     <table class="employee_status_tbl">
                         <thead>
                             <th></th>
@@ -246,7 +244,7 @@
                         </tbody>
                     </table>
                     <br>
-                    
+
                     <h5>NO. OF NONE TEACHING EMPLOYEES PER EDUCATIONAL STATUS</h5>
                     <table class="employee_status_tbl">
                         <thead>
@@ -303,11 +301,11 @@
 
         $.get('/dashboard/get_records', function(response) {
             var record = response;
-            
+
             createBarGraph(
-                'management_graph', 
-                '', 
-                ['FACULTY', 'NON-TEACHING', 'MIDDLE TO TOP MANAGMENT', 'TECHNICAL POSITIONS'], 
+                'management_graph',
+                '',
+                ['FACULTY', 'NON-TEACHING', 'MIDDLE TO TOP MANAGMENT', 'TECHNICAL POSITIONS'],
                 [
                     [record.total_employees_managment.male.faculty, record.total_employees_managment.male.non_teaching, record.total_employees_managment.male.top_management, record.total_employees_managment.male.techincal],
                     [record.total_employees_managment.female.faculty, record.total_employees_managment.female.non_teaching, record.total_employees_managment.female.top_management, record.total_employees_managment.female.techincal]
@@ -319,31 +317,31 @@
             );
 
             createPieGraph(
-                'employee_graph', 
-                'Count', 
-                ['MALE', 'FEMALE'], 
+                'employee_graph',
+                'Count',
+                ['MALE', 'FEMALE'],
                 [record.total_employees.male, record.total_employees.female],
                 [
                     '#004eff6b',
                     '#ff00006b'
                 ]
             );
-            
+
             createPolarGraph(
-                'children_graph', 
-                'Count', 
-                ['MALE', 'FEMALE'], 
+                'children_graph',
+                'Count',
+                ['MALE', 'FEMALE'],
                 [record.total_employees_children.male, record.total_employees_children.female],
                 [
                     '#004eff6b',
                     '#ff00006b'
                 ]
             );
-            
+
             createPolarGraph(
-                'children_graph_d', 
-                'Count', 
-                ['MALE', 'FEMALE'], 
+                'children_graph_d',
+                'Count',
+                ['MALE', 'FEMALE'],
                 [record.total_employees_children_d.male, record.total_employees_children_d.female],
                 [
                     '#004eff6b',
@@ -359,7 +357,7 @@
             $('#d_female').text(record.total_employees_questions.female.differently_able);
             $('#i_female').text(record.total_employees_questions.female.ip_groups);
             $('#s_female').text(record.total_employees_questions.female.solo_parents);
-            
+
             // ===============================================================================
             $('#male_per').text(record.total_employees_status.male.permanent);
             $('#male_cas').text(record.total_employees_status.male.casual);
@@ -417,7 +415,7 @@
 
         });
     });
-        
+
     function createPieGraph(id, title, labels, data, bg) {
         const ctx = document.getElementById(id);
         new Chart(ctx, {
@@ -445,7 +443,7 @@
             }
         });
     }
-    
+
     function createPolarGraph(id, title, labels, data, bg) {
         const ctx = document.getElementById(id);
         new Chart(ctx, {
@@ -473,7 +471,7 @@
             }
         });
     }
-    
+
     function createBarGraph(id, title, labels, data, bg) {
         const ctx = document.getElementById(id);
         new Chart(ctx, {
@@ -528,7 +526,7 @@
 .dash-card {
     padding: 15px 20px;
     background: #fff;
-    margin: 15px;
+    margin-right: 30px;
     border-radius: 10px;
 }
 

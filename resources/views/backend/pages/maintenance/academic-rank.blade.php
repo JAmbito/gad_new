@@ -34,7 +34,7 @@
 
                         <span class="id-count-class">
                             <span style="padding: 2px 7px; border-radius: 50px; background-color: #C30000!important; color: #fff!important; border-bottom: none; font-size: 12px;">
-                                {{ App\Academic_rank::count() }}
+                                {{ App\AcademicRank::count() }}
                             </span>
                         </span>
 

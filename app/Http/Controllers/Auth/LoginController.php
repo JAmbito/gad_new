@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use App\User;
+use Illuminate\Support\Arr;
 
 class LoginController extends Controller
 {
@@ -23,13 +24,6 @@ class LoginController extends Controller
     use AuthenticatesUsers;
 
     /**
-     * Where to redirect users after login.
-     *
-     * @var string
-     */
-    protected $redirectTo = '/home';
-
-    /**
      * Create a new controller instance.
      *
      * @return void
@@ -42,14 +36,23 @@ class LoginController extends Controller
     public function credentials(Request $request)
     {
         $user = User::with('campus')->where('email', $request->email)->firstOrFail();
-        if($user->campus->campus_access === "CAMPUS ONLY") {
+        if ($user->campus->campus_access === "CAMPUS ONLY") {
             $credentials = $request->only('email', 'password', 'campus_id');
-            $credentials = array_add($credentials, 'campus_id', $request->campus_id);
-        }
-        else {
-            $credentials = $request->only('email', 'password',);
+            $credentials = Arr::add($credentials, 'campus_id', $request->campus_id);
+        } else {
+            $credentials = $request->only('email', 'password', );
         }
         return $credentials;
-    } 
-    
+    }
+
+    public function redirectTo(): string
+    {
+        $user = $this->guard()->user();
+
+        if ($user && $user->is_password_default) {
+            return '/security/change_password';
+        }
+
+        return '/dashboard';
+    }
 }

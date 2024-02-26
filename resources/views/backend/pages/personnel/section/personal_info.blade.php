@@ -1,7 +1,7 @@
  <!-- I. PERSONAL INFORMATION -->
  <div class="main-table-container-div">
 
-    <div id="" class="project-details-div" style="width: 100%; border: 1px solid #939393; border-radius: 6px; padding: 50px 55px 20px 55px; margin-bottom: 30px;">
+    <div id="personal-info" class="project-details-div" style="width: 100%; border: 1px solid #939393; border-radius: 6px; padding: 50px 55px 20px 55px; margin-bottom: 30px;">
 
         <div style="margin-bottom: 25px;">
             <label style="font-size: 16.6px; text-decoration: underline;">I. PERSONAL INFORMATION</label>
@@ -105,7 +105,7 @@
             <div style="display: grid; grid-template-columns: 1fr 1fr; grid-gap: 15px; margin-bottom: 25px;">
                 <div>
                     <div style="margin-bottom: 12px">
-                        <label>EMPLOYEE STATUS</label><span class="additional-span">( REQUIRED )</span>
+                        <label>EMPLOYMENT STATUS</label><span class="additional-span">( REQUIRED )</span>
                     </div>
                     <select id="employee_status" name="employee_status"  style="height: 38px; margin-bottom: 25px;" required>
                          <option style="display: none;" value="">-SELECT STATUS-</option>

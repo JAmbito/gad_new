@@ -43,7 +43,7 @@ li {
 	--dark-grey: #AAAAAA;
 	--dark: #34495F;
 	--red: #FF5A5A;
-	--lred: #FFF2F2; 
+	--lred: #FFF2F2;
 	--light-red: #FFBCBC;
 	--yellow: #FFCE26;
 	--light-yellow: #FFF2C6;
@@ -148,7 +148,7 @@ body {
 }
 
 .fa-chevron-down1{
-	
+
 }
 
 
@@ -486,7 +486,7 @@ body {
 }
 
 #sidebar .side-menu .employee-list .emp-chev{
-	
+
 }
 
 #sidebar .side-menu .payroll-drop .fa-chevron-down{
@@ -710,7 +710,7 @@ body {
 
 #dash-dropdown.drop-dash{
    opacity: 1;
-   max-height: 1000px;  
+   max-height: 1000px;
    overflow: hidden;
    transition: .5s ease;
 }
@@ -729,7 +729,7 @@ body {
 
 #bom-dropdown{
 	 opacity: 0!important;
-   max-height: 0px!important;  
+   max-height: 0px!important;
    overflow: hidden;
    transition: .5s ease;
 }
@@ -755,7 +755,7 @@ body {
 
 #project-dropdown{
 	 opacity: 1!important;
-   max-height: 1000px!important;  
+   max-height: 1000px!important;
    overflow: hidden;
    transition: .5s ease;
    margin-top: 10px!important;
@@ -1077,7 +1077,7 @@ body {
 #content nav .profile .bxs-chevron-down{
 	color: #ffffff;
 	font-size: 14px;
-	margin-right: 5px; 
+	margin-right: 5px;
 }
 
 
@@ -1310,7 +1310,7 @@ body {
 }
 
 .review-btn{
-	background-color: #F8C471; 
+	background-color: #F8C471;
 	padding: 6.5px 12px;
 	border-radius: 4px;
 	color: #fff;
@@ -1855,7 +1855,7 @@ body {
 	min-width: 30px!important;
 	white-space: nowrap;
 	font-weight: 700!important;
-}	
+}
 
 #content main .table-data2 .table tr td:last-child{
 	border-right: none;
@@ -1974,7 +1974,6 @@ body {
 #content main .table-data2 .table tr td .action-cont{
 	position: absolute;
 	border: 1px solid #E0E0E0;
-	top: -67px;
 	right: 45px;
 	margin-top: 5px;
 	padding: 5px;
@@ -2400,7 +2399,7 @@ body {
 #content main .insert-cont .insert-modal .insert-middle .units_cont_class{
 	/*display: grid;*/
 	/*grid-template-columns: 1fr 1fr;*/
-}	
+}
 
 .btn-add-rem span{
 	background-color: #58D68D;
@@ -2587,7 +2586,7 @@ body {
 }
 
 #content main .insert-cont .insert-modal .preview-class{
-	
+
 }
 
 #content main .insert-cont .insert-modal .preview-class .preview-container{
@@ -3117,7 +3116,7 @@ body {
 }
 
 .approval-notif select{
-	
+
 }
 
 .approval-notif select:focus{
@@ -3186,7 +3185,7 @@ body {
 	box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
 }
 
-.view-func-cont span{ 
+.view-func-cont span{
 	color: #333C46;
 	font-family: 'sora';
 	font-weight: 500;
@@ -3770,7 +3769,7 @@ body {
 	border-radius: 4px;
 	border: 1px solid #CACFD2;
 /*	background-color: #F2F3F4; */
-	margin-bottom: 15px; 
+	margin-bottom: 15px;
 	margin-top: 15px;
 	height: 39px!important;
 	display: flex;

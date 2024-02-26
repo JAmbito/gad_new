@@ -11,7 +11,9 @@ $campus = \App\Campus::get();
 
             <div class="middle-header">
                 <div class="text-header-div">
-                    <span>Gender and Development - BPSU</span>
+                    <strong class="subtitle">Bataan Peninsula State University</strong>
+                    <br/>
+                    <span>Gender and Development</span>
                 </div>
                 <div class="img-header-div">
                     <img src="{{ asset('gad/img/log123.png') }}">
@@ -38,13 +40,15 @@ $campus = \App\Campus::get();
                     </div>
                     <div class="input-cont">
                         <i class="fa-solid fa-lock"></i>
-                        <i class="fa-regular fa-eye" id="show-pass-id"></i>
-                        <i class="fa-regular fa-eye-slash" id="hide-pass-id"></i>
-                        <input type="password" name="password" placeholder="Password" required autocomplete="off" id="password-id">
+                        <i class="fa-regular fa-eye show-pass"></i>
+                        <i class="fa-regular fa-eye-slash hide-pass"></i>
+                        <input type="password" class="password-input" name="password" placeholder="Password" required autocomplete="off">
                     </div>
                     <div class="input-cont">
                         <button class="login-btn" type="submit">LOGIN</button>
                     </div>
+                    @include('layouts.alert')
+
                 </form>
             </div>
 

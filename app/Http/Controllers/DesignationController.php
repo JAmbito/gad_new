@@ -12,10 +12,11 @@ class DesignationController extends Controller
 {
     protected $func;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->func = new Controller();
     }
-    
+
     public function index()
     {
         $designations = Designation::orderBy('id')->get();
@@ -31,11 +32,10 @@ class DesignationController extends Controller
 
         $request->request->add(['created_user' => Auth::user()->id]);
 
-        if($request->action === "save") {
+        if ($request->action === "save") {
             Designation::create($request->except(['action', 'id']));
             $this->func->setLog("Designation Added", "Inserted", '"'.$request->designation."\" was added at Designation Record");
-        }
-        else {
+        } else {
             Designation::find($request->id)->update($request->except(['action', 'id']));
             $this->func->setLog("Designation Updated", "Update", '"'.$request->designation."\" was updated at Designation Record");
         }
@@ -43,8 +43,9 @@ class DesignationController extends Controller
         return response()->json(compact('designation'));
     }
 
-    public function get() {
-        if(request()->ajax()) {
+    public function get()
+    {
+        if (request()->ajax()) {
             return datatables()->of(
                 Designation::orderBy('id', 'desc')->with('management_type')->get()
             )
@@ -64,6 +65,6 @@ class DesignationController extends Controller
         $destroy = Designation::find($id);
         $destroy->delete();
         $this->func->setLog("Designation Deleted", "Deleted", 'Record id "'.$id."\" was deleted at Designation Record");
-        return redirect()->back()->with('success','Successfully Deleted!');
+        return redirect()->back()->with('success', 'Successfully Deleted!');
     }
 }

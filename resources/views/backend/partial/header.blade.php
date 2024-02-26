@@ -17,20 +17,28 @@
             <div class="dropdown-list" onclick="window.location.href='schedule_employee_table_view.php';">Employee Schedule</div>
             <div class="dropdown-list" onclick="window.location.href='payslip_individual_table_view.php';" style="border-bottom: none;">Employee Payroll</div>
         </div>
-    </a>
     </form>
 
 
     <!-- BELL ICON -->
 
-    <div class="bell-cont" style="position: relative; cursor: pointer; display: none;" id="bell-btn">
+    @canany([
+        \App\Support\RoleSupport::PERMISSION_REVIEW_PERSONNEL_STATUS,
+    ])
+    <div class="bell-cont" style="position: relative; cursor: pointer;" id="bell-btn">
         <i class="fa-solid fa-bell"></i>
         <span class="id-count-class" style="position: absolute; top: -13px; right: -10px;">
-            <span style="padding: 2px 7px; border-radius: 50px; background-color: #C30000!important; color: #fff!important; border-bottom: none; font-size: 12px; " id="noti_number">0
-
+            <span style="padding: 2px 7px; border-radius: 50px; background-color: #C30000!important; color: #fff!important; border-bottom: none; font-size: 12px; " id="noti_number">
+                {{
+                    \App\Personnel::where([
+                        ['campus_id','=',Auth::user()->campus_id],
+                        ['status','=',\App\Support\StatusSupport::STATUS_PENDING]
+                    ])->count()
+                }}
             </span>
         </span>
     </div>
+    @endcanany
 
 
     <!-- PROFILE ICON -->
@@ -44,8 +52,8 @@
 
 <a href="#" class="profile-drop" id="prof-dropdown">
     <div class="logs">
-        <h3>Administrator</h3>
-        <h4></h4>
+        <h3>{{ Auth::user()->name }}<br/><small>{{ Auth::user()->email }}</small></h3>
+        <h4 style="text-transform: capitalize">{{ Auth::user()->getRoleNames()[0] }}</h4>
         <div class="logs-2nd" onclick="window.location.href='#';">
             <i class='bx bx-user'></i>
             <h4> My Profile</h4>
@@ -72,11 +80,20 @@
 
 
     <div style="height: 248px; overflow-y: auto;" id="notif-id">
+        @foreach(
+            \App\Personnel::where([
+                ['campus_id','=',Auth::user()->campus_id],
+                ['status','=',\App\Support\StatusSupport::STATUS_PENDING]
+            ])->get() as $personnel
+        )
+            <a href="{{route('personnel.view', ['id' => $personnel->id])}}" class="notif-mid-cont">{{$personnel->firstname}} {{$personnel->lastname}} data needs review.<span>{{$personnel->updated_at}}</span></a>
+
+        @endforeach
 
     </div>
 
     <div class="notif-header" style="border-bottom: none; border-top: 1px solid #E9E9E9; text-align: center; padding: 8px 20px; border-bottom-right-radius: 8px; border-bottom-left-radius: 8px;">
-         <a href="View_All_Notifications.php">View All Notifications</a>
+{{--         <a href="View_All_Notifications.php">View All Notifications</a>--}}
     </div>
 
 </div>

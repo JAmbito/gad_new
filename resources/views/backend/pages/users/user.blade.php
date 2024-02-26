@@ -20,10 +20,10 @@
 
         @include('backend.partial.header')
 
-        <div class="add-user-container">
+        <div class="add-user-container" id="add_data">
             <div class="add-btns btn-insert" style="margin-left: 10px">
                 <i class='bx bx-plus' ></i>
-                <button id="add_data">ADD ACCOUNT</button>
+                <button>ADD ACCOUNT</button>
             </div>
         </div>
 
@@ -59,7 +59,7 @@
                 <div class="insert-header" style="position: relative;">
                     <h4>ACCOUNT INFORMATION</h4>
                 </div>
-                <div class="form-module">
+                <div class="insert-middle form-module">
                     <div class="form-group name">
                         <label for="status">NAME (REQUIRED)</label>
                         <input type="text" class="form-control" id="name" name="name"/>
@@ -68,10 +68,20 @@
                         <label for="status">EMAIL (REQUIRED)</label>
                         <input type="email" class="form-control" id="email" name="email"/>
                     </div>
+                    <div class="form-group">
+                        <label for="status">ROLE (REQUIRED)</label>
+                        <select class="form-control" id="role" name="role">
+                            <option value="" disabled>--SELECT ROLE--</option>
+                            @foreach ($roles as $role)
+                                <option value="{{$role->name}}">{{$role->name}}</option>
+                            @endforeach
+                        </select>
+
+                    </div>
                     <div class="form-group campus_id">
                         <label for="campus">CAMPUS (REQUIRED)</label>
                         <select name="campus_id" id="campus_id" class="form-control">
-                            <option value="">--</option>
+                            <option value="">--SELECT CAMPUS--</option>
                             @foreach ($campus as $item)
                                 <option value="{{$item->id}}">{{$item->campus_name}}</option>
                             @endforeach
@@ -86,7 +96,7 @@
         </div>
     </div>
 
-    
+
     </main>
 
 </section>
@@ -113,7 +123,15 @@
                     $('.action-cont').css('display','none');
                     $.each(data, function() {
                         $.each(this, function(k, v) {
-                            $('#'+k).val(v);
+                            if (k === 'roles') {
+                                if (v.length > 0) {
+                                    $('#role').val(v[0].name);
+                                } else {
+                                    $('#role').val('');
+                                }
+                            } else {
+                                $('#'+k).val(v);
+                            }
                         });
                     });
                     $('#user_modal').show();
@@ -127,6 +145,7 @@
                 name: $('#name').val(),
                 email: $('#email').val(),
                 campus_id: $('#campus_id').val(),
+                role: $('#role').val(),
                 action: action,
                 id: hold_id
             };
@@ -153,6 +172,8 @@
 
             $('#name').val("");
             $('#email').val("");
+            $('#role').val("");
+            $('#campus').val("");
         }
 
         function confirmDelete(id) {
@@ -207,20 +228,37 @@
                     { data: 'DT_RowIndex', name: 'DT_RowIndex' },
                     { data: 'name', title: 'NAME'},
                     { data: 'email', title: 'EMAIL'},
-                    { data: null, title: 'ACTION', render: function(data, type, row, meta) {
-                        var html = '<div style="position: relative;">';
-                            html += '<button data-id="1" class="btn-action"><i class="fi fi-rr-menu-dots"></i></button>';
-                            html += '<div style="" class="action-cont" id="action-cont-id">';
-                            html += '<div style="text-align: left;">';
-                            html += '<button data-id="2" class="button-menu btn-edit" onclick="edit('+row.id+')">EDIT</button>';
-                            html += '</div>';
-                            html += '<div style="text-align: left;">';
-                            html += '<button data-id="2" class="button-menu btn-delete" onclick="confirmDelete('+row.id+')">DELETE</button>';
-                            html += '</div>';
-                            html += '</div>';
-                            html += '</div>';
-                        return html;
-                    }},
+                    {
+                        data: 'roles',
+                        title: 'ROLE',
+                        orderable: false,
+                        render: function (roles, type, row) {
+                            if (roles.length <= 0) {
+                                return `<span>No role set<span/>`;
+                            }
+                            // There can only be one role per user
+                            const role = roles[0];
+                            return role.name;
+                        }
+                    },
+                    {
+                        data: null,
+                        title: 'ACTION',
+                        render: function(data, type, row, meta) {
+                            var html = '<div style="position: relative;">';
+                                html += '<button data-id="1" class="btn-action"><i class="fi fi-rr-menu-dots"></i></button>';
+                                html += '<div style="" class="action-cont" id="action-cont-id">';
+                                html += '<div style="text-align: left;">';
+                                html += '<button data-id="2" class="btn-update" onclick="edit('+row.id+')">Edit</button>';
+                                html += '</div>';
+                                html += '<div style="text-align: left;">';
+                                html += '<button data-id="2" class="btn-delete" onclick="confirmDelete('+row.id+')">Delete</button>';
+                                html += '</div>';
+                                html += '</div>';
+                                html += '</div>';
+                            return html;
+                        }
+                    },
                 ]
             });
             toastr.options = {
@@ -238,6 +276,7 @@
             })
 
             $('#add_data').click(function(){
+                clearField();
                 $('#user_modal').show();
                 $('.error-message').remove();
                 action = 'save';

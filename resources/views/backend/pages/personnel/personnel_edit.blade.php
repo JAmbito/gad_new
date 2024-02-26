@@ -25,7 +25,7 @@
                         <div id="bom-details-parent-id1" style="border: none;">
 
                             <div style="margin-bottom: 28px; margin-top: -40px; margin-bottom: 5px;">
-                                <label style="font-size: 18px; text-decoration: underline;">ADD NEW PERSONNEL</label>
+                                <label style="font-size: 18px; text-decoration: underline;">EDIT PERSONNEL</label>
                             </div>
 
                         </div>
@@ -41,11 +41,10 @@
                     </div>
                         <div class="insert-btn-cont" id="submit-cont-id" style="margin-top: 5px; margin-bottom: 25px;">
                             <h1 style="margin-right: auto;"></h1>
-                            <button class="btn-del" name="sub-insert" onclick="saveRecord()" style="padding-left: 20px; padding-right: 20px; font-size: 10px; background-color: #3D9EFF; border: 1px solid #3D9EFF;">Submit</button>
+                            <button class="btn-del" name="sub-insert" onclick="saveRecord(this)" style="padding-left: 20px; padding-right: 20px; font-size: 10px; background-color: #3D9EFF; border: 1px solid #3D9EFF;">Submit</button>
                         </div>
                     </div>
-                    </div>
-            </div>
+                </div>
         </main>
     </section>
 @endsection
@@ -336,7 +335,14 @@
             });
         }
 
-        function saveRecord() {
+        let wait;
+        function saveRecord(btn) {
+            $(btn).attr('disabled', 'disabled');
+            $(btn).text('Please wait...');
+            if (wait) {
+                return;
+            }
+
             var data = {
                 _token: '{{csrf_token()}}',
                 personnel_id: $('#personnel_id').val(),
@@ -449,7 +455,15 @@
 
             $.post('/personnel/save', data).done(function(response){
                 toastr.success('Record saved');
+                $(btn).text('Saved!');
+                setTimeout(() => {
+                    $(btn).removeAttr('disabled');
+                    window.location.href = `{{ route('personnel.index') }}`;
+                }, 3000);
             }).fail(function(response) {
+                wait = false;
+                $(btn).removeAttr('disabled');
+                $(btn).text('Submit');
                 for (var field in response.responseJSON.errors) {
                     $('#'+field+"_error_message").remove();
                     $('.'+field).append('<span id="'+field+'_error_message" class="error-message">'+response.responseJSON.errors[field][0]+'</span>');

@@ -7,14 +7,16 @@ use Illuminate\Http\Request;
 
 class ActivityLogsController extends Controller
 {
-    public function index() {
+    public function index()
+    {
         return view('backend.pages.users.activity_logs');
     }
-    
-    public function get() {
-        if(request()->ajax()) {
+
+    public function get()
+    {
+        if (request()->ajax()) {
             return datatables()->of(
-                Activitylogs::with('user')->orderBy('id','desc')->get()
+                Activitylogs::with('user')->orderBy('id', 'desc')->get()
             )
             ->addIndexColumn()
             ->make(true);

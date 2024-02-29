@@ -11,7 +11,7 @@
                     <ul class="header-main">
                         <li style="margin-top: 6px;"><i class="fi fi-rr-chart-pie-alt" style="color:#C30000; margin-left: 15px;"></i></li>
                         <li><i class="fa-solid fa-chevron-right" style="font-size: 10px; margin-left: 10px; color: #585563;"></i></li>
-                        <li style="margin-top: 2px"><a href="#" class="active" style="color: #FFA6A6; margin-left: 10px; color: #585563; font-size: 14px;">Manage</a></li></li>
+                        <li style="margin-top: 2px"><a href="#" class="active" style="color: #FFA6A6; margin-left: 10px; color: #585563; font-size: 14px;">Manage</a></li>
                         <li style="margin-top: 2px"><a href="#" class="active" style="color: #FFA6A6; margin-left: 10px; color: #585563; font-size: 14px;">Data Management</a></li>
                     </ul>
                 </div>
@@ -20,10 +20,10 @@
 
         @include('backend.partial.header')
 
-        <div class="add-user-container">
+        <div class="add-user-container" id="add_data">
             <div class="add-btns btn-insert" style="margin-left: 10px">
                 <i class='bx bx-plus' ></i>
-                <button id="add_data">ADD ADMINISTRATIVE RANK</button>
+                <button>ADD ADMINISTRATIVE RANK</button>
             </div>
 
         </div>
@@ -56,7 +56,7 @@
         <div class="insert-modal">
         <div class="header-fixed">
             <div class="insert-header" style="position: relative;">
-            <h4>Create NEW ADMINISTRATIVE RANK</h4>
+            <h4>ADMINISTRATIVE RANK</h4>
             <div><i class='bx bx-x' id="x-close-id"></i></div>
             </div>
         </div>
@@ -127,11 +127,11 @@
                 toastr.success('Record saved');
                 table.clear().draw();
             }).fail(function(response) {
+                toastr.error('Record not saved');
                 for (var field in response.responseJSON.errors) {
                     $('#'+field+"_error_message").remove();
                     $('.'+field).append('<span id="'+field+'_error_message" class="error-message">'+response.responseJSON.errors[field][0]+'</span>');
                 }
-                toastr.error(response.responseJSON.message);
             });
         }
 
@@ -171,22 +171,21 @@
                     type: 'GET'
                 },
                 columns: [
-                    {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-                    { data: 'administrative_rank', title: 'Administrative Rank'},
                     { data: null, title: 'ACTION', render: function(data, type, row, meta) {
                         var html = '<div style="position: relative;">';
-                            html += '<button data-id="1" class="btn-action"><i class="fi fi-rr-menu-dots"></i></button>';
-                            html += '<div style="" class="action-cont" id="action-cont-id">';
-                            html += '<div style="text-align: left;">';
-                            html += '<button data-id="1" class="btn-update" onclick="edit('+row.id+')">Edit</button>';
-                            html += '</div>';
-                            html += '<div style="text-align: left;">';
-                            html += '<button data-id="2" class="btn-delete" onclick="confirmDelete('+row.id+')">Delete</button>';
-                            html += '</div>';
-                            html += '</div>';
-                            html += '</div>';
+                        html += '<button data-id="1" class="btn-action"><i class="fi fi-rr-menu-dots"></i></button>';
+                        html += '<div style="" class="action-cont" id="action-cont-id">';
+                        html += '<div style="text-align: left;">';
+                        html += '<button data-id="1" class="btn-update" onclick="edit('+row.id+')">Edit</button>';
+                        html += '</div>';
+                        html += '<div style="text-align: left;">';
+                        html += '<button data-id="2" class="btn-delete" onclick="confirmDelete('+row.id+')">Delete</button>';
+                        html += '</div>';
+                        html += '</div>';
+                        html += '</div>';
                         return html;
                     }},
+                    { data: 'administrative_rank', title: 'Administrative Rank'},
                 ]
             });
 

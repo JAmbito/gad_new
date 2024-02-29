@@ -90,7 +90,7 @@ const  p_order_chevdropdown1 = document.getElementById('project-chev-rotate');
 
 nav_proj1.addEventListener('click', function () {
      p_order_chevdropdown1.classList.toggle('project_chev');
-})
+});
 
 
 

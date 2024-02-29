@@ -46,7 +46,7 @@
                         <input type="text" class="data_management_class" hidden>
                     </a>
                 </li>
-                <ul id="dash-dropdown">
+                <ul id="dash-dropdown" class="{{ (request()->is('campus*', 'designation*', 'management_type*', 'administrative*', 'academic_rank*', 'department*')) ? 'drop-dash' : '' }}">
                     <li class="emp-down-li emp-ac emp-paydas">
                         <a href="{{ url('campus') }}">
                             <h4 style="color: #D5D5D5; margin-right: 8px">—</h4>
@@ -111,10 +111,10 @@
                     <a href="#" class="project-drop side-btn">
                         <i class="fi fi-rr-users"></i>
                         <span class="text emp-chev">&nbsp; Personnels </span>
-                        <i class="fa-solid fa-chevron-right" style="font-size: 10px;" id="project-chev-rotate"></i>
+                        <i class="fa-solid fa-chevron-right project_chev" style="font-size: 10px;" id="project-chev-rotate"></i>
                     </a>
                 </li>
-                <ul id="project-dropdown">
+                <ul id="project-dropdown" class="{{ (request()->is('personnel*')) ? '' : 'project-dash' }}">
                     @can(RoleSupport::PERMISSION_READ_PERSONNEL)
                         <li class="emp-down-li emp-ac emp-paydas">
                             <a href="{{ url('personnel') }}">
@@ -135,7 +135,7 @@
             @endif
             @can(RoleSupport::PERMISSION_GENERATE_REPORT)
                 <li>
-                    <a href="/reports" class="bom-drop side-btn">
+                    <a href="/reports" class="report-drop side-btn">
                         <i class="fi fi-rr-file-medical-alt" style="font-size: 20px"></i>
                         <span class="text emp-chev">&nbsp; Generate Reports </span>
                         <input type="text" name="bom" class="bom_class" hidden>
@@ -151,7 +151,7 @@
                         <input type="text" name="bom" class="bom_class" hidden>
                     </a>
                 </li>
-                <ul id="bom-dropdown">
+                <ul id="bom-dropdown" class="{{ (request()->is('users*', 'activity_logs*')) ? 'bom-dash' : '' }}">
                     <li class="emp-down-li emp-ac emp-paydas">
                         <a href="/users">
                             <h4 style="color: #D5D5D5; margin-right: 5px">—</h4>

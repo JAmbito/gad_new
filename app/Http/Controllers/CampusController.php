@@ -30,7 +30,6 @@ class CampusController extends Controller
     {
         $campus = $request->validate([
             'campus_name' => ['required', 'max:250'],
-            'campus_access' => ['required', 'max:250'],
             'detailed_address' => ['required', 'max:250'],
             'province' => ['required', 'max:250'],
             'city' => ['required', 'max:250'],

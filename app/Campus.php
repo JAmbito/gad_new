@@ -13,7 +13,6 @@ class Campus extends Model
 
     protected $fillable = [
         'campus_name',
-        'campus_access',
         'detailed_address',
         'province',
         'city',

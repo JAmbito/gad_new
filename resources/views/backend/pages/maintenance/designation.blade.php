@@ -20,10 +20,10 @@
 
         @include('backend.partial.header')
 
-        <div class="add-user-container">
+        <div class="add-user-container" id="add_data">
             <div class="add-btns btn-insert" style="margin-left: 10px">
                 <i class='bx bx-plus' ></i>
-                <button id="add_data">ADD POSITION</button>
+                <button>ADD POSITION</button>
             </div>
 
         </div>
@@ -56,7 +56,7 @@
         <div class="insert-modal">
         <div class="header-fixed">
             <div class="insert-header" style="position: relative;">
-            <h4>Create NEW DESIGNATION / POSITION</h4>
+            <h4>DESIGNATION / POSITION</h4>
             <div><i class='bx bx-x' id="x-close-id"></i></div>
             </div>
         </div>
@@ -139,11 +139,11 @@
                 toastr.success('Record saved');
                 table.clear().draw();
             }).fail(function(response) {
+                toastr.error('Record not saved');
                 for (var field in response.responseJSON.errors) {
                     $('#'+field+"_error_message").remove();
                     $('.'+field).append('<span id="'+field+'_error_message" class="error-message">'+response.responseJSON.errors[field][0]+'</span>');
                 }
-                toastr.error(response.responseJSON.message);
             });
         }
 
@@ -183,23 +183,22 @@
                     type: 'GET'
                 },
                 columns: [
-                    {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-                    { data: 'designation', title: 'Designation'},
-                    { data: 'management_type.management_type', title: 'Management Type'},
                     { data: null, title: 'ACTION', render: function(data, type, row, meta) {
                         var html = '<div style="position: relative;">';
-                            html += '<button data-id="1" class="btn-action"><i class="fi fi-rr-menu-dots"></i></button>';
-                            html += '<div style="" class="action-cont" id="action-cont-id">';
-                            html += '<div style="text-align: left;">';
-                            html += '<button data-id="1" class="btn-update" onclick="edit('+row.id+')">Edit</button>';
-                            html += '</div>';
-                            html += '<div style="text-align: left;">';
-                            html += '<button data-id="2" class="btn-delete" onclick="confirmDelete('+row.id+')">Delete</button>';
-                            html += '</div>';
-                            html += '</div>';
-                            html += '</div>';
+                        html += '<button data-id="1" class="btn-action"><i class="fi fi-rr-menu-dots"></i></button>';
+                        html += '<div style="" class="action-cont" id="action-cont-id">';
+                        html += '<div style="text-align: left;">';
+                        html += '<button data-id="1" class="btn-update" onclick="edit('+row.id+')">Edit</button>';
+                        html += '</div>';
+                        html += '<div style="text-align: left;">';
+                        html += '<button data-id="2" class="btn-delete" onclick="confirmDelete('+row.id+')">Delete</button>';
+                        html += '</div>';
+                        html += '</div>';
+                        html += '</div>';
                         return html;
                     }},
+                    { data: 'designation', title: 'Designation'},
+                    { data: 'management_type.management_type', title: 'Management Type'},
                 ]
             });
 

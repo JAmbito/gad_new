@@ -14,7 +14,6 @@ class CampusesTableSeeder extends Seeder
         DB::table('campuses')->insert([
             [
                 'campus_name' => 'Balanga Campus',
-                'campus_access' => 'CAMPUS ONLY',
                 'detailed_address' => 'SAMPLE ADDRESS',
                 'province' => 'SAMPLE PROVINCE',
                 'city' => 'SAMPLE CITY',
@@ -27,7 +26,6 @@ class CampusesTableSeeder extends Seeder
             ],
             [
                 'campus_name' => 'Abucay Campus',
-                'campus_access' => 'CAMPUS ONLY',
                 'detailed_address' => 'SAMPLE ADDRESS',
                 'province' => 'SAMPLE PROVINCE',
                 'city' => 'SAMPLE CITY',
@@ -40,7 +38,6 @@ class CampusesTableSeeder extends Seeder
             ],
             [
                 'campus_name' => 'Samal Campus',
-                'campus_access' => 'CAMPUS ONLY',
                 'detailed_address' => 'SAMPLE ADDRESS',
                 'province' => 'SAMPLE PROVINCE',
                 'city' => 'SAMPLE CITY',

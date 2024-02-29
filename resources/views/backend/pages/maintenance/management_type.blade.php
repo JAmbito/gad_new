@@ -18,7 +18,6 @@
                             <li style="margin-top: 2px"><a href="#" class="active"
                                                            style="color: #FFA6A6; margin-left: 10px; color: #585563; font-size: 14px;">Manage</a>
                             </li>
-                            </li>
                             <li style="margin-top: 2px"><a href="#" class="active"
                                                            style="color: #FFA6A6; margin-left: 10px; color: #585563; font-size: 14px;">Data
                                     Management</a></li>
@@ -72,7 +71,7 @@
                 <div class="insert-modal">
                     <div class="header-fixed">
                         <div class="insert-header" style="position: relative;">
-                            <h4>CREATE/UPDATE MANAGEMENT TYPE</h4>
+                            <h4>MANAGEMENT TYPE</h4>
                             <div><i class='bx bx-x' id="x-close-id"></i></div>
                         </div>
                     </div>
@@ -158,11 +157,11 @@
                 toastr.success('Record saved');
                 table.clear().draw();
             }).fail(function (response) {
+                toastr.error('Record not saved');
                 for (var field in response.responseJSON.errors) {
                     $('#' + field + "_error_message").remove();
                     $('.' + field).append('<span id="' + field + '_error_message" class="error-message">' + response.responseJSON.errors[field][0] + '</span>');
                 }
-                toastr.error(response.responseJSON.message);
             });
         }
 
@@ -204,7 +203,6 @@
                     type: 'GET'
                 },
                 columns: [
-                    {data: 'DT_RowIndex', name: 'DT_RowIndex'},
                     {
                         data: null, title: 'ACTION', render: function (data, type, row, meta) {
                             var html = '<div style="position: relative;">';

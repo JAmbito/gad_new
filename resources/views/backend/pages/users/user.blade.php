@@ -187,11 +187,11 @@
                 toastr.success('Record saved');
                 table.clear().draw();
             }).fail(function (response) {
+                toastr.error('Record not saved');
                 for (var field in response.responseJSON.errors) {
                     $('#' + field + "_error_message").remove();
                     $('.' + field).append('<span id="' + field + '_error_message" class="error-message">' + response.responseJSON.errors[field][0] + '</span>');
                 }
-                toastr.error(response.responseJSON.message);
             });
         }
 

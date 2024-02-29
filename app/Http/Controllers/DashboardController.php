@@ -2,280 +2,91 @@
 
 namespace App\Http\Controllers;
 
+use App\Campus;
+use App\Services\ReportGeneratorService;
+use App\Support\RoleSupport;
+use App\Support\StatusSupport;
 use Illuminate\Http\Request;
 use App\Personnel;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Session;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(ReportGeneratorService $reportGeneratorService)
     {
-        return view('backend.pages.dashboard');
+        $roleName = Auth::user()->getRoleNames()[0];
+        $variables = [];
+        if ($roleName === RoleSupport::ROLE_ENCODER) {
+            $total_employees_encoded_by_status = $reportGeneratorService->getTotalEmployeesEncodedByStatusByUser(Auth::user());
+            $total_employees_encoded = Personnel::where('created_by', Auth::user()->id)->orderBy('id', 'desc')->count();
+            $variables = compact('total_employees_encoded_by_status', 'total_employees_encoded');
+        } elseif ($roleName === RoleSupport::ROLE_APPROVER) {
+            $total_employees_reviewed_by_status = $reportGeneratorService->getTotalEmployeesReviewedByStatusByUser(Auth::user());
+            $total_employees_awaiting_review = $reportGeneratorService->getTotalEmployeesAwaitingReviewByCampus(Auth::user()->campus->id);
+            $total_employees_reviewed = Personnel::where('reviewed_by', Auth::user()->id)->whereIn('status', [StatusSupport::STATUS_APPROVED, StatusSupport::STATUS_ONHOLD, StatusSupport::STATUS_REJECTED])
+                ->orderBy('id', 'desc')->count();
+            $variables = compact('total_employees_reviewed_by_status', 'total_employees_awaiting_review', 'total_employees_reviewed');
+        }
+
+        return view('backend.pages.dashboard.dashboard', $variables);
     }
 
-    public function get_records()
+    public function get_records(ReportGeneratorService $reportGeneratorService)
     {
-        $total_employees = array(
-            'male' => Personnel::where('sex', 'MALE')->count(),
-            'female' => Personnel::where('sex', 'FEMALE')->count()
-        );
+        Campus::$currentCampusId = Auth::user()->campus ? Auth::user()->campus->id : null;
 
-        $total_employees_managment = array(
-            'male' => array(
-                'faculty' => Personnel::with('designation')->whereHas('designation', function ($q) {
-                    $q->where('management_type_id', 1);
-                })->where('sex', 'MALE')->count(),
-                'non_teaching' => Personnel::with('designation')->whereHas('designation', function ($q) {
-                    $q->where('management_type_id', 2);
-                })->where('sex', 'MALE')->count(),
-                'top_management' => Personnel::with('designation')->whereHas('designation', function ($q) {
-                    $q->where('management_type_id', 3)->orWhere('management_type_id', 4);
-                })->where('sex', 'MALE')->count(),
-                'techincal' => Personnel::with('designation')->whereHas('designation', function ($q) {
-                    $q->where('management_type_id', 5);
-                })->where('sex', 'MALE')->count(),
-            ),
-            'female' => array(
-                'faculty' => Personnel::with('designation')->whereHas('designation', function ($q) {
-                    $q->where('management_type_id', 1);
-                })->where('sex', 'FEMALE')->count(),
-                'non_teaching' => Personnel::with('designation')->whereHas('designation', function ($q) {
-                    $q->where('management_type_id', 2);
-                })->where('sex', 'FEMALE')->count(),
-                'top_management' => Personnel::with('designation')->whereHas('designation', function ($q) {
-                    $q->where('management_type_id', 3)->orWhere('management_type_id', 4);
-                })->where('sex', 'FEMALE')->count(),
-                'techincal' => Personnel::with('designation')->whereHas('designation', function ($q) {
-                    $q->where('management_type_id', 5);
-                })->where('sex', 'FEMALE')->count(),
-            ),
-        );
+        $total_employees_by_gender = $reportGeneratorService->getTotalEmployeesByGender();
+        $total_employees_by_gender_by_management_type = $reportGeneratorService->getTotalEmployeesByGenderByManagementType();
+        $total_disabled_employees_by_gender = $reportGeneratorService->getTotalDisabledEmployeesByGender();
+        $total_indigenous_employees_by_gender = $reportGeneratorService->getTotalIndigenousEmployeesByGender();
+        $total_solo_parent_employees_by_gender = $reportGeneratorService->getTotalSoloParentEmployeesByGender();
+        $total_employees_with_young_children_by_gender = $reportGeneratorService->getTotalEmployeesWithYoungChildrenByGender(7);
+        $total_employees_with_disabled_children_by_gender = $reportGeneratorService->getTotalEmployeesWithDisabledChildrenByGender();
+        $total_employees_by_gender_by_employment_status = $reportGeneratorService->getTotalEmployeesByGenderByEmploymentStatus();
+        $total_teaching_employees_by_gender_by_civil_status = $reportGeneratorService->getTotalTeachingEmployeesByGenderByCivilStatus();
+        $total_teaching_employees_by_gender_by_education_level = $reportGeneratorService->getTotalTeachingEmployeesByGenderByEducationLevel();
+        $total_non_teaching_employees_by_gender_by_civil_status = $reportGeneratorService->getTotalNonTeachingEmployeesByGenderByCivilStatus();
+        $total_non_teaching_employees_by_gender_by_education_level = $reportGeneratorService->getTotalNonTeachingEmployeesByGenderByEducationLevel();
 
-        $total_employees_questions = array(
-            'male' => array(
-                'differently_able' => Personnel::with('question')->whereHas('question', function ($q) {
-                    $q->where('question_40b', 'yes');
-                })->where('sex', 'MALE')->count(),
-                'ip_groups' => Personnel::with('question')->whereHas('question', function ($q) {
-                    $q->where('question_40a', 'yes');
-                })->where('sex', 'MALE')->count(),
-                'solo_parents' => Personnel::with('question')->whereHas('question', function ($q) {
-                    $q->where('question_40c', 'yes');
-                })->where('sex', 'MALE')->count()
-            ),
-            'female' => array(
-                'differently_able' => Personnel::with('question')->whereHas('question', function ($q) {
-                    $q->where('question_40b', 'yes');
-                })->where('sex', 'FEMALE')->count(),
-                'ip_groups' => Personnel::with('question')->whereHas('question', function ($q) {
-                    $q->where('question_40a', 'yes');
-                })->where('sex', 'FEMALE')->count(),
-                'solo_parents' => Personnel::with('question')->whereHas('question', function ($q) {
-                    $q->where('question_40c', 'yes');
-                })->where('sex', 'FEMALE')->count()
-            ),
-        );
+        return response()->json(compact(
+            'total_employees_by_gender',
+            'total_employees_by_gender_by_management_type',
+            'total_disabled_employees_by_gender',
+            'total_employees_with_young_children_by_gender',
+            'total_employees_with_disabled_children_by_gender',
+            'total_indigenous_employees_by_gender',
+            'total_solo_parent_employees_by_gender',
+            'total_employees_by_gender_by_employment_status',
+            'total_teaching_employees_by_gender_by_civil_status',
+            'total_teaching_employees_by_gender_by_education_level',
+            'total_non_teaching_employees_by_gender_by_civil_status',
+            'total_non_teaching_employees_by_gender_by_education_level'
+        ));
+    }
 
-        $total_employees_children = array(
-            'male' => Personnel::withCount('children')->whereHas('children', function ($q) {
-                $q->where(Db::raw("DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(), children_birthday)), '%Y') + 0"), '<', 7);
-            })->where('sex', 'MALE')->count(),
-            'female' => Personnel::withCount('children')->whereHas('children', function ($q) {
-                $q->where(Db::raw("DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(), children_birthday)), '%Y') + 0"), '<', 7);
-            })->where('sex', 'FEMALE')->count()
-        );
+    public function getPersonnels()
+    {
+        if (request()->ajax()) {
+            $role = Auth::user()->getRoleNames()[0];
+            if ($role === RoleSupport::ROLE_ENCODER) {
+                $personnels = Personnel::where('created_by', Auth::user()->id)->orderBy('id', 'desc')->with('reviewed_by', 'created_by', 'academic_rank', 'administrative_rank', 'designation', 'department', 'campus')->get();
+            } else {
+                $campus = Auth::user()->campus;
+                if ($campus) {
+                    $personnels = Personnel::where('campus_id', $campus->id)->orderBy('id', 'desc')->with('reviewed_by', 'created_by', 'academic_rank', 'administrative_rank', 'designation', 'department', 'campus')->get();
+                } else {
+                    $personnels = Personnel::orderBy('id', 'desc')->with('reviewed_by', 'created_by', 'academic_rank', 'administrative_rank', 'designation', 'department', 'campus')->get();
+                }
+            }
 
-        $total_employees_children_d = array(
-            'male' => Personnel::withCount('children')->whereHas('children', function ($q) {
-                $q->where('children_disability', '!=', '')->where('children_disability', '!=', null);
-            })->where('sex', 'MALE')->count(),
-            'female' => Personnel::withCount('children')->whereHas('children', function ($q) {
-                $q->where('children_disability', '!=', '')->where('children_disability', '!=', null);
-            })->where('sex', 'FEMALE')->count()
-        );
-
-        $total_employees_status = array(
-            'male' => array(
-                'permanent' => Personnel::where('employee_status', 'PERMANENT')->where('sex', 'MALE')->count(),
-                'casual' => Personnel::where('employee_status', 'CASUAL')->where('sex', 'MALE')->count(),
-                'job_order' => Personnel::where('employee_status', 'JOB ORDER')->where('sex', 'MALE')->count(),
-            ),
-            'female' => array(
-                'permanent' => Personnel::where('employee_status', 'PERMANENT')->where('sex', 'FEMALE')->count(),
-                'casual' => Personnel::where('employee_status', 'CASUAL')->where('sex', 'FEMALE')->count(),
-                'job_order' => Personnel::where('employee_status', 'JOB ORDER')->where('sex', 'FEMALE')->count(),
-            ),
-        );
-
-        $total_employees_civil = array(
-            'male' => array(
-                'single' => Personnel::with('designation')->whereHas('designation', function ($q) {
-                    $q->where('management_type_id', 1);
-                })->where('civil_status', 'SINGLE')->where('sex', 'MALE')->count(),
-                'married' => Personnel::with('designation')->whereHas('designation', function ($q) {
-                    $q->where('management_type_id', 1);
-                })->where('civil_status', 'MARRIED')->where('sex', 'MALE')->count(),
-                'widowed' => Personnel::with('designation')->whereHas('designation', function ($q) {
-                    $q->where('management_type_id', 1);
-                })->where('civil_status', 'WIDOWED')->where('sex', 'MALE')->count(),
-                'separated' => Personnel::with('designation')->whereHas('designation', function ($q) {
-                    $q->where('management_type_id', 1);
-                })->where('civil_status', 'SEPARATED')->where('sex', 'MALE')->count(),
-            ),
-            'female' => array(
-                'single' => Personnel::with('designation')->whereHas('designation', function ($q) {
-                    $q->where('management_type_id', 1);
-                })->where('civil_status', 'SINGLE')->where('sex', 'FEMALE')->count(),
-                'married' => Personnel::with('designation')->whereHas('designation', function ($q) {
-                    $q->where('management_type_id', 1);
-                })->where('civil_status', 'MARRIED')->where('sex', 'FEMALE')->count(),
-                'widowed' => Personnel::with('designation')->whereHas('designation', function ($q) {
-                    $q->where('management_type_id', 1);
-                })->where('civil_status', 'WIDOWED')->where('sex', 'FEMALE')->count(),
-                'separated' => Personnel::with('designation')->whereHas('designation', function ($q) {
-                    $q->where('management_type_id', 1);
-                })->where('civil_status', 'SEPARATED')->where('sex', 'FEMALE')->count(),
-            ),
-        );
-
-
-        $total_faculty_education = array(
-            'male' => array(
-                'doctorate' => Personnel::with('designation', 'educational')->whereHas('designation', function ($q) {
-                    $q->where('management_type_id', 1);
-                })->whereHas('educational', function ($q) {
-                    $q->where('education_level', 'DOCTORATE DEGREE');
-                })->where('sex', 'MALE')->count(),
-                'masters' => Personnel::with('designation', 'educational')->whereHas('designation', function ($q) {
-                    $q->where('management_type_id', 1);
-                })->whereHas('educational', function ($q) {
-                    $q->where('education_level', 'MASTERS DEGREE');
-                })->where('sex', 'MALE')->count(),
-                'college' => Personnel::with('designation', 'educational')->whereHas('designation', function ($q) {
-                    $q->where('management_type_id', 1);
-                })->whereHas('educational', function ($q) {
-                    $q->where('education_level', 'BACHELORS DEGREE');
-                })->where('sex', 'MALE')->count()
-            ),
-            'female' => array(
-                'doctorate' => Personnel::with('designation', 'educational')->whereHas('designation', function ($q) {
-                    $q->where('management_type_id', 1);
-                })->whereHas('educational', function ($q) {
-                    $q->where('education_level', 'DOCTORATE DEGREE');
-                })->where('sex', 'FEMALE')->count(),
-                'masters' => Personnel::with('designation', 'educational')->whereHas('designation', function ($q) {
-                    $q->where('management_type_id', 1);
-                })->whereHas('educational', function ($q) {
-                    $q->where('education_level', 'MASTERS DEGREE');
-                })->where('sex', 'FEMALE')->count(),
-                'college' => Personnel::with('designation', 'educational')->whereHas('designation', function ($q) {
-                    $q->where('management_type_id', 1);
-                })->whereHas('educational', function ($q) {
-                    $q->where('education_level', 'BACHELORS DEGREE');
-                })->where('sex', 'FEMALE')->count()
-            ),
-        );
-
-        $total_non_teaching_status = array(
-            'male' => array(
-                'single'=>Personnel::with('designation')->whereHas('designation', function ($q) {
-                    $q->where('management_type_id', 2);
-                })->where('civil_status', 'SINGLE')->where('sex', 'MALE')->count(),
-                'married'=>Personnel::with('designation')->whereHas('designation', function ($q) {
-                    $q->where('management_type_id', 2);
-                })->where('civil_status', 'MARRIED')->where('sex', 'MALE')->count(),
-                'widowed'=>Personnel::with('designation')->whereHas('designation', function ($q) {
-                    $q->where('management_type_id', 2);
-                })->where('civil_status', 'WIDOWED')->where('sex', 'MALE')->count(),
-                'separated'=>Personnel::with('designation')->whereHas('designation', function ($q) {
-                    $q->where('management_type_id', 2);
-                })->where('civil_status', 'SEPARATED')->where('sex', 'MALE')->count(),
-            ),
-            'female' => array(
-                'single'=>Personnel::with('designation')->whereHas('designation', function ($q) {
-                    $q->where('management_type_id', 2);
-                })->where('civil_status', 'SINGLE')->where('sex', 'FEMALE')->count(),
-                'married'=>Personnel::with('designation')->whereHas('designation', function ($q) {
-                    $q->where('management_type_id', 2);
-                })->where('civil_status', 'MARRIED')->where('sex', 'FEMALE')->count(),
-                'widowed'=>Personnel::with('designation')->whereHas('designation', function ($q) {
-                    $q->where('management_type_id', 2);
-                })->where('civil_status', 'WIDOWED')->where('sex', 'FEMALE')->count(),
-                'separated'=>Personnel::with('designation')->whereHas('designation', function ($q) {
-                    $q->where('management_type_id', 2);
-                })->where('civil_status', 'SEPARATED')->where('sex', 'FEMALE')->count(),
-            ),
-        );
-
-        $total_non_teaching_education = array(
-            'male' => array(
-                'doctorate' => Personnel::with('designation', 'educational')->whereHas('designation', function ($q) {
-                    $q->where('management_type_id', 2);
-                })->whereHas('educational', function ($q) {
-                    $q->where('education_level', 'DOCTORATE DEGREE');
-                })->where('sex', 'MALE')->count(),
-                'masters' => Personnel::with('designation', 'educational')->whereHas('designation', function ($q) {
-                    $q->where('management_type_id', 2);
-                })->whereHas('educational', function ($q) {
-                    $q->where('education_level', 'MASTERS DEGREE');
-                })->where('sex', 'MALE')->count(),
-                'college' => Personnel::with('designation', 'educational')->whereHas('designation', function ($q) {
-                    $q->where('management_type_id', 2);
-                })->whereHas('educational', function ($q) {
-                    $q->where('education_level', 'BACHELORS DEGREE');
-                })->where('sex', 'MALE')->count(),
-                'post_secondary' => Personnel::with('designation', 'educational')->whereHas('designation', function ($q) {
-                    $q->where('management_type_id', 2);
-                })->whereHas('educational', function ($q) {
-                    $q->where('education_level', 'VOCATIONAL');
-                })->where('sex', 'MALE')->count(),
-                'secondary' => Personnel::with('designation', 'educational')->whereHas('designation', function ($q) {
-                    $q->where('management_type_id', 2);
-                })->whereHas('educational', function ($q) {
-                    $q->where('education_level', 'SECONDARY');
-                })->where('sex', 'MALE')->count(),
-                'elementary' => Personnel::with('designation', 'educational')->whereHas('designation', function ($q) {
-                    $q->where('management_type_id', 2);
-                })->whereHas('educational', function ($q) {
-                    $q->where('education_level', 'ELEMENTARY');
-                })->where('sex', 'MALE')->count()
-            ),
-            'female' => array(
-                'doctorate' => Personnel::with('designation', 'educational')->whereHas('designation', function ($q) {
-                    $q->where('management_type_id', 2);
-                })->whereHas('educational', function ($q) {
-                    $q->where('education_level', 'DOCTORATE DEGREE');
-                })->where('sex', 'FEMALE')->count(),
-                'masters' => Personnel::with('designation', 'educational')->whereHas('designation', function ($q) {
-                    $q->where('management_type_id', 2);
-                })->whereHas('educational', function ($q) {
-                    $q->where('education_level', 'MASTERS DEGREE');
-                })->where('sex', 'FEMALE')->count(),
-                'college' => Personnel::with('designation', 'educational')->whereHas('designation', function ($q) {
-                    $q->where('management_type_id', 2);
-                })->whereHas('educational', function ($q) {
-                    $q->where('education_level', 'BACHELORS DEGREE');
-                })->where('sex', 'FEMALE')->count(),
-                'post_secondary' => Personnel::with('designation', 'educational')->whereHas('designation', function ($q) {
-                    $q->where('management_type_id', 2);
-                })->whereHas('educational', function ($q) {
-                    $q->where('education_level', 'VOCATIONAL');
-                })->where('sex', 'FEMALE')->count(),
-                'secondary' => Personnel::with('designation', 'educational')->whereHas('designation', function ($q) {
-                    $q->where('management_type_id', 2);
-                })->whereHas('educational', function ($q) {
-                    $q->where('education_level', 'SECONDARY');
-                })->where('sex', 'FEMALE')->count(),
-                'elementary' => Personnel::with('designation', 'educational')->whereHas('designation', function ($q) {
-                    $q->where('management_type_id', 2);
-                })->whereHas('educational', function ($q) {
-                    $q->where('education_level', 'ELEMENTARY');
-                })->where('sex', 'FEMALE')->count()
-            ),
-        );
-
-        return response()->json(compact('total_employees', 'total_employees_managment', 'total_employees_questions', 'total_employees_children', 'total_employees_children_d', 'total_employees_status', 'total_employees_civil', 'total_faculty_education', 'total_non_teaching_status', 'total_non_teaching_education'));
+            return datatables()->of(
+                $personnels
+            )
+                ->addIndexColumn()
+                ->make(true);
+        }
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\ManagementType;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -14,13 +15,20 @@ class ManagementTypesTableSeeder extends Seeder
     {
         DB::table('management_types')->insert([
             [
-                'management_type' => 'Management Type 1',
+                'management_type' => 'Faculty',
+                'classification' => ManagementType::CLASSIFICATION_TEACHING,
             ],
             [
-                'management_type' => 'Management Type 2',
+                'management_type' => 'Non-teaching',
+                'classification' => ManagementType::CLASSIFICATION_NON_TEACHING,
             ],
             [
-                'management_type' => 'Management Type 3',
+                'management_type' => 'Top Management',
+                'classification' => ManagementType::CLASSIFICATION_OTHER,
+            ],
+            [
+                'management_type' => 'Technical',
+                'classification' => ManagementType::CLASSIFICATION_OTHER,
             ],
         ]);
     }

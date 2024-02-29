@@ -133,6 +133,15 @@
                     </li> -->
                 </ul>
             @endif
+            @can(RoleSupport::PERMISSION_GENERATE_REPORT)
+                <li>
+                    <a href="/reports" class="bom-drop side-btn">
+                        <i class="fi fi-rr-file-medical-alt" style="font-size: 20px"></i>
+                        <span class="text emp-chev">&nbsp; Generate Reports </span>
+                        <input type="text" name="bom" class="bom_class" hidden>
+                    </a>
+                </li>
+            @endif
             @if(RoleSupport::hasSystemPermissions(auth()->user()))
                 <li>
                     <a href="#" class="bom-drop side-btn">
@@ -161,10 +170,14 @@
             @endif
 
             <li>
-                <a href="{{ url('logout') }}" class="project-drop side-btn">
+                <a href="#" onclick="document.getElementById('logout-form').submit();" class="project-drop side-btn">
                     <i class="fi fi-rr-exit" style="margin-left: 15px; font-size: 15px;"></i>
                     <span class="text emp-chev">&nbsp; Log-Out </span>
                 </a>
+
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                    {{ csrf_field() }}
+                </form>
             </li>
         </ul>
     </div>

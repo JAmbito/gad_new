@@ -1936,13 +1936,15 @@ body {
 	border: none;
 	outline: none;
 	cursor: pointer;
+    font-size: 13px !important;
 	border-bottom: 1px solid #E0E0E0;
-	padding: 5px;
-	text-align: left;
+	padding: 10px;
+	text-align: center;
 	font-family: 'Sora';
-	font-weight: 500;
+	font-weight: bold;
+    text-transform: none;
 	color: #9C9C9C;
-	letter-spacing: -.1px;
+	letter-spacing: .5px;
 	transition: .2s ease;
 }
 
@@ -1957,11 +1959,12 @@ body {
 	border: none;
 	outline: none;
 	cursor: pointer;
-	padding: 5px;
-	text-align: left;
 	font-family: 'Sora';
-	font-weight: 500;
+    font-weight: bold;
+    padding: 10px;
+    text-align: center;
 	color: #9C9C9C;
+    text-transform: none;
 	letter-spacing: -.1px;
 	transition: .2s ease;
 }
@@ -1974,16 +1977,15 @@ body {
 #content main .table-data2 .table tr td .action-cont{
 	position: absolute;
 	border: 1px solid #E0E0E0;
-	right: 45px;
+	left: 45px;
 	margin-top: 5px;
-	padding: 5px;
+	padding: 0px;
 	width: 100px;
 	background-color: #fff;
 	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 	display: none;
 	z-index: 9999;
 	border-radius: 7px;
-	border-bottom-right-radius: 0px;
 }
 
 #content main .table-data2 .table tr td .btn-action{

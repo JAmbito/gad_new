@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Support\RoleSupport;
 use Illuminate\Http\Request;
 use App\User;
 use App\Campus;
@@ -23,10 +24,14 @@ class UsersController extends Controller
         $user = $request->validate([
             'name' => ['required', 'max:250'],
             'email' => ['required', 'max:250'],
-            'campus_id' => ['required', 'max:250'],
             'role' => ['required', 'max:50'],
         ]);
 
+        $role = $request->role;
+
+        if ($role === RoleSupport::ROLE_SUPERADMINISTRATOR) {
+            $request->request->set('campus_id', null);
+        }
 
         if ($request->action === 'save') {
             $request->request->add(['password' => Hash::make('P@ssw0rd')]);
@@ -51,7 +56,7 @@ class UsersController extends Controller
     {
         if (request()->ajax()) {
             return datatables()->of(
-                User::with('roles')->orderBy('id', 'desc')->get()
+                User::with('campus', 'roles')->orderBy('id', 'desc')->get()
             )
             ->addIndexColumn()
             ->make(true);

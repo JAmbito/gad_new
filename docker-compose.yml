@@ -9,6 +9,7 @@ services:
     environment:
       TEMPLATE_PHP_INI: "development"
       PHP_EXTENSION_XDEBUG: 1
+      PHP_EXTENSION_GD: 1
       APACHE_DOCUMENT_ROOT: "public"
     volumes:
       - "./:/var/www/html"

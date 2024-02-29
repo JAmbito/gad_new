@@ -2,9 +2,6 @@
 
 @section('content')
 
-<?php
-$campus = \App\Campus::get();
-?>
 <section id="content">
     <div class="main-cont">
         <div class="middle-cont">
@@ -25,14 +22,6 @@ $campus = \App\Campus::get();
                     @csrf
                     <div class="status-cont" style="text-align: left; display: flex;">
                     </div>
-                    <div class="input-cont">
-                        <select name="campus_id" id="campus_id" required>
-                            <option value="">-SELECT CAMPUS-</option>
-                            @foreach ($campus as $item)
-                            <option value="{{$item->id}}">{{$item->campus_name}}</option>
-                            @endforeach
-                        </select>
-                    </div>
 
                     <div class="input-cont">
                         <i class="fa-solid fa-user"></i>
@@ -47,7 +36,9 @@ $campus = \App\Campus::get();
                     <div class="input-cont">
                         <button class="login-btn" type="submit">LOGIN</button>
                     </div>
-                    @include('layouts.alert')
+                    @if($errors->any())
+                        <div class="alert alert-danger">{{ $errors->first() }}</div>
+                    @endif
 
                 </form>
             </div>

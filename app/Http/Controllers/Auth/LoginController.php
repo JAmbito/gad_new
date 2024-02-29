@@ -35,14 +35,8 @@ class LoginController extends Controller
 
     public function credentials(Request $request)
     {
-        $user = User::with('campus')->where('email', $request->email)->firstOrFail();
-        if ($user->campus->campus_access === "CAMPUS ONLY") {
-            $credentials = $request->only('email', 'password', 'campus_id');
-            $credentials = Arr::add($credentials, 'campus_id', $request->campus_id);
-        } else {
-            $credentials = $request->only('email', 'password', );
-        }
-        return $credentials;
+        $user = User::where('email', $request->email)->firstOrFail();
+        return $request->only('email', 'password');
     }
 
     public function redirectTo(): string

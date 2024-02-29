@@ -25,11 +25,11 @@ class DesignationsTableSeeder extends Seeder
             $managementTypeName = $managementType->management_type;
             DB::table('designations')->insert([
                 [
-                    'designation' => "$managementTypeName Designation 1",
+                    'designation' => "$managementTypeName Position 1",
                     'management_type_id' => $managementTypeId,
                 ],
                 [
-                    'designation' => "$managementTypeName Designation 2",
+                    'designation' => "$managementTypeName Position 2",
                     'management_type_id' => $managementTypeId,
                 ],
             ]);

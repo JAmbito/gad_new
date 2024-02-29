@@ -450,7 +450,39 @@
 
             $("#add-educational").click(function() {
                 var newRow = $("<tr>");
-                newRow.append('<td><input type="hidden" name="educational_id[]" placeholder="----" autocomplete="off" class="education_id_class" style="width: 400px"><select name="education_level[]" style="height: 38px; margin-bottom: 25px;" class="education_level_class"><option value="">-SELECT LEVEL-</option><option value="ELEMENTARY">ELEMENTARY</option><option value="SECONDARY">SECONDARY</option><option value="VOCATIONAL">VOCATIONAL</option><option value="BACHELORS DEGREE">BACHELORS DEGREE</option><option value="MASTERS DEGREE">MASTERS DEGREE</option><option value="DOCTORATE DEGREE">DOCTORATE DEGREE</option></select></td><td><input type="text" name="educational_school_name[]" placeholder="----" autocomplete="off" class="educational_school_class" style="width: 400px"></td><td><input type="text" name="educational_course[]" placeholder="----" autocomplete="off" class="educational_course_class" style="width: 400px"></td><td><input type="text" name="educational_from[]" placeholder="----" autocomplete="off" class="educational_from_class" style="width: 150px; margin-right: 10px;"><input type="text" name="educational_to[]" placeholder="----" autocomplete="off" class="educational_to_class" style="width: 153px"></td><td><input type="text" name="educational_units_earned[]" placeholder="----" autocomplete="off" class="educational_units_class" style="width: 400px"></td><td><input type="text" name="educational_year_graduated[]" placeholder="----" autocomplete="off" class="educational_graduated_class"></td><td><input type="text" name="educational_scholarship[]" placeholder="----" autocomplete="off" class="educational_scholarship_class"></td>');
+                newRow.append(
+                    '<td>' +
+                    '<input type="hidden" name="educational_id[]" placeholder="----" autocomplete="off" class="education_id_class" style="width: 400px">' +
+                    '<select name="education_level[]" style="height: 38px; margin-bottom: 25px;" class="education_level_class">' +
+                    '<option value="">-SELECT LEVEL-</option>' +
+                    '<option value="ELEMENTARY">ELEMENTARY</option>' +
+                    '<option value="SECONDARY">SECONDARY</option>' +
+                    '<option value="VOCATIONAL">VOCATIONAL</option>' +
+                    '<option value="BACHELORS DEGREE">BACHELORS DEGREE</option>' +
+                    '<option value="MASTERS DEGREE">MASTERS DEGREE</option>' +
+                    '<option value="DOCTORATE DEGREE">DOCTORATE DEGREE</option>' +
+                    '</select>' +
+                    '</td>' +
+                    '<td>' +
+                    '<input type="text" name="educational_school_name[]" placeholder="----" autocomplete="off" class="educational_school_class" style="width: 400px">' +
+                    '</td>' +
+                    '<td>' +
+                    '<input type="text" name="educational_course[]" placeholder="----" autocomplete="off" class="educational_course_class" style="width: 400px">' +
+                    '</td>' +
+                    '<td>' +
+                    '<input type="text" name="educational_from[]" placeholder="----" autocomplete="off" class="educational_from_class" style="width: 150px; margin-right: 10px;">' +
+                    '<input type="text" name="educational_to[]" placeholder="----" autocomplete="off" class="educational_to_class" style="width: 153px">' +
+                    '</td>' +
+                    '<td>' +
+                    '<input type="text" name="educational_units_earned[]" placeholder="----" autocomplete="off" class="educational_units_class" style="width: 400px">' +
+                    '</td>' +
+                    '<td>' +
+                    '<input type="text" name="educational_year_graduated[]" placeholder="----" autocomplete="off" class="educational_graduated_class">' +
+                    '</td>' +
+                    '<td>' +
+                    '<input type="text" name="educational_scholarship[]" placeholder="----" autocomplete="off" class="educational_scholarship_class">' +
+                    '</td>'
+                );
                 var removeButton = $('<i class="fa-solid fa-minus" style="background-color: #FF7979; color: #fff; border-radius: 4px; padding: 13px 13.5px; font-size: 13px;"></i>');
                 newRow.append($('<td class="remove_educational" style="min-width: 30px!important; cursor: pointer;">').append(removeButton));
 

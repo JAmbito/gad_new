@@ -9,7 +9,7 @@
     </div>
 @endif
 @if($errors->any())
-    <div class="alert alert-danger">{{ $errors->first() }}</div>
+    <div class="floating-alert alert alert-danger">{{ $errors->first() }}</div>
 @endif
 
 <script>

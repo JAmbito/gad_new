@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Notifications\PersonnelCreated;
+use App\Notifications\PersonnelReviewed;
+use App\Notifications\PersonnelUpdated;
 use App\Personnel;
 use App\AcademicRank;
 use App\Administrative_rank;
@@ -21,17 +24,20 @@ use App\PersonnelLearning;
 use App\PersonnelHobbies;
 use App\PersonnelNonAcademic;
 use App\PersonnelMembership;
+use App\Support\RoleSupport;
+use App\Support\StatusSupport;
+use App\User;
 use Illuminate\Http\Request;
-use Auth;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class PersonnelController extends Controller
 {
     public function create()
     {
-        $campus = Auth::user()->campus();
+        $campus = Auth::user()->campus;
         if ($campus) {
-            $campuses = Campus::where('id', $campus->first()->id)->orderBy('id')->get();
+            $campuses = Campus::where('id', $campus->id)->orderBy('id')->get();
         } else {
             $campuses = Campus::orderBy('id')->get();
         }
@@ -45,12 +51,18 @@ class PersonnelController extends Controller
     public function index()
     {
         $personnels = Personnel::orderBy('id')->get();
+        $campus = Auth::user()->campus;
+        if (!is_null($campus)) {
+            $total_personnel_count = Personnel::where('campus_id', $campus->id)->count();
+        } else {
+            $total_personnel_count = Personnel::count();
+        }
         $academic_ranks = AcademicRank::orderBy('id')->get();
         $administrative_ranks = Administrative_rank::orderBy('id')->get();
         $designations = Designation::orderBy('id')->get();
         $departments = Department::orderBy('id')->get();
         $campuses = Campus::orderBy('id')->get();
-        return view('backend.pages.personnel.personnel', compact('personnels', 'academic_ranks', 'administrative_ranks', 'designations', 'departments', 'campuses'));
+        return view('backend.pages.personnel.personnel', compact('total_personnel_count', 'personnels', 'academic_ranks', 'administrative_ranks', 'designations', 'departments', 'campuses'));
     }
 
     public function store(Request $request)
@@ -166,11 +178,33 @@ class PersonnelController extends Controller
             $request->request->add(['created_by' => Auth::user()->id]);
             $personnel = Personnel::create($request->except(['action', 'id']));
             $this->savePersonnel($request, $personnel->id);
+
+            $approvers = User::role(RoleSupport::ROLE_APPROVER)->where('campus_id', $request->campus_id)->get();
+            foreach ($approvers as $approver) {
+                $approver->notify(new PersonnelCreated($personnel, Auth::user()->name));
+            }
+
+            $superadmins = User::role(RoleSupport::ROLE_SUPERADMINISTRATOR)->get();
+            foreach ($superadmins as $superadmin) {
+                $superadmin->notify(new PersonnelCreated($personnel, Auth::user()->name));
+            }
+
             $this->setLog("Personnel Added", "Inserted", '"'.$request->firstname." ".$request->lastname."\" was added at Personnel Record");
         } else {
             $personnel = Personnel::find($request->personnel_id);
             $personnel->update(array_merge($request->except(['action', 'id']), ['status' => 0]));
             $this->savePersonnel($request, $personnel->id);
+
+            $approvers = User::role(RoleSupport::ROLE_APPROVER)->where('campus_id', $request->campus_id)->get();
+            foreach ($approvers as $approver) {
+                $approver->notify(new PersonnelUpdated($personnel, Auth::user()->name));
+            }
+
+            $superadmins = User::role(RoleSupport::ROLE_SUPERADMINISTRATOR)->get();
+            foreach ($superadmins as $superadmin) {
+                $superadmin->notify(new PersonnelUpdated($personnel, Auth::user()->name));
+            }
+
             $this->setLog("Personnel Updated", "Updated", "Personnel Record was updated");
         }
 
@@ -399,12 +433,13 @@ class PersonnelController extends Controller
     public function get()
     {
         if (request()->ajax()) {
-            $campus = Auth::user()->campus();
+            $campus = Auth::user()->campus;
             if ($campus) {
-                $personnels = Personnel::where('campus_id', $campus->first()->id)->orderBy('id', 'desc')->with('reviewed_by', 'created_by', 'academic_rank', 'administrative_rank', 'designation', 'department', 'campus')->get();
+                $personnels = Personnel::where('campus_id', $campus->id)->orderBy('id', 'desc')->with('reviewed_by', 'created_by', 'academic_rank', 'administrative_rank', 'designation', 'department', 'campus')->get();
             } else {
                 $personnels = Personnel::orderBy('id', 'desc')->with('reviewed_by', 'created_by', 'academic_rank', 'administrative_rank', 'designation', 'department', 'campus')->get();
             }
+
             return datatables()->of(
                 $personnels
             )
@@ -421,9 +456,9 @@ class PersonnelController extends Controller
         $designations = Designation::orderBy('id')->get();
         $departments = Department::orderBy('id')->get();
 
-        $campus = Auth::user()->campus();
+        $campus = Auth::user()->campus;
         if ($campus) {
-            $campuses = Campus::where('id', $campus->first()->id)->orderBy('id')->get();
+            $campuses = Campus::where('id', $campus->id)->orderBy('id')->get();
         } else {
             $campuses = Campus::orderBy('id')->get();
         }
@@ -458,9 +493,9 @@ class PersonnelController extends Controller
         $designations = Designation::orderBy('id')->get();
         $departments = Department::orderBy('id')->get();
 
-        $campus = Auth::user()->campus();
+        $campus = Auth::user()->campus;
         if ($campus) {
-            $campuses = Campus::where('id', $campus->first()->id)->orderBy('id')->get();
+            $campuses = Campus::where('id', $campus->id)->orderBy('id')->get();
         } else {
             $campuses = Campus::orderBy('id')->get();
         }
@@ -483,7 +518,17 @@ class PersonnelController extends Controller
 
     public function save_status(Request $request)
     {
-        $personnel = Personnel::where('id', $request->id)->update(['status' => $request->status, 'reviewed_by' => Auth::user()->id]);
+        $personnel = Personnel::where('id', $request->id)->first();
+        $personnel->update(['status' => $request->status, 'reviewed_by' => Auth::user()->id]);
+
+        $encoder = User::role(RoleSupport::ROLE_ENCODER)->where('id', $personnel->created_by)->first();
+        $encoder->notify(new PersonnelReviewed($personnel, Auth::user()->name, StatusSupport::getLabelByStatus($request->status)));
+
+        $superadmins = User::role(RoleSupport::ROLE_SUPERADMINISTRATOR)->get();
+        foreach ($superadmins as $superadmin) {
+            $superadmin->notify(new PersonnelReviewed($personnel, Auth::user()->name, StatusSupport::getLabelByStatus($request->status)));
+        }
+
         $this->setLog("Personnel Status Updated", "Update", 'Personnel Status was updated to "'.$request->status."\" at Personnel Record");
         return 'Record Saved';
     }

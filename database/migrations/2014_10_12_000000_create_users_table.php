@@ -27,15 +27,6 @@ class CreateUsersTable extends Migration
                 ->references('id')
                 ->on('campuses');
         });
-
-        DB::table('users')->insert([
-            [
-                'name' => 'Super Admin',
-                'email' => 'superadmin@gmail.com',
-                'campus_id' => 1,
-                'password' => Hash::make('P@ssw0rd')
-            ],
-        ]);
     }
 
     /**

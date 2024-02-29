@@ -29,14 +29,14 @@
 
                         </div>
                         @include('backend.pages.personnel.view.personal_info')
-                        @include('backend.pages.personnel.section.family')
-                        @include('backend.pages.personnel.section.children')
-                        @include('backend.pages.personnel.section.educational')
-                        @include('backend.pages.personnel.section.civil_service')
-                        @include('backend.pages.personnel.section.work_experience')
-                        @include('backend.pages.personnel.section.voluntary_work')
-                        @include('backend.pages.personnel.section.learning')
-                        @include('backend.pages.personnel.section.other_info')
+                        @include('backend.pages.personnel.view.family')
+                        @include('backend.pages.personnel.view.children')
+                        @include('backend.pages.personnel.view.educational')
+                        @include('backend.pages.personnel.view.civil_service')
+                        @include('backend.pages.personnel.view.work_experience')
+                        @include('backend.pages.personnel.view.voluntary_work')
+                        @include('backend.pages.personnel.view.learning')
+                        @include('backend.pages.personnel.view.other_info')
                     </div>
                 </div>
             </div>
@@ -83,29 +83,29 @@
 
                     $.each(data.personnel.family, function() {
                         $.each(this, function(k, v) {
-                            $('#'+k).val(v);
+                            $('#'+k).text(v);
                         });
                     });
 
                     $.each(data.personnel.question, function() {
                         $.each(this, function(k, v) {
                             if(v == "yes" || v == "no") {
-                                $("input[name="+ k +"][value='" + v + "']").prop("checked",true);
+                                $("#"+ k).text(v);
                             } else {
-                                $('#'+k).val(v);
+                                $('#'+k).html(v || '<i>No answer</i>');
                             }
                         });
                     });
 
                     $.each(data.personnel.reference, function() {
                         $.each(this, function(k, v) {
-                            $('#'+k).val(v);
+                            $('#'+k).html(v || '<i>No answer</i>');
                         });
                     });
 
                     $.each(data.personnel.government, function() {
                         $.each(this, function(k, v) {
-                            $('#'+k).val(v);
+                            $('#'+k).text(v);
                         });
                     });
 
@@ -115,11 +115,10 @@
                         for (let index = 0; index < children_info.length; index++) {
                             var newRow = $("<tr>");
                             var cols = "";
-                            cols += '<td><input type="hidden" name="children_id[]" value="'+ children_info[index].id +'" class="children_id_class"><input type="text" name="children_name[]" placeholder="----" autocomplete="off" class="children_name_class" style="width: 500px" value="'+ children_info[index].children_name +'"></td>';
-                            cols += '<td><select id="children_'+children_info[index].id+'" name="children_sex[]" style="height: 38px; margin-bottom: 25px;" class="children_sex_class" value="'+ children_info[index].children_sex +'"><option value="">-SELECT SEX-</option><option value="MALE">MALE</option><option value="FEMALE">FEMALE</option></select></td>';
-                            cols += '<td><input type="date" name="children_bday[]" placeholder="----" autocomplete="off" class="children_bday_class" value="'+ children_info[index].children_birthday +'"></td>';
-                            cols += '<td><select id="disability_'+children_info[index].id+'" name="children_disability[]" style="height: 38px; margin-bottom: 25px;" class="children_disability_class" value="'+ children_info[index].children_disability +'"><option value="NONE">NONE</option><option value="COGNITIVE">COGNITIVE</option><option value="HEARING">HEARING</option><option value="MOTOR">MOTOR</option><option value="VISUAL">VISUAL</option><option value="OTHERS">OTHERS</option></select></td>';
-                            cols += '<td class="remove_children" style="min-width: 30px!important; cursor: pointer	;"><i class="fa-solid fa-minus" style="background-color: #FF7979; color: #fff; border-radius: 4px; padding: 13px 13.5px; font-size: 13px;"></i></td>';
+                            cols += '<td>'+children_info[index].children_name+'</td>';
+                            cols += '<td>'+children_info[index].children_sex+'</td>';
+                            cols += '<td>'+children_info[index].children_birthday+'</td>';
+                            cols += '<td>'+children_info[index].children_disability+'</td>';
                             newRow.append(cols);
 
                             $("#family_children_table_id").append(newRow);
@@ -133,12 +132,16 @@
                         $("#educational_tbl").empty();
                         for (let index = 0; index < educational_info.length; index++) {
                             var newRow = $("<tr>");
-                            newRow.append('<td><input type="hidden" value="'+ educational_info[index].id +'" name="educational_id[]" placeholder="----" autocomplete="off" class="education_id_class" style="width: 400px"><select id="level_'+educational_info[index].id+'" name="education_level[]" style="height: 38px; margin-bottom: 25px;" class="education_level_class"><option value="">-SELECT LEVEL-</option><option value="ELEMENTARY">ELEMENTARY</option><option value="SECONDARY">SECONDARY</option><option value="VOCATIONAL">VOCATIONAL</option><option value="BACHELORS DEGREE">BACHELORS DEGREE</option><option value="MASTERS DEGREE">MASTERS DEGREE</option><option value="DOCTORATE DEGREE">DOCTORATE DEGREE</option></select></td><td><input type="text" value="'+ educational_info[index].educational_school_name +'" name="educational_school_name[]" placeholder="----" autocomplete="off" class="educational_school_class" style="width: 400px"></td><td><input type="text" value="'+ educational_info[index].educational_course +'" name="educational_course[]" placeholder="----" autocomplete="off" class="educational_course_class" style="width: 400px"></td><td><input type="text" value="'+ educational_info[index].educational_from +'" name="educational_from[]" placeholder="----" autocomplete="off" class="educational_from_class" style="width: 150px; margin-right: 10px;"><input type="text" value="'+ educational_info[index].educational_to +'" name="educational_to[]" placeholder="----" autocomplete="off" class="educational_to_class" style="width: 153px"></td><td><input type="text" value="'+ educational_info[index].educational_units_earned +'" name="educational_units_earned[]" placeholder="----" autocomplete="off" class="educational_units_class" style="width: 400px"></td><td><input type="text" value="'+ educational_info[index].educational_year_graduated +'" name="educational_year_graduated[]" placeholder="----" autocomplete="off" class="educational_graduated_class"></td><td><input type="text"  value="'+ educational_info[index].educational_scholarship_class +'" name="educational_scholarship[]" placeholder="----" autocomplete="off" class="educational_scholarship_class"></td>');
-                            var removeButton = $('<i class="fa-solid fa-minus" style="background-color: #FF7979; color: #fff; border-radius: 4px; padding: 13px 13.5px; font-size: 13px;"></i>');
-                            newRow.append($('<td class="remove_educational" style="min-width: 30px!important; cursor: pointer;">').append(removeButton));
+                            newRow.append(
+                                '<td id="level_'+educational_info[index].id+'"></td>' +
+                                '<td>'+educational_info[index].educational_school_name +'</td><td>'+educational_info[index].educational_course +'</td>' +
+                                '<td>'+ educational_info[index].educational_from +' - '+ educational_info[index].educational_to +'</td>' +
+                                '<td>'+ educational_info[index].educational_units_earned +'</td>' +
+                                '<td>'+ educational_info[index].educational_year_graduated +'</td>' +
+                                '<td>'+ educational_info[index].educational_scholarship_class +'</td>');
 
                             $('#educational_table_id').append(newRow);
-                            $('#level_'+educational_info[index].id).val(educational_info[index].education_level);
+                            $('#level_'+educational_info[index].id).text(educational_info[index].education_level);
                         }
                     }
 
@@ -148,24 +151,20 @@
                         for (let index = 0; index < service_info.length; index++) {
                             var html = '<tr>' +
                                 '<td>' +
-                                '<input type="hidden" name="service_id[]" value="'+ service_info[index].id +'" class="service_id_class" placeholder="----" autocomplete="off" style="width: 350px">' +
-                                '<input type="text" name="service_career[]" value="'+ service_info[index].service_career +'" class="service_career_class" placeholder="----" autocomplete="off" style="width: 350px">' +
+                                service_info[index].service_career +
                                 '</td>' +
                                 '<td>' +
-                                '<input type="text" name="service_rating[]" value="'+ service_info[index].service_rating +'" class="service_rating_class" placeholder="----" autocomplete="off">' +
+                                service_info[index].service_rating +
                                 '</td>' +
                                 '<td>' +
-                                '<input type="date" name="service_date_of_exam[]" value="'+ service_info[index].service_exam_date +'" class="service_exam_date_class" placeholder="----" autocomplete="off">' +
+                                service_info[index].service_exam_date +
                                 '</td>' +
                                 '<td>' +
-                                '<input type="text" name="service_place_of_exam[]" value="'+ service_info[index].service_exam_place +'" class="service_exam_place_class" placeholder="----" autocomplete="off">' +
+                                service_info[index].service_exam_place +
                                 '</td>' +
                                 '<td>' +
-                                '<input type="text" name="service_license[]" value="'+ service_info[index].service_license +'" class="service_license_class" placeholder="----" autocomplete="off" style="width: 180px; margin-right: 10px">' +
-                                '<input type="date" name="service_license_date[]" value="'+ service_info[index].service_license_date +'" class="service_license_date_class" placeholder="----" autocomplete="off" style="width: 184px">' +
-                                '</td>' +
-                                '<td class="remove_service" style="min-width: 30px!important; cursor: pointer;">' +
-                                '<i class="fa-solid fa-minus" style="background-color: #FF7979; color: #fff; border-radius: 4px; padding: 13px 13.5px; font-size: 13px;"></i>' +
+                                 service_info[index].service_license + ' ' +
+                                 service_info[index].service_license_date +
                                 '</td>' +
                                 '</tr>';
 
@@ -179,30 +178,26 @@
                         for (let index = 0; index < work_info.length; index++) {
                             var html = '<tr>' +
                                 '<td>' +
-                                '<input type="hidden" name="work_id[]" class="work_id_class" value="'+ work_info[index].id +'">' +
-                                '<input type="date" name="work_inclusive_date_from[]" value="'+ work_info[index].work_from +'" class="work_from_class" placeholder="----" autocomplete="off" style="width: 180px; margin-right: 10px">' +
-                                '<input type="date" name="work_inclusive_date_to[]" value="'+ work_info[index].work_to +'" class="work_to_class" placeholder="----" autocomplete="off" style="width: 180px">' +
+                                work_info[index].work_from +' - ' +
+                                work_info[index].work_to +
                                 '</td>' +
                                 '<td>' +
-                                '<input type="text" name="work_position[]" value="'+ work_info[index].work_position +'" class="work_position_class" placeholder="----" autocomplete="off" style="width: 350px">' +
+                                work_info[index].work_position +
                                 '</td>' +
                                 '<td>' +
-                                '<input type="text" name="work_agency[]" value="'+ work_info[index].work_agency +'" class="work_agency_class" placeholder="----" autocomplete="off">' +
+                                work_info[index].work_agency +
                                 '</td>' +
                                 '<td>' +
-                                '<input type="text" name="work_salary[]" value="'+ work_info[index].work_salary +'" class="work_salary_class" placeholder="----" autocomplete="off">' +
+                                work_info[index].work_salary +
                                 '</td>' +
                                 '<td>' +
-                                '<input type="text" name="work_pay_grade[]" value="'+ work_info[index].work_pay_grade +'" class="work_pay_class" placeholder="----" autocomplete="off">' +
+                                work_info[index].work_pay_grade +
                                 '</td>' +
                                 '<td>' +
-                                '<input type="text" name="work_appoinment[]" value="'+ work_info[index].work_appointment +'" class="work_appointment_class" placeholder="----" autocomplete="off">' +
+                                work_info[index].work_appointment +
                                 '</td>' +
                                 '<td>' +
-                                '<input type="text" name="work_gov_service[]" value="'+ work_info[index].work_gov_service +'" class="work_gov_service_class" placeholder="----" autocomplete="off">' +
-                                '</td>' +
-                                '<td class="remove_work" style="min-width: 30px!important; cursor: pointer;">' +
-                                '<i class="fa-solid fa-minus" style="background-color: #FF7979; color: #fff; border-radius: 4px; padding: 13px 13.5px; font-size: 13px;"></i>' +
+                                work_info[index].work_gov_service +
                                 '</td>' +
                                 '</tr>';
                             $('#work_table_id').append(html);
@@ -215,24 +210,20 @@
                         for (let index = 0; index < voluntary_info.length; index++) {
                             const html = `<tr>
                                     <td>
-                                        <input type="hidden" name="voluntary_id[]" value="`+ voluntary_info[index].id +`" class="voluntary_id_class">
-                                        <input type="text" name="voluntary_name[]" value="`+ voluntary_info[index].voluntary_name +`" class="voluntary_name_class" placeholder="----" autocomplete="off" style="width: 400px">
+                                        `+ voluntary_info[index].voluntary_name +`
                                     </td>
                                     <td>
-                                        <input type="text" name="voluntary_address[]" value="`+ voluntary_info[index].voluntary_address +`" class="voluntary_address_class" placeholder="----" autocomplete="off">
+                                        `+ voluntary_info[index].voluntary_address +`
                                     </td>
                                     <td>
-                                        <input type="date" name="voluntary_date_from[]" value="`+ voluntary_info[index].voluntary_from +`" class="voluntary_from_class" placeholder="----" autocomplete="off" style="width: 180px; margin-right: 10px">
-                                        <input type="date" name="voluntary_date_to[]" value="`+ voluntary_info[index].voluntary_to +`" class="voluntary_to_class" placeholder="----" autocomplete="off" style="width: 180px">
+                                        `+ voluntary_info[index].voluntary_from +` -
+                                        `+ voluntary_info[index].voluntary_to +`
                                     </td>
                                     <td>
-                                        <input type="text" name="voluntary_no_of_hrs[]" value="`+ voluntary_info[index].voluntary_hours +`" class="voluntary_hours_class" placeholder="----" autocomplete="off">
+                                        `+ voluntary_info[index].voluntary_hours +`
                                     </td>
                                     <td>
-                                        <input type="text" name="voluntary_position[]" value="`+ voluntary_info[index].voluntary_position +`" class="voluntary_position_class" placeholder="----" autocomplete="off">
-                                    </td>
-                                    <td class="remove-voluntary" style="min-width: 30px!important; cursor: pointer;">
-                                        <i class="fa-solid fa-minus" style="background-color: #FF7979; color: #fff; border-radius: 4px; padding: 13px 13.5px; font-size: 13px;"></i>
+                                        `+ voluntary_info[index].voluntary_position +`
                                     </td>
                                 </tr>`;
                             $('#voluntary_work_table_id').append(html);
@@ -245,31 +236,20 @@
                         for (let index = 0; index < learning_info.length; index++) {
                             const html = `<tr>
                                         <td>
-                                        <input type="hidden" name="learning_training[]" value="`+ learning_info[index].id +`" class="learning_id_class">
-                                        <input type="text" name="learning_training[]" value="`+ learning_info[index].learning_training +`" class="learning_training_class" placeholder="----" autocomplete="off" style="width: 400px">
+                                        `+ learning_info[index].learning_training +`
                                         </td>
                                         <td>
-                                        <input type="date" name="learning_date_from[]" value="`+ learning_info[index].learning_from +`" class="learning_from_class" placeholder="----" autocomplete="off" style="width: 180px; margin-right: 10px">
-                                        <input type="date" name="learning_date_to[]" value="`+ learning_info[index].learning_to +`" class="learning_to_class" placeholder="----" autocomplete="off" style="width: 180px">
+                                        `+ learning_info[index].learning_from +` -
+                                        `+ learning_info[index].learning_to +`
                                         </td>
                                         <td>
-                                        <input type="text" name="learning_no_hrs[]" value="`+ learning_info[index].learning_hours +`" class="learning_hours_class" placeholder="----" autocomplete="off">
+                                        `+ learning_info[index].learning_hours +`
                                         </td>
                                         <td>
-                                        <select id="learning_`+learning_info[index].id+`" name="learning_ld_type[]" value="`+ learning_info[index].learning_id_type +`" class="learning_id_type_class"style="height: 38px; margin-bottom: 25px;" class="educational_level_class">
-                                            <option value="">-SELECT-</option>
-                                            <option value="EXECUTIVE/MANAGERIAL">EXECUTIVE/MANAGERIAL</option>
-                                            <option value="QUALITY">QUALITY</option>
-                                            <option value="SOFT SKILLS">SOFT SKILLS</option>
-                                            <option value="SUPERVISORY">SUPERVISORY</option>
-                                            <option value="TECHNICAL OR SKILLS">TECHNICAL OR SKILLS</option>
-                                        </select>
+                                        `+ learning_info[index].learning_id_type +`
                                         </td>
                                         <td>
-                                        <input type="text" name="learning_sponsored[]" value="`+ learning_info[index].learning_sponsored +`" class="learning_sponsored_class" placeholder="----" autocomplete="off">
-                                        </td>
-                                        <td class="remove-learning" style="min-width: 30px!important; cursor: pointer;">
-                                        <i class="fa-solid fa-minus" style="background-color: #FF7979; color: #fff; border-radius: 4px; padding: 13px 13.5px; font-size: 13px;"></i>
+                                        `+ learning_info[index].learning_sponsored +`
                                         </td>
                                     </tr>`;
                             $('#learning_table_id').append(html);
@@ -285,11 +265,7 @@
                         for (let index = 0; index < hobby_info.length; index++) {
                             const html = `<tr>
                                         <td>
-                                            <input type="hidden" name="hobby_id[]" value="`+ hobby_info[index].id +`" class="hobby_id_class">
-                                            <input type="text" name="hobby_hobby[]" value="`+ hobby_info[index].hobby +`" class="hobby_hobby_class" placeholder="----" autocomplete="off" style="width: 400px">
-                                        </td>
-                                        <td class="remove-learning" style="min-width: 30px!important; cursor: pointer;">
-                                        <i class="fa-solid fa-minus" style="background-color: #FF7979; color: #fff; border-radius: 4px; padding: 13px 13.5px; font-size: 13px;"></i>
+                                            `+ hobby_info[index].hobby +`
                                         </td>
                                     </tr>`;
                             $('#hobby_table_id').append(html);
@@ -302,11 +278,7 @@
                         for (let index = 0; index < academic_info.length; index++) {
                             const html = `<tr>
                                         <td>
-                                            <input type="hidden" name="academic_id[]" value="`+ academic_info[index].id +`" class="academic_id_class">
-                                            <input type="text" name="others_non_academic[]" value="`+ academic_info[index].others_non_academic +`" class="others_non_academic_class" placeholder="----" autocomplete="off" style="width: 400px">
-                                        </td>
-                                        <td class="remove-learning" style="min-width: 30px!important; cursor: pointer;">
-                                        <i class="fa-solid fa-minus" style="background-color: #FF7979; color: #fff; border-radius: 4px; padding: 13px 13.5px; font-size: 13px;"></i>
+                                            `+ academic_info[index].others_non_academic +`
                                         </td>
                                     </tr>`;
                             $('#academic_table_id').append(html);
@@ -319,11 +291,7 @@
                         for (let index = 0; index < membership_info.length; index++) {
                             const html = `<tr>
                                         <td>
-                                            <input type="hidden" name="membership_id[]" value="`+ membership_info[index].id +`" class="membership_id_class">
-                                            <input type="text" name="membership[]" value="`+ membership_info[index].membership +`" class="membership_class" placeholder="----" autocomplete="off" style="width: 400px">
-                                        </td>
-                                        <td class="remove-learning" style="min-width: 30px!important; cursor: pointer;">
-                                        <i class="fa-solid fa-minus" style="background-color: #FF7979; color: #fff; border-radius: 4px; padding: 13px 13.5px; font-size: 13px;"></i>
+                                            `+ membership_info[index].membership +`
                                         </td>
                                     </tr>`;
                             $('#membership_table_id').append(html);
@@ -353,18 +321,29 @@
             });
         });
 
-        function saveStatus(status) {
+        let wait;
+        function saveStatus(status, element) {
+            const btn = $(element);
+            if (wait) {
+                return;
+            }
+            wait = true;
             var data = {
                 _token: "{{csrf_token()}}",
                 id: hold_id,
                 status,
             };
-
+            var originalText = btn.text();
+            btn.text('Please wait...');
             $.post('/personnel/save_status', data).done(function (response) {
                 toastr.success('Personnel was updated successfully!');
+                btn.text(originalText);
                 setTimeout(() => {
                     window.location.reload();
                 }, 3000);
+            }).fail(() => {
+                wait = false;
+                btn.text(originalText);
             });
         }
 

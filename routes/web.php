@@ -21,6 +21,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::group(['prefix' => 'dashboard'], function () {
         Route::get('/', 'DashboardController@index')->name('dashboard');
         Route::get('/get_records', 'DashboardController@get_records')->name('get_record');
+        Route::get('/personnel', 'DashboardController@getPersonnels')->name('dashboard.personnels.get');
     });
 
     Route::group(['prefix' => 'management_type'], function () {
@@ -110,6 +111,15 @@ Route::group(['middleware' => ['auth']], function () {
     Route::group(['prefix' => 'security'], function () {
         Route::get('/change_password', 'SecurityController@changePassword')->name('security.change_password');
         Route::post('/change_password/update', 'SecurityController@changePasswordUpdate')->name('security.change_password.update');
+    });
+
+    Route::group(['prefix' => 'reports'], function () {
+        Route::get('/', 'ReportsController@index')->name('reports.change_passwordindex');
+        Route::post('/download', 'ReportsController@download')->name('reports.download');
+    });
+
+    Route::group(['prefix' => 'notifications'], function () {
+        Route::post('/mark-as-read', 'NotificationsController@markAsRead')->name('notifications.mark_as_read');
     });
 });
 

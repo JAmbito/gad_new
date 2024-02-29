@@ -35,7 +35,9 @@
                             <button class="login-btn align-self-center ml-15" type="submit">Change password</button>
                         </div>
 
-                        @include('layouts.alert')
+                        @if($errors->any())
+                            <div class="alert alert-danger">{{ $errors->first() }}</div>
+                        @endif
                     </form>
                 </div>
 

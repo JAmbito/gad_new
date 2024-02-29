@@ -10,9 +10,9 @@
                     Status: <strong style="text-transform: capitalize">{{App\Support\StatusSupport::getLabelByStatus($personnel->status)}}</strong>
                 </div>
                 @can(App\Support\RoleSupport::PERMISSION_REVIEW_PERSONNEL_STATUS)
-                    <button class="btn btn-success" onclick="saveStatus({{ App\Support\StatusSupport::STATUS_APPROVED }})">Approve</button>
-                    <button class="btn btn-danger" onclick="saveStatus({{ App\Support\StatusSupport::STATUS_REJECTED }})">Reject</button>
-                    <button class="btn btn-info" onclick="saveStatus({{ App\Support\StatusSupport::STATUS_ONHOLD }})">Hold</button>
+                    <button class="btn btn-success" onclick="saveStatus({{ App\Support\StatusSupport::STATUS_APPROVED }}, this)">Approve</button>
+                    <button class="btn btn-danger" onclick="saveStatus({{ App\Support\StatusSupport::STATUS_REJECTED }}, this)">Reject</button>
+                    <button class="btn btn-info" onclick="saveStatus({{ App\Support\StatusSupport::STATUS_ONHOLD }}, this)">Hold</button>
                 @endcan
             </div>
         <div style="margin-bottom: 25px;">

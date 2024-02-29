@@ -9,6 +9,34 @@ class Personnel extends Model
 {
     use SoftDeletes;
 
+    public const EMPLOYEE_STATUS_CASUAL = 'CASUAL';
+    public const EMPLOYEE_STATUS_JOB_ORDER = 'JOB ORDER';
+    public const EMPLOYEE_STATUS_PERMANENT = 'PERMANENT';
+    public const EMPLOYEE_STATUS_PART_TIME = 'PART TIME';
+    public const EMPLOYEE_STATUS_TEMPORARY = 'TEMPORARY';
+
+    public const EMPLOYEE_STATUSES = [
+        self::EMPLOYEE_STATUS_PERMANENT,
+        self::EMPLOYEE_STATUS_PART_TIME,
+        self::EMPLOYEE_STATUS_JOB_ORDER,
+        self::EMPLOYEE_STATUS_CASUAL,
+        self::EMPLOYEE_STATUS_TEMPORARY,
+    ];
+
+    public const CIVIL_STATUS_SINGLE = 'SINGLE';
+    public const CIVIL_STATUS_MARRIED = 'MARRIED';
+    public const CIVIL_STATUS_WIDOWED = 'WIDOWED';
+    public const CIVIL_STATUS_SEPARATED = 'SEPARATED';
+    public const CIVIL_STATUS_OTHER = 'OTHER';
+
+    public const CIVIL_STATUSES = [
+        self::CIVIL_STATUS_SINGLE,
+        self::CIVIL_STATUS_MARRIED,
+        self::CIVIL_STATUS_WIDOWED,
+        self::CIVIL_STATUS_SEPARATED,
+        self::CIVIL_STATUS_OTHER,
+    ];
+
     protected $fillable = [
             'id',
             'firstname',

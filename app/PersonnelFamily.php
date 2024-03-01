@@ -3,11 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class PersonnelFamily extends Model
 {
     protected $fillable = [
-        'personnel_id',
+        'personnel_information_id',
         'spouse_firstname',
         'spouse_middlename',
         'spouse_lastname',
@@ -27,8 +28,8 @@ class PersonnelFamily extends Model
         'mother_extension',
     ];
 
-    public function personnel()
+    public function personnel_information(): BelongsTo
     {
-        return $this->belongsTo(Personnel::class, 'personnel_id');
+        return $this->belongsTo(PersonnelInformation::class, 'personnel_id');
     }
 }

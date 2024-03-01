@@ -17,7 +17,7 @@
                   <a href="DTM_Personnels.php"><i class='bx bx-arrow-back'></i></a>
                 </div>
                 <div id="bom-details-parent-id" style="padding-bottom: 1px; padding-top: 27px;">
-                        @include('backend.pages.personnel.partial.faker')
+{{--                     For debugging only   @include('backend.pages.personnel.partial.faker')--}}
 
                         <!-- CREATE BOM CONTAINER -->
                         <div id="create-bom-cont-id" style="border: 0px solid #A2A2A2; border-radius: 6px; padding: 20px 30px 20px 30px; margin-bottom: -23px; margin-top: 10px;">
@@ -76,7 +76,7 @@
             wait = true;
             var data = {
                 _token: '{{csrf_token()}}',
-                personnel_id: $('#personnel_id').val(),
+                personnel_information_id: $('#personnel_information_id').val(),
                 firstname: $('#firstname').val(),
                 middlename: $('#middlename').val(),
                 lastname: $('#lastname').val(),
@@ -160,6 +160,7 @@
                 question_40b:$('input[type=radio][name=question_40b]:checked').val(),
                 question_40b_detail:$('#question_40b_detail').val(),
                 question_40c:$('input[type=radio][name=question_40c]:checked').val(),
+                question_40c_detail:$('#question_40c_detail').val(),
                 reference_name:$('#reference_name').val(),
                 reference_address:$('#reference_address').val(),
                 reference_tel_no:$('#reference_tel_no').val(),

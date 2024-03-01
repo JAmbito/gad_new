@@ -29,7 +29,7 @@ class PersonnelEducational extends Model
     ];
 
     protected $fillable = [
-        'personnel_id',
+        'personnel_information_id',
         'education_id',
         'education_level',
         'educational_school_name',

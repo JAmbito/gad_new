@@ -39,7 +39,7 @@
             @if(RoleSupport::hasDataManagementPermissions(auth()->user()))
                 <li class="">
                     <a href="#" class="dash-drop side-btn">
-                        <i class="fi fi-rr-chart-pie-alt"></i>
+                        <i class="fi fi-rr-folder-open"></i>
                         <span class="text dash-chev" style="letter-spacing: .3px">&nbsp; Data Management </span>
                         <i class="fa-solid fa-chevron-right" style="font-size: 10px; margin-right: 12px;"
                            id="chev-rotate"></i>
@@ -119,11 +119,20 @@
                         <li class="emp-down-li emp-ac emp-paydas">
                             <a href="{{ url('personnel') }}">
                                 <h4 style="color: #D5D5D5; margin-right: 5px">—</h4>
-                                <span class="text">&nbsp;View Personnels</span>
+                                <span class="text">&nbsp;Manage Personnels</span>
                                 <input type="text" name="project_create" class="project_create_class" hidden>
                             </a>
                         </li>
                     @endcan
+                        @can(RoleSupport::PERMISSION_REVIEW_PERSONNEL_STATUS)
+                            <li class="emp-down-li emp-ac emp-paydas">
+                                <a href="{{ route('personnel.review') }}">
+                                    <h4 style="color: #D5D5D5; margin-right: 5px">—</h4>
+                                    <span class="text">&nbsp;Review Personnels</span>
+                                    <input type="text" name="project_create" class="project_create_class" hidden>
+                                </a>
+                            </li>
+                        @endcan
                     <!-- <li class="emp-down-li emp-ac emp-paydas">
                         <a href="DTM_Personnels_APPROVAL.php">
                             <h4 style="color: #D5D5D5; margin-right: 5px">—</h4>

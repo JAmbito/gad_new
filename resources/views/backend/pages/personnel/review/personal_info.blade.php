@@ -2,14 +2,28 @@
 <div class="main-table-container-div">
 
     <div id="personal-info" class="project-details-div" style="width: 100%; border: 1px solid #939393; border-radius: 6px; padding: 50px 55px 20px 55px; margin-bottom: 30px;">
-            @if($personnel->reviewed_by()->first())
-            <h4>Last reviewed by: {{$personnel->reviewed_by()->first()->name}}</h4>
+        <div style="margin-bottom: 25px; text-align: center">
+            @if($personnel_version->version > 1)
+                <h4>Revision information version: v{{ $personnel_version->version }}</h4>
+                <a href="{{ route('personnel.view', ['id' => $latest_personnel_version->personnel_information_id]) }}">View current version</a>
+                <br/>
+                <br/>
+            @else
+                <h4>Information version: v{{ $personnel_version->version }}</h4>
             @endif
-            <h4>Current information version: v{{ $personnel_version->version }}</h4>
-            @if($personnel->created_by()->first())
-                    <h4>Created by: {{ $personnel->created_by()->first()->name }}</h4>
-            @endif
-        <br/>
+            <label style="font-size: 16.6px; text-align: center">Note: Approving this data will set it as the current data of this personnel</label>
+        </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; grid-gap: 30px; margin-bottom: 25px;margin-top: 25px;">
+                <div class="align-self-center">
+                    Status: <strong style="text-transform: capitalize">{{App\Support\StatusSupport::getLabelByStatus($personnel->status)}}</strong>
+                </div>
+                @can(App\Support\RoleSupport::PERMISSION_REVIEW_PERSONNEL_STATUS)
+                    <button class="btn btn-success" onclick="saveStatus({{ App\Support\StatusSupport::STATUS_APPROVED }}, this)">Approve</button>
+                    <button class="btn btn-danger" onclick="saveStatus({{ App\Support\StatusSupport::STATUS_REJECTED }}, this)">Reject</button>
+                    <button class="btn btn-info" onclick="saveStatus({{ App\Support\StatusSupport::STATUS_ONHOLD }}, this)">Hold</button>
+                @endcan
+            </div>
         <div style="margin-bottom: 25px;">
             <label style="font-size: 16.6px; text-decoration: underline;">I. PERSONAL INFORMATION</label>
         </div>

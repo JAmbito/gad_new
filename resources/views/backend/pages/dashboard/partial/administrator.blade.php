@@ -1,5 +1,5 @@
 @php
-    use App\Personnel;
+    use App\PersonnelInformation;
     use App\PersonnelEducational;
 @endphp
 <div class="row" style="margin-top: 0; margin-bottom: 25px">
@@ -89,7 +89,7 @@
             </thead>
             <tbody>
 
-            @foreach(Personnel::EMPLOYEE_STATUSES as $employmentStatus)
+            @foreach(PersonnelInformation::EMPLOYEE_STATUSES as $employmentStatus)
                 <tr>
                     <td class="emp_status">{{ $employmentStatus }} EMPLOYMENT</td>
                     <td id="MALE_{{ str_replace(' ', '_', $employmentStatus) }}">0</td>
@@ -108,7 +108,7 @@
             <th>FEMALE</th>
             </thead>
             <tbody>
-            @foreach(Personnel::CIVIL_STATUSES as $civilStatus)
+            @foreach(PersonnelInformation::CIVIL_STATUSES as $civilStatus)
                 <tr>
                     <td class="emp_status">{{ $civilStatus }}</td>
                     <td id="MALE_TEACHING_{{ str_replace(' ', '_', $civilStatus) }}">0</td>
@@ -156,7 +156,7 @@
             <th>FEMALE</th>
             </thead>
             <tbody>
-            @foreach(Personnel::CIVIL_STATUSES as $civilStatus)
+            @foreach(PersonnelInformation::CIVIL_STATUSES as $civilStatus)
                 <tr>
                     <td class="emp_status">{{ $civilStatus }}</td>
                     <td id="MALE_NON_TEACHING_{{ str_replace(' ', '_', $civilStatus) }}">0</td>

@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Campus;
+use App\PersonnelVersion;
 use App\Services\ReportGeneratorService;
 use App\Support\RoleSupport;
 use App\Support\StatusSupport;
 use Illuminate\Http\Request;
-use App\Personnel;
+use App\PersonnelInformation;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -21,13 +22,18 @@ class DashboardController extends Controller
         $variables = [];
         if ($roleName === RoleSupport::ROLE_ENCODER) {
             $total_employees_encoded_by_status = $reportGeneratorService->getTotalEmployeesEncodedByStatusByUser(Auth::user());
-            $total_employees_encoded = Personnel::where('created_by', Auth::user()->id)->orderBy('id', 'desc')->count();
+            $total_employees_encoded = PersonnelVersion::whereHas('personnel_information', function ($q) {
+                $q->where([
+                    ['created_by', '=', Auth::user()->id],
+                ]);
+            })->count();
             $variables = compact('total_employees_encoded_by_status', 'total_employees_encoded');
         } elseif ($roleName === RoleSupport::ROLE_APPROVER) {
             $total_employees_reviewed_by_status = $reportGeneratorService->getTotalEmployeesReviewedByStatusByUser(Auth::user());
             $total_employees_awaiting_review = $reportGeneratorService->getTotalEmployeesAwaitingReviewByCampus(Auth::user()->campus->id);
-            $total_employees_reviewed = Personnel::where('reviewed_by', Auth::user()->id)->whereIn('status', [StatusSupport::STATUS_APPROVED, StatusSupport::STATUS_ONHOLD, StatusSupport::STATUS_REJECTED])
-                ->orderBy('id', 'desc')->count();
+            $total_employees_reviewed = PersonnelVersion::whereHas('personnel_information', function ($q) {
+                $q->where('reviewed_by', Auth::user()->id)->whereIn('status', [StatusSupport::STATUS_APPROVED, StatusSupport::STATUS_ONHOLD, StatusSupport::STATUS_REJECTED]);
+            })->count();
             $variables = compact('total_employees_reviewed_by_status', 'total_employees_awaiting_review', 'total_employees_reviewed');
         }
 
@@ -72,13 +78,30 @@ class DashboardController extends Controller
         if (request()->ajax()) {
             $role = Auth::user()->getRoleNames()[0];
             if ($role === RoleSupport::ROLE_ENCODER) {
-                $personnels = Personnel::where('created_by', Auth::user()->id)->orderBy('id', 'desc')->with('reviewed_by', 'created_by', 'academic_rank', 'administrative_rank', 'designation', 'department', 'campus')->get();
+                $personnels = PersonnelVersion::whereHas('personnel_information', function ($q) {
+                    $q->where([
+                        [
+                            'campus_id', '=', Auth::user()->campus ? Auth::user()->campus->id : null,
+                        ],
+                        [
+                            'created_by', '=', Auth::user()->id
+                        ]
+                    ]);
+                })->orderBy('id', 'desc')->with(
+                    'personnel_information.reviewed_by',
+                    'personnel_information.created_by',
+                    'personnel_information.academic_rank',
+                    'personnel_information.administrative_rank',
+                    'personnel_information.designation',
+                    'personnel_information.department',
+                    'personnel_information.campus'
+                )->get();
             } else {
                 $campus = Auth::user()->campus;
                 if ($campus) {
-                    $personnels = Personnel::where('campus_id', $campus->id)->orderBy('id', 'desc')->with('reviewed_by', 'created_by', 'academic_rank', 'administrative_rank', 'designation', 'department', 'campus')->get();
+                    $personnels = PersonnelInformation::where('campus_id', $campus->id)->orderBy('id', 'desc')->with('reviewed_by', 'created_by', 'academic_rank', 'administrative_rank', 'designation', 'department', 'campus')->get();
                 } else {
-                    $personnels = Personnel::orderBy('id', 'desc')->with('reviewed_by', 'created_by', 'academic_rank', 'administrative_rank', 'designation', 'department', 'campus')->get();
+                    $personnels = PersonnelInformation::orderBy('id', 'desc')->with('reviewed_by', 'created_by', 'academic_rank', 'administrative_rank', 'designation', 'department', 'campus')->get();
                 }
             }
 

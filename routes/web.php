@@ -72,10 +72,13 @@ Route::group(['middleware' => ['auth']], function () {
     Route::group(['prefix' => 'personnel'], function () {
         Route::get('/', 'PersonnelController@index')->name('personnel.index');
         Route::get('/create', 'PersonnelController@create')->name('personnel.create');
+        Route::get('/review', 'PersonnelController@review')->name('personnel.review');
         Route::post('/save', 'PersonnelController@store')->name('save');
         Route::get('/edit/{id}', 'PersonnelController@edit')->name('edit');
         Route::get('/edit_personnel/{id}', 'PersonnelController@edit_personnel')->name('edit');
         Route::get('/get', 'PersonnelController@get')->name('get');
+        Route::get('/get_for_review', 'PersonnelController@getForReview')->name('personnel.get_for_review');
+        Route::get('/review/{id}', 'PersonnelController@reviewPersonnel')->name('personnel.review_personnel');
         Route::get('/{id}', 'PersonnelController@view')->name('personnel.view');
         Route::post('/update/{id}', 'PersonnelController@update')->name('update');
         Route::get('/destroy/{id}', 'PersonnelController@destroy')->name('delete');

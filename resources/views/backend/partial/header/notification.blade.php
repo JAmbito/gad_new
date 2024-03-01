@@ -38,7 +38,7 @@
                 Auth::user()->notifications()->limit(5)->get() as $notification
             )
                 @if ($notification->type === PersonnelCreated::class)
-                    <a href='javascript:' data-id="{{$notification->id}}" data-redirect="{{route('personnel.view', ['id' => $notification->data['personnel_id']])}}"
+                    <a href='javascript:' data-id="{{$notification->id}}" data-redirect="{{route('personnel.review_personnel', ['id' => $notification->data['personnel_id']])}}"
                        class="notif-mid-cont user-notifications">
                         @if (is_null($notification->read_at))<span class="badge badge-info">Unread</span>@endif
                         Personnel {{$notification->data['personnel_firstname']}} {{$notification->data['personnel_lastname']}} has been created by {{$notification->data['personnel_created_by']}} and needs review.
@@ -47,7 +47,7 @@
                         </span>
                     </a>
                 @elseif ($notification->type === PersonnelUpdated::class)
-                    <a href='javascript:' data-id="{{$notification->id}}" data-redirect="{{route('personnel.view', ['id' => $notification->data['personnel_id']])}}"
+                    <a href='javascript:' data-id="{{$notification->id}}" data-redirect="{{route('personnel.review_personnel', ['id' => $notification->data['personnel_id']])}}"
                        class="notif-mid-cont user-notifications">
                         @if (is_null($notification->read_at))<span class="badge badge-info">Unread</span>@endif
                         Personnel {{$notification->data['personnel_firstname']}} {{$notification->data['personnel_lastname']}} has been updated by {{$notification->data['personnel_created_by']}} and needs another review.

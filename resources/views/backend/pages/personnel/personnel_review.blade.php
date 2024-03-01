@@ -27,16 +27,6 @@
 
             @include('backend.partial.header')
 
-            @can(RoleSupport::PERMISSION_CREATE_PERSONNEL)
-                <div class="add-user-container">
-                    <a class="add-btns btn-insert" href="{{ route('personnel.create') }}" style="margin-left: 10px">
-                        <i class='bx bx-plus'></i>
-                        <button>ADD PERSONNEL</button>
-                    </a>
-
-                </div>
-            @endcan
-
             <div style="margin-left: 30px;" class="selection-cont">
                 <div class="table-pad">
                     <div class="table-header" id="header">
@@ -49,7 +39,7 @@
                         </span>
 
                         <span id="teach-full-btn" style="margin-left: 0px; font-weight: 600; font-size: 14px;"
-                              class="proj-data">All Personnel</span>
+                              class="proj-data">For Review</span>
 
                     </div>
                 </div>
@@ -127,51 +117,26 @@
                 pageLength: 20,
                 scrollX: true,
                 ajax: {
-                    url: '/personnel/get',
+                    url: '{{ route('personnel.get_for_review') }}',
                     type: 'GET'
                 },
                 columns: [
-                    @canany([
-                        RoleSupport::PERMISSION_UPDATE_PERSONNEL,
-                        RoleSupport::PERMISSION_READ_PERSONNEL,
-                        RoleSupport::PERMISSION_DELETE_PERSONNEL,
-                    ])
+                    @can(RoleSupport::PERMISSION_REVIEW_PERSONNEL_STATUS)
                         {
-                            data: null, title: 'ACTION', orderable: false, render: function (data, type, row, meta) {
-
-                                var html = '<div style="position: relative;">';
-                                html += '<button data-id="1" class="btn-action"><i class="fi fi-rr-menu-dots"></i></button>';
-                                html += '<div style="" class="action-cont" id="action-cont-id">';
-                                @can(RoleSupport::PERMISSION_READ_PERSONNEL)
-                                    html += '<div style="text-align: left;">';
-                                html += '<a data-id="1" class="btn-update" href="/personnel/' + data.personnel_information.id + '">View</a>';
-                                html += '</div>';
-                                @endcan
-                                    @can(RoleSupport::PERMISSION_UPDATE_PERSONNEL)
-                                    html += '<div style="text-align: left;">';
-                                html += '<a data-id="1" class="btn-update" href="/personnel/edit/' + data.personnel_information.id + '">Edit</a>';
-                                html += '</div>';
-                                @endcan
-                                    @can(RoleSupport::PERMISSION_UPDATE_PERSONNEL)
-                                    html += '<div style="text-align: left;">';
-                                html += '<button data-id="2" class="btn-delete" onclick="confirmDelete(' + data.personnel_information.id + ')">Delete</button>';
-                                html += '</div>';
-                                @endcan
-
-                                    html += '</div>';
+                            data: null,
+                            title: '<div class="text-center">ACTION</div>',
+                            orderable: false,
+                            render: function (data, type, row, meta) {
+                                var html = '<div style="position: relative;" class="text-center">';
+                                html += '<a href="/personnel/review/'+data.personnel_information.id+'" data-id="1" class="btn-action">Review</a>';
                                 html += '</div>';
                                 return html;
                             }
                         },
-                    @endcanany
+                    @endcan
                     {data: 'personnel_information.firstname', title: 'firstname'},
                     {data: 'personnel_information.lastname', title: 'lastname'},
-                    {data: 'personnel_information.academic_rank.academic_rank', title: 'Academic Rank'},
-                    {data: 'personnel_information.administrative_rank.administrative_rank', title: 'Administrative Rank'},
-                    {data: 'personnel_information.designation.designation', title: 'Position'},
-                    {data: 'personnel_information.department.department', title: 'Department'},
                     {data: 'personnel_information.campus.campus_name', title: 'Campus'},
-                    {data: 'personnel_information.employee_status', title: 'Employment Status'},
                     {
                         data: 'personnel_information.created_by.name', title: 'Created by', render: function (data, type, row, meta) {
                             if (data) {
@@ -182,14 +147,24 @@
                         }
                     },
                     {
-                        data: 'personnel_information.reviewed_by.name', title: 'Reviewed by', render: function (data, type, row, meta) {
-                            if (data) {
-                                return data;
+                        data: 'personnel_information.status', title: 'Status', render: function (data, type, row, meta) {
+                            switch (data.toString()) {
+                                case '0':
+                                    return '<span style="color:orange;">{{App\Support\StatusSupport::getLabelByStatus(\App\Support\StatusSupport::STATUS_PENDING)}}</span>';
+                                    break;
+                                case '1':
+                                    return '<span style="color:blue;">{{App\Support\StatusSupport::getLabelByStatus(\App\Support\StatusSupport::STATUS_ONHOLD)}}</span>';
+                                    break;
+                                case '2':
+                                    return '<span style="color:red;">{{App\Support\StatusSupport::getLabelByStatus(\App\Support\StatusSupport::STATUS_REJECTED)}}</span>';
+                                    break;
+                                case '3':
+                                    return '<span style="color:lime;">{{App\Support\StatusSupport::getLabelByStatus(\App\Support\StatusSupport::STATUS_APPROVED)}}</span>';
+                                    break;
                             }
-
-                            return '-';
                         }
                     },
+
                 ]
             });
 

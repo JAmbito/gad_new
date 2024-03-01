@@ -1,4 +1,4 @@
-@php use App\Personnel; @endphp
+@php use App\PersonnelInformation; @endphp
     <!-- I. PERSONAL INFORMATION -->
 <div class="main-table-container-div">
 
@@ -121,7 +121,7 @@
                     <select id="employee_status" name="employee_status" style="height: 38px; margin-bottom: 25px;"
                             required>
                         <option style="display: none;" value="">-SELECT STATUS-</option>
-                        @foreach(Personnel::EMPLOYEE_STATUSES as $employeeStatus)
+                        @foreach(PersonnelInformation::EMPLOYEE_STATUSES as $employeeStatus)
                             <option value="{{ $employeeStatus }}">{{ $employeeStatus }}</option>
                         @endforeach
 
@@ -159,7 +159,7 @@
                     </div>
                     <select id="civil_status" name="civil_status" style="height: 38px; margin-bottom: 25px;" required>
                         <option style="display: none;" value="">-SELECT STATUS-</option>
-                        @foreach(Personnel::CIVIL_STATUSES as $civilStatus)
+                        @foreach(PersonnelInformation::CIVIL_STATUSES as $civilStatus)
                             <option value="{{ $civilStatus }}">{{ $civilStatus }}</option>
                         @endforeach
                     </select>

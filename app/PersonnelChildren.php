@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class PersonnelChildren extends Model
 {
     protected $fiilable = [
-        'personnel_id',
+        'personnel_information_id',
         'children_name',
         'children_sex',
         'children_birthday',

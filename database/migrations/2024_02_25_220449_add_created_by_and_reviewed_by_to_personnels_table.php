@@ -34,6 +34,8 @@ class AddCreatedByAndReviewedByToPersonnelsTable extends Migration
     public function down()
     {
         Schema::table('personnels', function (Blueprint $table) {
+            $table->dropForeign(['created_by']);
+            $table->dropForeign(['reviewed_by']);
             $table->dropColumn('created_by');
             $table->dropColumn('reviewed_by');
         });

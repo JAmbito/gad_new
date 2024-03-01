@@ -2,7 +2,7 @@
 
 namespace App\Notifications;
 
-use App\Personnel;
+use App\PersonnelInformation;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -17,10 +17,10 @@ class PersonnelReviewed extends Notification
      *
      * @return void
      */
-    private Personnel $personnel;
+    private PersonnelInformation $personnel;
     private string $reviewedByName;
     private string $status;
-    public function __construct(Personnel $personnel, string $reviewedByName, string $status)
+    public function __construct(PersonnelInformation $personnel, string $reviewedByName, string $status)
     {
         $this->personnel = $personnel;
         $this->reviewedByName = $reviewedByName;

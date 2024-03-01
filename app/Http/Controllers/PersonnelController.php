@@ -6,6 +6,7 @@ use App\Notifications\PersonnelCreated;
 use App\Notifications\PersonnelReviewed;
 use App\Notifications\PersonnelUpdated;
 use App\Personnel;
+use App\PersonnelInformation;
 use App\AcademicRank;
 use App\Administrative_rank;
 use App\Designation;
@@ -18,6 +19,7 @@ use App\PersonnelGovernmentIssued;
 use App\PersonnelChildren;
 use App\PersonnelEducational;
 use App\PersonnelService;
+use App\PersonnelVersion;
 use App\PersonnelWork;
 use App\PersonnelVoluntaryWork;
 use App\PersonnelLearning;
@@ -50,25 +52,41 @@ class PersonnelController extends Controller
 
     public function index()
     {
-        $personnels = Personnel::orderBy('id')->get();
         $campus = Auth::user()->campus;
         if (!is_null($campus)) {
-            $total_personnel_count = Personnel::where('campus_id', $campus->id)->count();
+            $total_personnel_count = Personnel::currentVersion($campus->id)->count();
         } else {
-            $total_personnel_count = Personnel::count();
+            $total_personnel_count = Personnel::currentVersion()->count();
         }
         $academic_ranks = AcademicRank::orderBy('id')->get();
         $administrative_ranks = Administrative_rank::orderBy('id')->get();
         $designations = Designation::orderBy('id')->get();
         $departments = Department::orderBy('id')->get();
         $campuses = Campus::orderBy('id')->get();
-        return view('backend.pages.personnel.personnel', compact('total_personnel_count', 'personnels', 'academic_ranks', 'administrative_ranks', 'designations', 'departments', 'campuses'));
+        return view('backend.pages.personnel.personnel', compact('total_personnel_count', 'academic_ranks', 'administrative_ranks', 'designations', 'departments', 'campuses'));
+    }
+
+    public function review()
+    {
+        $campus = Auth::user()->campus;
+        if (!is_null($campus)) {
+            $total_personnel_count = Personnel::forReviewVersion($campus->id)->count();
+        } else {
+            $total_personnel_count = Personnel::forReviewVersion()->count();
+        }
+        $academic_ranks = AcademicRank::orderBy('id')->get();
+        $administrative_ranks = Administrative_rank::orderBy('id')->get();
+        $designations = Designation::orderBy('id')->get();
+        $departments = Department::orderBy('id')->get();
+        $campuses = Campus::orderBy('id')->get();
+
+        return view('backend.pages.personnel.personnel_review', compact('total_personnel_count', 'academic_ranks', 'administrative_ranks', 'designations', 'departments', 'campuses'));
     }
 
     public function store(Request $request)
     {
-        $personnel = $request->validate([
-            'personnel_id' => ['max:250'],
+        $personnelInformation = $request->validate([
+            'personnel_information_id' => ['max:250'],
             'firstname' => ['required', 'max:250'],
             'middlename' => [ 'max:250'],
             'lastname' => ['required', 'max:250'],
@@ -174,258 +192,202 @@ class PersonnelController extends Controller
             'membership_records',
         ]);
 
-        if (!isset($request->personnel_id)) {
+        if (!isset($request->personnel_information_id)) {
             $request->request->add(['created_by' => Auth::user()->id]);
-            $personnel = Personnel::create($request->except(['action', 'id']));
-            $this->savePersonnel($request, $personnel->id);
+            $personnel = Personnel::create();
+            $personnelInformation = PersonnelInformation::create($request->except(['action', 'id']));
+            $this->savePersonnel($request, $personnelInformation->id, false);
+            PersonnelVersion::create([
+                'version' => 1,
+                'personnel_id' => $personnel->id,
+                'personnel_information_id' => $personnelInformation->id
+            ]);
 
             $approvers = User::role(RoleSupport::ROLE_APPROVER)->where('campus_id', $request->campus_id)->get();
             foreach ($approvers as $approver) {
-                $approver->notify(new PersonnelCreated($personnel, Auth::user()->name));
+                $approver->notify(new PersonnelCreated($personnelInformation, Auth::user()->name));
             }
 
             $superadmins = User::role(RoleSupport::ROLE_SUPERADMINISTRATOR)->get();
             foreach ($superadmins as $superadmin) {
-                $superadmin->notify(new PersonnelCreated($personnel, Auth::user()->name));
+                $superadmin->notify(new PersonnelCreated($personnelInformation, Auth::user()->name));
             }
 
             $this->setLog("Personnel Added", "Inserted", '"'.$request->firstname." ".$request->lastname."\" was added at Personnel Record");
         } else {
-            $personnel = Personnel::find($request->personnel_id);
-            $personnel->update(array_merge($request->except(['action', 'id']), ['status' => 0]));
-            $this->savePersonnel($request, $personnel->id);
+            $request->request->add(['created_by' => Auth::user()->id]);
+            $personnelInformationId = $request->personnel_information_id;
+            $personnel = Personnel::whereHas('personnel_versions', function ($q) use ($personnelInformationId) {
+                $q->where('personnel_information_id', $personnelInformationId);
+            })->first();
+            $personnelVersionHighest = PersonnelVersion::where([
+                ['personnel_information_id', '=' ,$personnelInformationId],
+                ['personnel_id', '=' ,$personnel->id]
+            ])->max('version');
+
+            $personnelInformation = PersonnelInformation::create($request->except(['action', 'id']));
+            $this->savePersonnel($request, $personnelInformation->id, true);
+            PersonnelVersion::create([
+                'version' => ($personnelVersionHighest+1),
+                'personnel_id' => $personnel->id,
+                'personnel_information_id' => $personnelInformation->id
+            ]);
 
             $approvers = User::role(RoleSupport::ROLE_APPROVER)->where('campus_id', $request->campus_id)->get();
             foreach ($approvers as $approver) {
-                $approver->notify(new PersonnelUpdated($personnel, Auth::user()->name));
+                $approver->notify(new PersonnelUpdated($personnelInformation, Auth::user()->name));
             }
 
             $superadmins = User::role(RoleSupport::ROLE_SUPERADMINISTRATOR)->get();
             foreach ($superadmins as $superadmin) {
-                $superadmin->notify(new PersonnelUpdated($personnel, Auth::user()->name));
+                $superadmin->notify(new PersonnelUpdated($personnelInformation, Auth::user()->name));
             }
 
             $this->setLog("Personnel Updated", "Updated", "Personnel Record was updated");
         }
 
-        return response()->json(compact('personnel'));
+        return response()->json(compact('personnelInformation'));
     }
 
-    private function savePersonnel($request, $personnelId)
+    private function savePersonnel($request, $personnelInformationId, $isEdit)
     {
-        $request->request->add(['personnel_id' => $personnelId]);
+        $request->request->add(['personnel_information_id' => $personnelInformationId]);
 
-        if (PersonnelFamily::where('personnel_id', $personnelId)->exists()) {
-            PersonnelFamily::where('personnel_id', $personnelId)->firstOrFail()->update($request->except(['action', 'id']));
+        if (PersonnelFamily::where('personnel_information_id', $personnelInformationId)->exists()) {
+            PersonnelFamily::where('personnel_information_id', $personnelInformationId)->firstOrFail()->update($request->except(['action', 'id']));
         } else {
             PersonnelFamily::create($request->except(['action', 'id']));
         }
 
-        if (PersonnelQuestionaire::where('personnel_id', $personnelId)->exists()) {
-            PersonnelQuestionaire::where('personnel_id', $personnelId)->firstOrFail()->update($request->except(['action', 'id']));
+        if (PersonnelQuestionaire::where('personnel_information_id', $personnelInformationId)->exists()) {
+            PersonnelQuestionaire::where('personnel_information_id', $personnelInformationId)->firstOrFail()->update($request->except(['action', 'id']));
         } else {
             PersonnelQuestionaire::create($request->except(['action', 'id']));
         }
 
-        if (PersonnelReference::where('personnel_id', $personnelId)->exists()) {
-            PersonnelReference::where('personnel_id', $personnelId)->firstOrFail()->update($request->except(['action', 'id']));
+        if (PersonnelReference::where('personnel_information_id', $personnelInformationId)->exists()) {
+            PersonnelReference::where('personnel_information_id', $personnelInformationId)->firstOrFail()->update($request->except(['action', 'id']));
         } else {
             PersonnelReference::create($request->except(['action', 'id']));
         }
 
-        if (PersonnelGovernmentIssued::where('personnel_id', $personnelId)->exists()) {
-            PersonnelGovernmentIssued::where('personnel_id', $personnelId)->firstOrFail()->update($request->except(['action', 'id']));
+        if (PersonnelGovernmentIssued::where('personnel_information_id', $personnelInformationId)->exists()) {
+            PersonnelGovernmentIssued::where('personnel_information_id', $personnelInformationId)->firstOrFail()->update($request->except(['action', 'id']));
         } else {
             PersonnelGovernmentIssued::create($request->except(['action', 'id']));
         }
 
-        foreach ($request->children_records as $key => $children) {
-            if (empty($children['children_id'])) {
+        if ($request->children_records) {
+            foreach ($request->children_records as $key => $children) {
                 $children_data = new PersonnelChildren();
-                $children_data->personnel_id = $personnelId;
+                $children_data->personnel_information_id = $personnelInformationId;
                 $children_data->children_name = $children['children'];
                 $children_data->children_sex = $children['sex'];
                 $children_data->children_birthday = $children['birthdate'];
                 $children_data->children_disability =  $children['disability'];
                 $children_data->save();
-            } else {
-                $children_data = PersonnelChildren::where('id', $children['children_id'])->firstOrFail();
-                $children_data->personnel_id = $personnelId;
-                $children_data->children_name = $children['children'];
-                $children_data->children_sex = $children['sex'];
-                $children_data->children_birthday = $children['birthdate'];
-                $children_data->children_disability =  $children['disability'];
-                $children_data->update();
             }
         }
 
-        foreach ($request->educational_records as $key => $educational) {
-            if (empty($educational['education_id'])) {
+
+        if ($request->educational_records) {
+            foreach ($request->educational_records as $key => $educational) {
                 $educational_data = new PersonnelEducational();
-                $educational_data->personnel_id = $personnelId;
+                $educational_data->personnel_information_id = $personnelInformationId;
                 $educational_data->education_level = $educational['education_level'];
                 $educational_data->educational_school_name = $educational['educational_school_name'];
                 $educational_data->educational_course = $educational['educational_course'];
-                $educational_data->educational_from =  $educational['educational_from'];
-                $educational_data->educational_to =  $educational['educational_to'];
-                $educational_data->educational_units_earned =  $educational['educational_units_earned'];
-                $educational_data->educational_year_graduated =  $educational['educational_year_graduated'];
-                $educational_data->educational_scholarship_class =  $educational['educational_scholarship_class'];
+                $educational_data->educational_from = $educational['educational_from'];
+                $educational_data->educational_to = $educational['educational_to'];
+                $educational_data->educational_units_earned = $educational['educational_units_earned'];
+                $educational_data->educational_year_graduated = $educational['educational_year_graduated'];
+                $educational_data->educational_scholarship_class = $educational['educational_scholarship_class'];
                 $educational_data->save();
-            } else {
-                $educational_data = PersonnelEducational::where('id', $educational['education_id'])->firstOrFail();
-                $educational_data->personnel_id = $personnelId;
-                $educational_data->education_level = $educational['education_level'];
-                $educational_data->educational_school_name = $educational['educational_school_name'];
-                $educational_data->educational_course = $educational['educational_course'];
-                $educational_data->educational_from =  $educational['educational_from'];
-                $educational_data->educational_to =  $educational['educational_to'];
-                $educational_data->educational_units_earned =  $educational['educational_units_earned'];
-                $educational_data->educational_year_graduated =  $educational['educational_year_graduated'];
-                $educational_data->educational_scholarship_class =  $educational['educational_scholarship_class'];
-                $educational_data->update();
             }
         }
 
-        foreach ($request->service_records as $key => $service) {
-            if (empty($service['service_id'])) {
+        if ($request->service_records) {
+            foreach ($request->service_records as $key => $service) {
                 $service_data = new PersonnelService();
-                $service_data->personnel_id = $personnelId;
+                $service_data->personnel_information_id = $personnelInformationId;
                 $service_data->service_career = $service['service_career'];
                 $service_data->service_rating = $service['service_rating'];
-                $service_data->service_exam_date =  $service['service_exam_date'];
-                $service_data->service_exam_place =  $service['service_exam_place'];
-                $service_data->service_license =  $service['service_license'];
-                $service_data->service_license_date =  $service['service_license_date'];
+                $service_data->service_exam_date = $service['service_exam_date'];
+                $service_data->service_exam_place = $service['service_exam_place'];
+                $service_data->service_license = $service['service_license'];
+                $service_data->service_license_date = $service['service_license_date'];
                 $service_data->save();
-            } else {
-                $service_data = PersonnelService::where('id', $service['service_id'])->firstOrFail();
-                $service_data->personnel_id = $personnelId;
-                $service_data->service_career = $service['service_career'];
-                $service_data->service_rating = $service['service_rating'];
-                $service_data->service_exam_date =  $service['service_exam_date'];
-                $service_data->service_exam_place =  $service['service_exam_place'];
-                $service_data->service_license =  $service['service_license'];
-                $service_data->service_license_date =  $service['service_license_date'];
-                $service_data->update();
             }
         }
 
-        foreach ($request->work_records as $key => $work) {
-            if (empty($work['work_id'])) {
+        if ($request->work_records) {
+            foreach ($request->work_records as $key => $work) {
                 $work_data = new PersonnelWork();
-                $work_data->personnel_id = $personnelId;
+                $work_data->personnel_information_id = $personnelInformationId;
                 $work_data->work_from = $work['work_from'];
                 $work_data->work_to = $work['work_to'];
-                $work_data->work_position =  $work['work_position'];
-                $work_data->work_agency =  $work['work_agency'];
-                $work_data->work_salary =  $work['work_salary'];
-                $work_data->work_pay_grade =  $work['work_pay_grade'];
-                $work_data->work_appointment =  $work['work_appointment'];
-                $work_data->work_gov_service =  $work['work_gov_service'];
+                $work_data->work_position = $work['work_position'];
+                $work_data->work_agency = $work['work_agency'];
+                $work_data->work_salary = $work['work_salary'];
+                $work_data->work_pay_grade = $work['work_pay_grade'];
+                $work_data->work_appointment = $work['work_appointment'];
+                $work_data->work_gov_service = $work['work_gov_service'];
                 $work_data->save();
-            } else {
-                $work_data = PersonnelWork::where('id', $work['work_id'])->firstOrFail();
-                $work_data->personnel_id = $personnelId;
-                $work_data->work_from = $work['work_from'];
-                $work_data->work_to = $work['work_to'];
-                $work_data->work_position =  $work['work_position'];
-                $work_data->work_agency =  $work['work_agency'];
-                $work_data->work_salary =  $work['work_salary'];
-                $work_data->work_pay_grade =  $work['work_pay_grade'];
-                $work_data->work_appointment =  $work['work_appointment'];
-                $work_data->work_gov_service =  $work['work_gov_service'];
-                $work_data->update();
             }
         }
 
-        foreach ($request->voluntary_records as $key => $voluntary) {
-            if (empty($voluntary['voluntary_id'])) {
+        if ($request->voluntary_records) {
+            foreach ($request->voluntary_records as $key => $voluntary) {
                 $voluntary_data = new PersonnelVoluntaryWork();
-                $voluntary_data->personnel_id = $personnelId;
+                $voluntary_data->personnel_information_id = $personnelInformationId;
                 $voluntary_data->voluntary_name = $voluntary['voluntary_name'];
                 $voluntary_data->voluntary_address = $voluntary['voluntary_address'];
-                $voluntary_data->voluntary_from =  $voluntary['voluntary_from'];
-                $voluntary_data->voluntary_to =  $voluntary['voluntary_to'];
-                $voluntary_data->voluntary_hours =  $voluntary['voluntary_hours'];
-                $voluntary_data->voluntary_position =  $voluntary['voluntary_position'];
+                $voluntary_data->voluntary_from = $voluntary['voluntary_from'];
+                $voluntary_data->voluntary_to = $voluntary['voluntary_to'];
+                $voluntary_data->voluntary_hours = $voluntary['voluntary_hours'];
+                $voluntary_data->voluntary_position = $voluntary['voluntary_position'];
                 $voluntary_data->save();
-            } else {
-                $voluntary_data = PersonnelVoluntaryWork::where('id', $voluntary['voluntary_id'])->firstOrFail();
-                $voluntary_data->personnel_id = $personnelId;
-                $voluntary_data->voluntary_name = $voluntary['voluntary_name'];
-                $voluntary_data->voluntary_address = $voluntary['voluntary_address'];
-                $voluntary_data->voluntary_from =  $voluntary['voluntary_from'];
-                $voluntary_data->voluntary_to =  $voluntary['voluntary_to'];
-                $voluntary_data->voluntary_hours =  $voluntary['voluntary_hours'];
-                $voluntary_data->voluntary_position =  $voluntary['voluntary_position'];
-                $voluntary_data->update();
             }
         }
 
-        foreach ($request->learning_records as $key => $learning) {
-            if (empty($learning['learning_id'])) {
+        if ($request->learning_records) {
+            foreach ($request->learning_records as $key => $learning) {
                 $learning_data = new PersonnelLearning();
-                $learning_data->personnel_id = $personnelId;
+                $learning_data->personnel_information_id = $personnelInformationId;
                 $learning_data->learning_training = $learning['learning_training'];
                 $learning_data->learning_from = $learning['learning_from'];
-                $learning_data->learning_to =  $learning['learning_to'];
-                $learning_data->learning_hours =  $learning['learning_hours'];
-                $learning_data->learning_id_type =  $learning['learning_id_type'];
-                $learning_data->learning_sponsored =  $learning['learning_sponsored'];
+                $learning_data->learning_to = $learning['learning_to'];
+                $learning_data->learning_hours = $learning['learning_hours'];
+                $learning_data->learning_id_type = $learning['learning_id_type'];
+                $learning_data->learning_sponsored = $learning['learning_sponsored'];
                 $learning_data->save();
-            } else {
-                $learning_data = PersonnelLearning::where('id', $learning['learning_id'])->firstOrFail();
-                $learning_data->personnel_id = $personnelId;
-                $learning_data->learning_training = $learning['learning_training'];
-                $learning_data->learning_from = $learning['learning_from'];
-                $learning_data->learning_to =  $learning['learning_to'];
-                $learning_data->learning_hours =  $learning['learning_hours'];
-                $learning_data->learning_id_type =  $learning['learning_id_type'];
-                $learning_data->learning_sponsored =  $learning['learning_sponsored'];
-                $learning_data->update();
             }
         }
 
-        foreach ($request->hobby_records as $key => $hobby) {
-            if (empty($hobby['hobby_id'])) {
+        if ($request->hobby_records) {
+            foreach ($request->hobby_records as $key => $hobby) {
                 $hobby_data = new PersonnelHobbies();
-                $hobby_data->personnel_id = $personnelId;
+                $hobby_data->personnel_information_id = $personnelInformationId;
                 $hobby_data->hobby = $hobby['hobby'] ?? '';
                 $hobby_data->save();
-            } else {
-                $hobby_data = PersonnelHobbies::where('id', $hobby['hobby_id'])->firstOrFail();
-                $hobby_data->personnel_id = $personnelId;
-                $hobby_data->hobby = $hobby['hobby'] ?? '';
-                $hobby_data->update();
             }
         }
 
-        foreach ($request->academic_records as $key => $academic) {
-            if (empty($academic['academic_id'])) {
+        if ($request->academic_records) {
+            foreach ($request->academic_records as $key => $academic) {
                 $academic_data = new PersonnelNonAcademic();
-                $academic_data->personnel_id = $personnelId;
+                $academic_data->personnel_information_id = $personnelInformationId;
                 $academic_data->others_non_academic = $academic['others_non_academic'];
                 $academic_data->save();
-            } else {
-                $academic_data = PersonnelNonAcademic::where('id', $academic['academic_id'])->firstOrFail();
-                $academic_data->personnel_id = $personnelId;
-                $academic_data->others_non_academic = $academic['others_non_academic'];
-                $academic_data->update();
             }
         }
 
-        foreach ($request->membership_records as $key => $membership) {
-            if (empty($membership['membership_id'])) {
+        if ($request->academic_records) {
+            foreach ($request->membership_records as $key => $membership) {
                 $membership_data = new PersonnelMembership();
-                $membership_data->personnel_id = $personnelId;
+                $membership_data->personnel_information_id = $personnelInformationId;
                 $membership_data->membership = $membership['membership'] ?? '';
                 $membership_data->save();
-            } else {
-                $membership_data = PersonnelMembership::where('id', $membership['membership_id'])->firstOrFail();
-                $membership_data->personnel_id = $personnelId;
-                $membership_data->membership = $membership['membership'] ?? '';
-                $membership_data->update();
             }
         }
     }
@@ -435,9 +397,9 @@ class PersonnelController extends Controller
         if (request()->ajax()) {
             $campus = Auth::user()->campus;
             if ($campus) {
-                $personnels = Personnel::where('campus_id', $campus->id)->orderBy('id', 'desc')->with('reviewed_by', 'created_by', 'academic_rank', 'administrative_rank', 'designation', 'department', 'campus')->get();
+                $personnels = Personnel::currentVersion($campus->id)->orderBy('id', 'desc')->get();
             } else {
-                $personnels = Personnel::orderBy('id', 'desc')->with('reviewed_by', 'created_by', 'academic_rank', 'administrative_rank', 'designation', 'department', 'campus')->get();
+                $personnels = Personnel::currentVersion()->orderBy('id', 'desc')->get();
             }
 
             return datatables()->of(
@@ -448,9 +410,27 @@ class PersonnelController extends Controller
         }
     }
 
+    public function getForReview()
+    {
+        if (request()->ajax()) {
+            $campus = Auth::user()->campus;
+            if ($campus) {
+                $personnels = Personnel::forReviewVersion($campus->id)->orderBy('id', 'desc')->get();
+            } else {
+                $personnels = Personnel::forReviewVersion()->orderBy('id', 'desc')->get();
+            }
+
+            return datatables()->of(
+                $personnels
+            )
+                ->addIndexColumn()
+                ->make(true);
+        }
+    }
+
     public function edit($id)
     {
-        $personnel = Personnel::where('id', $id)->orderBy('id')->firstOrFail();
+        $personnel = PersonnelInformation::where('id', $id)->orderBy('id')->firstOrFail();
         $academic_ranks = AcademicRank::orderBy('id')->get();
         $administrative_ranks = Administrative_rank::orderBy('id')->get();
         $designations = Designation::orderBy('id')->get();
@@ -467,27 +447,42 @@ class PersonnelController extends Controller
 
     public function edit_personnel($id)
     {
-        $personnel = Personnel::where('id', $id)->with(
-            'family',
-            'question',
-            'reference',
-            'government',
-            'children',
-            'educational',
-            'service',
-            'work',
-            'voluntary',
-            'learning',
-            'hobby',
-            'academic',
-            'membership'
-        )->orderBy('id')->firstOrFail();
+        $personnelMain = Personnel::getByPersonnelInformationId($id)->orderBy('id')->firstOrFail();
+
+        $personnel = $personnelMain['personnel_information'];
         return response()->json(compact('personnel'));
+    }
+
+    public function reviewPersonnel($id)
+    {
+        $personnel = PersonnelInformation::where('id', $id)->orderBy('id')->firstOrFail();
+        $academic_ranks = AcademicRank::orderBy('id')->get();
+        $administrative_ranks = Administrative_rank::orderBy('id')->get();
+        $designations = Designation::orderBy('id')->get();
+        $departments = Department::orderBy('id')->get();
+        $personnel_version = PersonnelVersion::where('personnel_information_id', $id)->firstOrFail();
+
+        $personnelMain = Personnel::whereHas('personnel_versions', function ($q) use ($id) {
+            $q->where('personnel_information_id', $id);
+        })->first();
+        $latest_personnel_version = PersonnelVersion::where([
+            ['personnel_id', '=', $personnelMain->id],
+            ['is_current', '=', true]
+        ])->orderBy('version', 'desc')->first();
+
+        $campus = Auth::user()->campus;
+        if ($campus) {
+            $campuses = Campus::where('id', $campus->id)->orderBy('id')->get();
+        } else {
+            $campuses = Campus::orderBy('id')->get();
+        }
+        return view('backend.pages.personnel.personnel_review_view', compact('latest_personnel_version', 'personnel_version', 'personnel', 'academic_ranks', 'administrative_ranks', 'designations', 'departments', 'campuses'));
     }
 
     public function view($id)
     {
-        $personnel = Personnel::where('id', $id)->orderBy('id')->firstOrFail();
+        $personnel = PersonnelInformation::where('id', $id)->orderBy('id')->firstOrFail();
+        $personnel_version = PersonnelVersion::where('personnel_information_id', $id)->firstOrFail();
         $academic_ranks = AcademicRank::orderBy('id')->get();
         $administrative_ranks = Administrative_rank::orderBy('id')->get();
         $designations = Designation::orderBy('id')->get();
@@ -499,12 +494,12 @@ class PersonnelController extends Controller
         } else {
             $campuses = Campus::orderBy('id')->get();
         }
-        return view('backend.pages.personnel.personnel_view', compact('personnel', 'academic_ranks', 'administrative_ranks', 'designations', 'departments', 'campuses'));
+        return view('backend.pages.personnel.personnel_view', compact('personnel_version', 'personnel', 'academic_ranks', 'administrative_ranks', 'designations', 'departments', 'campuses'));
     }
 
     public function destroy($id)
     {
-        $destroy = Personnel::find($id);
+        $destroy = PersonnelInformation::find($id);
         $destroy->delete();
         $this->setLog("Personnel Deleted", "Deleted", 'Record id "'.$id."\" was deleted at Personnel Record");
         return redirect()->back()->with('success', 'Successfully Deleted!');
@@ -512,21 +507,38 @@ class PersonnelController extends Controller
 
     public function get_record($id)
     {
-        $personnel = Personnel::where('id', $id)->firstOrFail();
+        $personnel = PersonnelInformation::where('id', $id)->firstOrFail();
         return response()->json(compact('personnel'));
     }
 
     public function save_status(Request $request)
     {
-        $personnel = Personnel::where('id', $request->id)->first();
-        $personnel->update(['status' => $request->status, 'reviewed_by' => Auth::user()->id]);
+        $personnelInformationId = $request->id;
+        $personnel = Personnel::whereHas('personnel_versions', function ($q) use ($personnelInformationId) {
+            $q->where('personnel_information_id', $personnelInformationId);
+        })->first();
+        $personnelInformation = PersonnelInformation::where('id', $request->id)->first();
 
-        $encoder = User::role(RoleSupport::ROLE_ENCODER)->where('id', $personnel->created_by)->first();
-        $encoder->notify(new PersonnelReviewed($personnel, Auth::user()->name, StatusSupport::getLabelByStatus($request->status)));
+        if ($request->status == StatusSupport::STATUS_APPROVED) {
+            PersonnelVersion::where('personnel_id', $personnel->id)->update([
+                'is_current' => false,
+            ]);
+            $personnelVersion = PersonnelVersion::where('personnel_information_id', $personnelInformationId)->first();
+            $personnelVersion->update([
+                'is_current' => true
+            ]);
+        }
+
+        $personnelInformation->update(['status' => $request->status, 'reviewed_by' => Auth::user()->id]);
+
+        $encoder = User::role(RoleSupport::ROLE_ENCODER)->where('id', $personnelInformation->created_by)->first();
+        if ($encoder) {
+            $encoder->notify(new PersonnelReviewed($personnelInformation, Auth::user()->name, StatusSupport::getLabelByStatus($request->status)));
+        }
 
         $superadmins = User::role(RoleSupport::ROLE_SUPERADMINISTRATOR)->get();
         foreach ($superadmins as $superadmin) {
-            $superadmin->notify(new PersonnelReviewed($personnel, Auth::user()->name, StatusSupport::getLabelByStatus($request->status)));
+            $superadmin->notify(new PersonnelReviewed($personnelInformation, Auth::user()->name, StatusSupport::getLabelByStatus($request->status)));
         }
 
         $this->setLog("Personnel Status Updated", "Update", 'Personnel Status was updated to "'.$request->status."\" at Personnel Record");

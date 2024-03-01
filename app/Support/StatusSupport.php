@@ -9,6 +9,17 @@ class StatusSupport
     public const STATUS_REJECTED = 2;
     public const STATUS_APPROVED = 3;
 
+    public const ALL_REVIEWED_STATUSES = [
+        self::STATUS_APPROVED,
+        self::STATUS_REJECTED,
+        self::STATUS_ONHOLD,
+    ];
+
+    public const ALL_REVIEWABLE_STATUSES = [
+        self::STATUS_ONHOLD,
+        self::STATUS_PENDING,
+    ];
+
     public static function getLabelByStatus($status): string
     {
         switch ($status) {

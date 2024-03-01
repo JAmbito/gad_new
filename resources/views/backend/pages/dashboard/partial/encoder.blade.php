@@ -98,13 +98,12 @@
                     ])
                 {
                     data: null, title: 'ACTION', orderable: false, render: function (data, type, row, meta) {
-
                         var html = '<div style="position: relative;">';
                         html += '<button data-id="1" class="btn-action"><i class="fi fi-rr-menu-dots"></i></button>';
                         html += '<div style="" class="action-cont" id="action-cont-id">';
                         @can(RoleSupport::PERMISSION_READ_PERSONNEL)
                             html += '<div style="text-align: left;">';
-                        html += '<a data-id="1" class="btn-update" href="/personnel/' + row.id + '">View</a>';
+                        html += '<a data-id="1" class="btn-update" href="/personnel/' + data.personnel_information.id + '">View</a>';
                         html += '</div>';
                         @endcan
                         html += '</div>';
@@ -114,15 +113,18 @@
                 },
                     @endcanany
                 {
-                    data: 'firstname', title: 'firstname'
+                    data: 'personnel_information.firstname', title: 'firstname'
                 },
-                {data: 'academic_rank.academic_rank', title: 'Academic Rank'},
-                {data: 'administrative_rank.administrative_rank', title: 'Administrative Rank'},
-                {data: 'designation.designation', title: 'Position'},
-                {data: 'department.department', title: 'Department'},
-                {data: 'employee_status', title: 'Employment Status'},
                 {
-                    data: 'reviewed_by.name', title: 'Reviewed by', render: function (data, type, row, meta) {
+                    data: 'personnel_information.lastname', title: 'lastname'
+                },
+                {data: 'personnel_information.academic_rank.academic_rank', title: 'Academic Rank'},
+                {data: 'personnel_information.administrative_rank.administrative_rank', title: 'Administrative Rank'},
+                {data: 'personnel_information.designation.designation', title: 'Position'},
+                {data: 'personnel_information.department.department', title: 'Department'},
+                {data: 'personnel_information.employee_status', title: 'Employment Status'},
+                {
+                    data: 'personnel_information.reviewed_by.name', title: 'Reviewed by', render: function (data, type, row, meta) {
                         if (data) {
                             return data;
                         }
@@ -131,18 +133,18 @@
                     }
                 },
                 {
-                    data: 'status', title: 'Status', render: function (data, type, row, meta) {
-                        switch (row.status) {
-                            case 0:
+                    data: 'personnel_information.status', title: 'Status', render: function (data, type, row, meta) {
+                        switch (data.toString()) {
+                            case '0':
                                 return '<span style="color:orange;">{{App\Support\StatusSupport::getLabelByStatus(0)}}</span>';
                                 break;
-                            case 1:
+                            case '1':
                                 return '<span style="color:blue;">{{App\Support\StatusSupport::getLabelByStatus(1)}}</span>';
                                 break;
-                            case 2:
+                            case '2':
                                 return '<span style="color:red;">{{App\Support\StatusSupport::getLabelByStatus(2)}}</span>';
                                 break;
-                            case 3:
+                            case '3':
                                 return '<span style="color:lime;">{{App\Support\StatusSupport::getLabelByStatus(3)}}</span>';
                                 break;
                         }

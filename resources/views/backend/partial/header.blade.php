@@ -41,14 +41,6 @@
         <div class="logs">
             <h3>{{ Auth::user()->name }}<br/><small>{{ Auth::user()->email }}</small></h3>
             <h4 style="text-transform: capitalize">{{ Auth::user()->getRoleNames()[0] }}</h4>
-            <div class="logs-2nd" onclick="window.location.href='#';">
-                <i class='bx bx-user'></i>
-                <h4> My Profile</h4>
-            </div>
-            <div class="logs-2nd" onclick="window.location.href='#';">
-                <i class='bx bx-cog'></i>
-                <h4> Account Settings</h4>
-            </div>
             <div class="logs-3rd">
                 <i class='bx bx-log-out-circle'></i>
                 <h4 href="{{ route('logout') }}"

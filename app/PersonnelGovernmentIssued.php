@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class PersonnelGovernmentIssued extends Model
 {
     protected $fillable = [
-        'personnel_id',
+        'personnel_information_id',
         'government_issued_id',
         'government_issued_passport',
         'government_date_issuance',

@@ -9,13 +9,13 @@ use App\Http\Controllers\Controller;
 
 class AdministrativeRankController extends Controller
 {
-    
     protected $func;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->func = new Controller();
     }
-    
+
     public function index()
     {
         $administratives = Administrative_rank::orderBy('id')->get();
@@ -30,11 +30,10 @@ class AdministrativeRankController extends Controller
 
         $request->request->add(['created_user' => Auth::user()->id]);
 
-        if($request->action === "save") {
+        if ($request->action === "save") {
             Administrative_rank::create($request->except(['action', 'id']));
             $this->func->setLog("Administrative Rank added", "Inserted", '"'.$request->administrative_rank."\" was added at Administrative Rank Record");
-        }
-        else {
+        } else {
             Administrative_rank::find($request->id)->update($request->except(['action', 'id']));
             $this->func->setLog("Administrative Rank Updated", "Update", '"'.$request->administrative_rank."\" was updated at Administrative Rank Record");
         }
@@ -42,8 +41,9 @@ class AdministrativeRankController extends Controller
         return response()->json(compact('administrative'));
     }
 
-    public function get() {
-        if(request()->ajax()) {
+    public function get()
+    {
+        if (request()->ajax()) {
             return datatables()->of(
                 Administrative_rank::orderBy('id', 'desc')->get()
             )
@@ -63,6 +63,6 @@ class AdministrativeRankController extends Controller
         $destroy = Administrative_rank::find($id);
         $destroy->delete();
         $this->func->setLog("Administrative Rank Deleted", "Deleted", 'Record id "'.$id."\" was deleted at Administrative Rank Record");
-        return redirect()->back()->with('success','Successfully Deleted!');
+        return redirect()->back()->with('success', 'Successfully Deleted!');
     }
 }

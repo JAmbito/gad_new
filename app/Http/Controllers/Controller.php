@@ -6,15 +6,18 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use App\Activitylogs;
+use App\ActivityLogs;
 use Auth;
 
 class Controller extends BaseController
 {
-    use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+    use AuthorizesRequests;
+    use DispatchesJobs;
+    use ValidatesRequests;
 
-    
-    public function setLog($title, $action, $details) {
+
+    public function setLog($title, $action, $details)
+    {
         $data = array(
             "title" => $title,
             "action" => $action,
@@ -23,7 +26,7 @@ class Controller extends BaseController
             "updated_by" => Auth::user()->id
         );
 
-        Activitylogs::create($data);
+        ActivityLogs::create($data);
 
         return "Logs Added";
     }

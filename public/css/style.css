@@ -118,13 +118,13 @@ div#action-cont-id {
 }
 
 .button-menu {
-    padding: 3px !important;
+    padding: 10px !important;
     background: transparent !important;
     color: #3f3f3f !important;
-    font-weight: bold !important;
-    font-size: 15px !important;
-    text-align: left !important;
-    font-family: system-ui !important;
+    font-size: 12px !important;
+    font-weight: 500;
+    text-align: center !important;
+    font-family: "poppins" !important;
     border: 0px !important;
     transition: .3s !important;
     display: block !important;
@@ -143,4 +143,119 @@ div#action-cont-id {
 .dataTables_filter {
     padding: 20px !important;
     text-align: left !important;
+}
+
+/** Custom CSS */
+
+.align-self-center {
+    align-self: center !important;
+}
+
+.mt-15 {
+    margin-top: 15px !important;
+}
+
+.ml-15 {
+    margin-left: 15px !important;
+}
+
+.mb-0 {
+    margin-bottom: 0 !important;
+}
+
+.text-error {
+    color: #A40000;
+}
+
+.btn {
+    top: 0 !important;
+    right: 0 !important;
+    position: relative !important;
+    margin-top: 0px;
+    width: 100%;
+    border-radius: 25px;
+    border: none;
+    padding: 11px;
+    cursor: pointer;
+    font-family: 'poppins';
+    letter-spacing: .7px;
+    font-size: 13px;
+    transition: .3s ease;
+}
+
+.btn.btn-default {
+    background-color: white;
+    color: black !important;
+}
+
+.btn.btn-info {
+    background-color: #4573dc;
+    color: white !important;
+}
+
+.btn.btn-success {
+    background-color: #34DA54;
+    color: white !important;
+}
+
+.btn.btn-warning {
+    background-color: orange;
+    color: white;
+}
+
+.btn.btn-danger {
+    background-color: #A44444;
+    color: white !important;
+}
+
+.btn.btn-fit {
+    width: fit-content;
+}
+
+.alert {
+    padding: 20px;
+    color: white;
+    margin-bottom: 15px;
+
+    border-radius: 25px;
+}
+
+.alert.alert-danger {
+    color: white;
+    background-color: #A44444; /* Red */
+}
+
+.alert.alert-success {
+    color: white;
+    background-color: #34DA54; /* Red */
+}
+
+.alert.alert-info {
+    color: white;
+    background-color: #4573dc; /* Red */
+}
+
+.floating-alert {
+    position: fixed;
+    z-index: 999999999!important;
+    width: 20%;
+    bottom: 0;
+    right: 15px;
+    margin-bottom: 15px;
+}
+
+.text-center {
+    text-align: center;
+}
+
+/** Notification */
+.notif-mid-cont .badge, .badge {
+    padding: 2px 10px 2px 10px;
+    border-radius: 10px;
+    width: fit-content;
+}
+
+.badge.badge-info {
+    background-color: #4573dc;
+    color: white !important;
 }

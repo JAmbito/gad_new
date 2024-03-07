@@ -14,10 +14,11 @@ class CampusController extends Controller
 {
     protected $func;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->func = new Controller();
     }
-    
+
     public function index()
     {
         $campuses = Campus::orderBy('id')->get();
@@ -29,7 +30,6 @@ class CampusController extends Controller
     {
         $campus = $request->validate([
             'campus_name' => ['required', 'max:250'],
-            'campus_access' => ['required', 'max:250'],
             'detailed_address' => ['required', 'max:250'],
             'province' => ['required', 'max:250'],
             'city' => ['required', 'max:250'],
@@ -53,11 +53,10 @@ class CampusController extends Controller
         $requestData = $request->all();
         $requestData['image'] = $imageName;
 
-        if($request->action === "save") {
+        if ($request->action === "save") {
             Campus::create($requestData);
             $this->func->setLog("Campus Added", "Inserted", '"'.$request->campus_name."\" was added at Campus Record");
-        }
-        else {
+        } else {
             Campus::find($request->id)->update($requestData);
             $this->func->setLog("Campus Updated", "Update", '"'.$request->campus_name."\" was updated at Campus Record");
         }
@@ -65,8 +64,9 @@ class CampusController extends Controller
         return response()->json(compact('campus'));
     }
 
-    public function get() {
-        if(request()->ajax()) {
+    public function get()
+    {
+        if (request()->ajax()) {
             return datatables()->of(
                 Campus::orderBy('id', 'desc')->get()
             )
@@ -98,6 +98,6 @@ class CampusController extends Controller
         $destroy = Campus::find($id);
         $destroy->delete();
         $this->func->setLog("Campus Deleted", "Inserted", 'Record id "'.$id."\" was deleted at Campus Record");
-        return redirect()->back()->with('success','Successfully Deleted!');
+        return redirect()->back()->with('success', 'Successfully Deleted!');
     }
 }

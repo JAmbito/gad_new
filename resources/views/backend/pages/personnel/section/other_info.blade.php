@@ -1,6 +1,6 @@
 <!-- VIII. OTHER INFORMATION -->
 <div class="main-table-container-div" style="margin-top: 20px;">
-    <div id="" class="project-details-div" style="width: 100%; border: 1px solid #939393; border-radius: 6px; padding: 50px 55px 50px 55px; margin-bottom: 30px;">
+    <div id="other-information" class="project-details-div" style="width: 100%; border: 1px solid #939393; border-radius: 6px; padding: 50px 55px 50px 55px; margin-bottom: 30px;">
         <div style="margin-bottom:10px;">
             <label style="font-size: 16.6px; text-decoration: underline;">VIII. OTHER INFORMATION</label>
         </div>
@@ -464,11 +464,15 @@
 
             <div style="border: 1px solid #939393; padding: 20px 30px 0px 30px; border-left: 0;">
                 <div style="border: 1px solid #939393; margin-top: 20px">
-                    <img src="img/noimg.jpg" id="image" style="width: 300px; height: 300px">
+                    <img src="{{ asset('img/noimg.jpg') }}" id="govt_image" style="width: 300px; height: 300px">
                 </div>
                 <div style="margin-top: 15px;">
                     <label style="font-size: 13px; text-decoration: underline;">Select Image</label>
-                    <input type="file" name="government_issued_image" id="government_issued_image" placeholder="----">
+                    <form id="img-form">
+                        @csrf
+                        <input type="file" name="government_issued_image_file" id="government_issued_image_file" placeholder="----">
+                        <input type="hidden" name="government_issued_image" id="government_issued_image" placeholder="----">
+                    </form>
                 </div>
             </div>
 

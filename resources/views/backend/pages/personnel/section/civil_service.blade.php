@@ -1,7 +1,7 @@
  <!-- IV CIVIL SERVICE ELIGIBILITY -->
  <div class="main-table-container-div" style="margin-top: 20px;">
 
-    <div id="" class="project-details-div" style="">
+    <div id="civil-service-eligibility" class="project-details-div" style="">
 
         <table class="table table-responsive-block" style="width: 100%; border: 1px solid #939393; border-radius: 6px; padding: 25px 30px 10px 30px; margin-bottom: 30px;" id="service_table_id">
 

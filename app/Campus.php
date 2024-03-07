@@ -9,9 +9,10 @@ class Campus extends Model
 {
     use SoftDeletes;
 
+    public static ?string $currentCampusId = null;
+
     protected $fillable = [
         'campus_name',
-        'campus_access',
         'detailed_address',
         'province',
         'city',

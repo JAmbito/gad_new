@@ -14,7 +14,8 @@ class ActivityLogs extends Model
         'updated_by'
     ];
 
-    public function user() {
+    public function user()
+    {
         return $this->hasOne(User::class, 'id', 'created_by');
     }
 }

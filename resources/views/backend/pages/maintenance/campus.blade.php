@@ -11,7 +11,7 @@
                     <ul class="header-main">
                         <li style="margin-top: 6px;"><i class="fi fi-rr-chart-pie-alt" style="color:#C30000; margin-left: 15px;"></i></li>
                         <li><i class="fa-solid fa-chevron-right" style="font-size: 10px; margin-left: 10px; color: #585563;"></i></li>
-                        <li style="margin-top: 2px"><a href="#" class="active" style="color: #FFA6A6; margin-left: 10px; color: #585563; font-size: 14px;">Manage</a></li></li>
+                        <li style="margin-top: 2px"><a href="#" class="active" style="color: #FFA6A6; margin-left: 10px; color: #585563; font-size: 14px;">Manage</a></li>
                         <li style="margin-top: 2px"><a href="#" class="active" style="color: #FFA6A6; margin-left: 10px; color: #585563; font-size: 14px;">Data Management</a></li>
                     </ul>
                 </div>
@@ -20,10 +20,10 @@
 
         @include('backend.partial.header')
 
-        <div class="add-user-container">
+        <div class="add-user-container" id="add_data">
             <div class="add-btns btn-insert" style="margin-left: 10px">
                 <i class='bx bx-plus' ></i>
-                <button id="add_data">ADD CAMPUS</button>
+                <button>ADD CAMPUS</button>
             </div>
 
         </div>
@@ -56,7 +56,7 @@
         <div class="insert-modal">
         <div class="header-fixed">
             <div class="insert-header" style="position: relative;">
-            <h4>Create NEW CAMPUS</h4>
+            <h4>CAMPUS</h4>
             <div><i class='bx bx-x' id="x-close-id"></i></div>
             </div>
         </div>
@@ -74,16 +74,6 @@
                   </div>
                   <div>
                     <input type="text" id="campus_name" name="campus_name" placeholder="----" required="" autocomplete="off" style="margin-bottom: 23px;">
-                 </div>
-                 <div style="margin-bottom: 13px;">
-                    <label>Access</label><span class="additional-span">( REQUIRED )</span>
-                 </div>
-                 <div>
-                    <select id="campus_access" name="campus_access" style="margin-bottom: 23px;" class="acess_class" required>
-                        <option value="">-SELECT ACCESS-</option>
-                        <option value="ALL CAMPUS">ALL CAMPUS</option>
-                        <option value="CAMPUS ONLY">CAMPUS ONLY</option>
-                    </select>
                  </div>
                  <div>
                       <label>DETAILED ADDRESS</label><span class="additional-span">( REQUIRED )</span>
@@ -224,7 +214,6 @@
             var data = {
                 _token: '{{csrf_token()}}',
                 campus_name: $('#campus_name').val(),
-                campus_access: $('#campus_access').val(),
                 detailed_address: $('#detailed_address').val(),
                 province: $('#province').val(),
                 city: $('#city').val(),
@@ -246,11 +235,11 @@
                 toastr.success('Record saved');
                 table.clear().draw();
             }).fail(function(response) {
+                toastr.error('Record not saved');
                 for (var field in response.responseJSON.errors) {
                     $('#'+field+"_error_message").remove();
                     $('.'+field).append('<span id="'+field+'_error_message" class="error-message">'+response.responseJSON.errors[field][0]+'</span>');
                 }
-                toastr.error(response.responseJSON.message);
             });
         }
 
@@ -326,27 +315,25 @@
                     type: 'GET'
                 },
                 columns: [
-                    {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+                    { data: null, title: 'ACTION', render: function(data, type, row, meta) {
+                        var html = '<div style="position: relative;">';
+                        html += '<button data-id="1" class="btn-action"><i class="fi fi-rr-menu-dots"></i></button>';
+                        html += '<div style="" class="action-cont" id="action-cont-id">';
+                        html += '<div style="text-align: left;">';
+                        html += '<button data-id="1" class="btn-update" onclick="edit('+row.id+')">Edit</button>';
+                        html += '</div>';
+                        html += '<div style="text-align: left;">';
+                        html += '<button data-id="2" class="btn-delete" onclick="confirmDelete('+row.id+')">Delete</button>';
+                        html += '</div>';
+                        html += '</div>';
+                        html += '</div>';
+                        return html;
+                    }},
                     { data: 'campus_name', title: 'Campus Name'},
-                    { data: 'campus_access', title: 'Campus Access'},
                     { data: 'detailed_address', title: 'Address'},
                     { data: 'email', title: 'Email'},
                     { data: 'tel_no', title: 'Tel No.'},
                     { data: 'mobile_no', title: 'Mobile No.'},
-                    { data: null, title: 'ACTION', render: function(data, type, row, meta) {
-                        var html = '<div style="position: relative;">';
-                            html += '<button data-id="1" class="btn-action"><i class="fi fi-rr-menu-dots"></i></button>';
-                            html += '<div style="" class="action-cont" id="action-cont-id">';
-                            html += '<div style="text-align: left;">';
-                            html += '<button data-id="1" class="btn-update" onclick="edit('+row.id+')">Edit</button>';
-                            html += '</div>';
-                            html += '<div style="text-align: left;">';
-                            html += '<button data-id="2" class="btn-delete" onclick="confirmDelete('+row.id+')">Delete</button>';
-                            html += '</div>';
-                            html += '</div>';
-                            html += '</div>';
-                        return html;
-                    }},
                 ]
             });
 
@@ -369,9 +356,10 @@
                         clearField();
                         table.clear().draw();
                         $('#campus_modal').hide();
+                        toastr.success('Record saved');
                     },
                     error: function(data){
-                        alert(data.responseJSON.errors.files[0]);
+                        toastr.error('Record not saved');
                     }
                 });
 

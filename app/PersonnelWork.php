@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class PersonnelWork extends Model
 {
     protected $fillable = [
-        'personnel_id',
+        'personnel_information_id',
         'work_from',
         'work_to',
         'work_position',

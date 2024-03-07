@@ -15,7 +15,7 @@
 
                 <div class="return-class">
                   <a href="DTM_Personnels.php"><i class='bx bx-arrow-back'></i></a>
-                  <input type="hidden" id="personnel_id" value="{{ $personnel->id }} ">
+                  <input type="hidden" id="personnel_information_id" value="{{ $personnel->id }} ">
                 </div>
                     <div id="bom-details-parent-id" style="padding-bottom: 1px; padding-top: 27px;">
 
@@ -25,7 +25,7 @@
                         <div id="bom-details-parent-id1" style="border: none;">
 
                             <div style="margin-bottom: 28px; margin-top: -40px; margin-bottom: 5px;">
-                                <label style="font-size: 18px; text-decoration: underline;">ADD NEW PERSONNEL</label>
+                                <label style="font-size: 18px; text-decoration: underline;">EDIT PERSONNEL</label>
                             </div>
 
                         </div>
@@ -41,11 +41,10 @@
                     </div>
                         <div class="insert-btn-cont" id="submit-cont-id" style="margin-top: 5px; margin-bottom: 25px;">
                             <h1 style="margin-right: auto;"></h1>
-                            <button class="btn-del" name="sub-insert" onclick="saveRecord()" style="padding-left: 20px; padding-right: 20px; font-size: 10px; background-color: #3D9EFF; border: 1px solid #3D9EFF;">Submit</button>
+                            <button class="btn-del" name="sub-insert" onclick="saveRecord(this)" style="padding-left: 20px; padding-right: 20px; font-size: 10px; background-color: #3D9EFF; border: 1px solid #3D9EFF;">Submit</button>
                         </div>
                     </div>
-                    </div>
-            </div>
+                </div>
         </main>
     </section>
 @endsection
@@ -65,6 +64,43 @@
         var hobby_data = [];
         var academic_data = [];
         var membership_data = [];
+
+        $(document).ready(function (e) {
+            $('#img-form').on('submit',(function(e) {
+                e.preventDefault();
+                var formData = new FormData();
+
+                var photo = $('#government_issued_image_file').prop('files')[0];
+                formData.append('government_issued_image_file', photo);
+
+                $.ajax({
+                    url: '{{ route('personnel.image_upload') }}',
+                    type: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        // "Content-Type": "multipart/form-data",
+                    },
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    enctype: 'multipart/form-data',
+                    data: formData,
+                    success: (response) => {
+                        $('#government_issued_image').val(response.government_issued_image_file);
+                        $('#govt_image').attr('src', `/${response.government_issued_image_file}`);
+                    },
+                    error: (response) => {
+                        console.log(response);
+                    }
+                });
+            }));
+
+            $("#government_issued_image_file").on("change", function() {
+                setTimeout(() => {
+                    $("#img-form").submit();
+                }, 300);
+            });
+        });
 
         function edit_personnel(id){
             action = 'update';
@@ -108,6 +144,9 @@
 
                     $.each(data.personnel.government, function() {
                         $.each(this, function(k, v) {
+                            if (k === 'government_issued_image' && v) {
+                                $('#govt_image').attr('src', `/${v}`);
+                            }
                             $('#'+k).val(v);
                         });
                     });
@@ -336,10 +375,17 @@
             });
         }
 
-        function saveRecord() {
+        let wait;
+        function saveRecord(btn) {
+            $(btn).attr('disabled', 'disabled');
+            $(btn).text('Please wait...');
+            if (wait) {
+                return;
+            }
+
             var data = {
                 _token: '{{csrf_token()}}',
-                personnel_id: $('#personnel_id').val(),
+                personnel_information_id: $('#personnel_information_id').val(),
                 firstname: $('#firstname').val(),
                 middlename: $('#middlename').val(),
                 lastname: $('#lastname').val(),
@@ -423,6 +469,7 @@
                 question_40b:$('input[type=radio][name=question_40b]:checked').val(),
                 question_40b_detail:$('#question_40b_detail').val(),
                 question_40c:$('input[type=radio][name=question_40c]:checked').val(),
+                question_40c_detail:$('#question_40c_detail').val(),
                 reference_name:$('#reference_name').val(),
                 reference_address:$('#reference_address').val(),
                 reference_tel_no:$('#reference_tel_no').val(),
@@ -449,12 +496,20 @@
 
             $.post('/personnel/save', data).done(function(response){
                 toastr.success('Record saved');
+                $(btn).text('Saved!');
+                setTimeout(() => {
+                    $(btn).removeAttr('disabled');
+                    window.location.href = `{{ route('personnel.index') }}`;
+                }, 3000);
             }).fail(function(response) {
+                wait = false;
+                $(btn).removeAttr('disabled');
+                $(btn).text('Submit');
+                toastr.error('Record not saved');
                 for (var field in response.responseJSON.errors) {
                     $('#'+field+"_error_message").remove();
                     $('.'+field).append('<span id="'+field+'_error_message" class="error-message">'+response.responseJSON.errors[field][0]+'</span>');
                 }
-                toastr.error(response.responseJSON.message);
             });
         }
 
@@ -700,7 +755,7 @@
                 });
 
         $(function() {
-            edit_personnel($('#personnel_id').val());
+            edit_personnel($('#personnel_information_id').val());
             const menuBar = document.querySelector('#content nav #desktop-menu');
             const sidebar = document.getElementById('sidebar');
             sidebar.classList.toggle('hide');

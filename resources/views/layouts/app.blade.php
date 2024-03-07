@@ -8,10 +8,10 @@
 	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" charset="utf-8"></script>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css">
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js" integrity="sha512-AA1Bzp5Q0K1KanKKmvN/4d3IRKVlv9PYgwFPvm32nPO6QS8yH1HO7LbgB1pgiOxPtfeg5zEn2ba64MUcqJx6CA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js" integrity="sha512-AA1Bzp5Q0K1KanKKmvN/4d3IRKVlv9PYgwFPvm32nPO6QS8yH1HO7LbgB1pgiOxPtfeg5zEn2ba64MUcqJx6CA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css">
-	<link rel="stylesheet" type="text/css" href="{{ url('gad/CSS/styles.css') }}">
-	<title>GAD - Login</title>
+    <link rel="stylesheet" type="text/css" href="{{ url('gad/CSS/styles.css') }}">
+	<title>Bataan Peninsula State University - Gender and Development</title>
 </head>
 <body>
 
@@ -27,21 +27,23 @@
 
 	<script type="text/javascript">
 
-			$("#show-pass-id").click(function(){
-			  	$("#password-id").prop("type", "text");
-			  	$("#hide-pass-id").show();
-			  	$("#show-pass-id").hide();
+			$(".show-pass").click(function(e){
+                const showPass = $(e.target);
+                showPass.parent().find('.password-input').prop('type', 'text');
+                showPass.parent().find('.hide-pass').show();
+                showPass.hide();
 			});
 
 	</script>
 
 	<script type="text/javascript">
 
-			$("#hide-pass-id").click(function(){
-			  	$("#password-id").prop("type", "password");
-			  	$("#show-pass-id").show();
-			  	$("#hide-pass-id").hide();
-			});
+        $(".hide-pass").click(function(e){
+            const hidePass = $(e.target);
+            hidePass.parent().find('.password-input').prop('type', 'password');
+            hidePass.parent().find('.show-pass').show();
+            hidePass.hide();
+        });
 
 	</script>
 

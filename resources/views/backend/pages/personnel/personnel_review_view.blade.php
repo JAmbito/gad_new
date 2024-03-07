@@ -41,6 +41,24 @@
                     </div>
                 </div>
             </div>
+
+            <div id="rejectModal" class="delete-cont">
+                <div class="delete-modal">
+                    <div class="delete-header">
+                        <i class="las la-exclamation-triangle"></i>
+                        <h4>Reject Personnel Data</h4>
+                    </div>
+                    <div class="delete-middle">
+                        <h4>Please put a reason for rejection</h4>
+                        <textarea id="reject_reason" class="form-control" style="margin-top: 25px" rows="5"></textarea>
+                    </div>
+                    <div class="delete-btn-cont">
+                        <h1 style="margin-right: auto;"></h1>
+                        <span class="btn-cancel" id="cancel-btn" onclick="closeModal()">CANCEL</span>
+                        <button class="btn-del" name="sub_delete" onclick="confirmReject(this)">PROCEED</button>
+                    </div>
+                </div>
+            </div>
         </main>
     </section>
 @endsection
@@ -104,9 +122,13 @@
                         });
                     });
 
-                    $.each(data.personnel.government, function () {
-                        $.each(this, function (k, v) {
-                            $('#' + k).text(v);
+                    $.each(data.personnel.government, function() {
+                        $.each(this, function(k, v) {
+                            if (k === 'government_issued_image' && v) {
+                                $('#'+k).attr('src', `/${v}`);
+                            } else {
+                                $('#'+k).text(v);
+                            }
                         });
                     });
 
@@ -310,6 +332,50 @@
         });
 
         let wait;
+
+        let statusHolder = null;
+        function rejectStatus(status, element) {
+            statusHolder = status;
+            $('#rejectModal').show();
+        }
+
+        function confirmReject(element) {
+            reject(statusHolder, element);
+        }
+
+        function closeModal() {
+            $('#rejectModal').hide();
+        }
+
+        function reject(status, element) {
+            const btn = $(element);
+            if (wait) {
+                return;
+            }
+            wait = true;
+            var data = {
+                _token: "{{csrf_token()}}",
+                id: hold_id,
+                status,
+                reject_reason: $('#reject_reason').val(),
+            };
+            var originalText = btn.text();
+            btn.text('Please wait...');
+            $.post('/personnel/save_status', data).done(function (response) {
+                toastr.success('Personnel was updated successfully!');
+                btn.text(originalText);
+                setTimeout(() => {
+                    if (status == {{StatusSupport::STATUS_APPROVED}}) {
+                        window.location.href = '/personnel/' + hold_id;
+                    } else {
+                        window.location.href = '/personnel/review';
+                    }
+                }, 3000);
+            }).fail(() => {
+                wait = false;
+                btn.text(originalText);
+            });
+        }
 
         function saveStatus(status, element) {
             const btn = $(element);

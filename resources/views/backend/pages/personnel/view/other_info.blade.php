@@ -354,7 +354,7 @@
 
             <div style="border: 1px solid #939393; padding: 20px 30px 20px 30px; border-left: 0;">
                 <div style="border: 1px solid #939393; margin-top: 20px">
-                    <img src="{{ asset('img/noimg.jpg') }}" id="image" style="width: 300px; height: 300px">
+                    <img src="{{ asset('img/noimg.jpg') }}" id="government_issued_image" style="width: 300px; height: 300px">
                 </div>
             </div>
 

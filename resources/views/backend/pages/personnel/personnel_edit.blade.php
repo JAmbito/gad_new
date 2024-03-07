@@ -65,6 +65,43 @@
         var academic_data = [];
         var membership_data = [];
 
+        $(document).ready(function (e) {
+            $('#img-form').on('submit',(function(e) {
+                e.preventDefault();
+                var formData = new FormData();
+
+                var photo = $('#government_issued_image_file').prop('files')[0];
+                formData.append('government_issued_image_file', photo);
+
+                $.ajax({
+                    url: '{{ route('personnel.image_upload') }}',
+                    type: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        // "Content-Type": "multipart/form-data",
+                    },
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    enctype: 'multipart/form-data',
+                    data: formData,
+                    success: (response) => {
+                        $('#government_issued_image').val(response.government_issued_image_file);
+                        $('#govt_image').attr('src', `/${response.government_issued_image_file}`);
+                    },
+                    error: (response) => {
+                        console.log(response);
+                    }
+                });
+            }));
+
+            $("#government_issued_image_file").on("change", function() {
+                setTimeout(() => {
+                    $("#img-form").submit();
+                }, 300);
+            });
+        });
+
         function edit_personnel(id){
             action = 'update';
             hold_id = id;
@@ -107,6 +144,9 @@
 
                     $.each(data.personnel.government, function() {
                         $.each(this, function(k, v) {
+                            if (k === 'government_issued_image' && v) {
+                                $('#govt_image').attr('src', `/${v}`);
+                            }
                             $('#'+k).val(v);
                         });
                     });

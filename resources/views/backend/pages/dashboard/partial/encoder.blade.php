@@ -118,11 +118,6 @@
                 {
                     data: 'personnel_information.lastname', title: 'lastname'
                 },
-                {data: 'personnel_information.academic_rank.academic_rank', title: 'Academic Rank'},
-                {data: 'personnel_information.administrative_rank.administrative_rank', title: 'Administrative Rank'},
-                {data: 'personnel_information.designation.designation', title: 'Position'},
-                {data: 'personnel_information.department.department', title: 'Department'},
-                {data: 'personnel_information.employee_status', title: 'Employment Status'},
                 {
                     data: 'personnel_information.reviewed_by.name', title: 'Reviewed by', render: function (data, type, row, meta) {
                         if (data) {
@@ -148,6 +143,15 @@
                                 return '<span style="color:lime;">{{App\Support\StatusSupport::getLabelByStatus(3)}}</span>';
                                 break;
                         }
+                    }
+                },
+                {
+                    data: 'personnel_information.reject_reason', title: 'Reason (If rejected)', render: function (data, type, row, meta) {
+                        if (data) {
+                            return data;
+                        }
+
+                        return '-';
                     }
                 },
             ]

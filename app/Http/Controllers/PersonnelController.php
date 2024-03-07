@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\StoreImageTrait;
 use App\Notifications\PersonnelCreated;
 use App\Notifications\PersonnelReviewed;
 use App\Notifications\PersonnelUpdated;
@@ -35,6 +36,7 @@ use Illuminate\Support\Facades\Auth;
 
 class PersonnelController extends Controller
 {
+    use StoreImageTrait;
     public function create()
     {
         $campus = Auth::user()->campus;
@@ -64,6 +66,14 @@ class PersonnelController extends Controller
         $departments = Department::orderBy('id')->get();
         $campuses = Campus::orderBy('id')->get();
         return view('backend.pages.personnel.personnel', compact('total_personnel_count', 'academic_ranks', 'administrative_ranks', 'designations', 'departments', 'campuses'));
+    }
+
+    public function imageUpload(Request $request)
+    {
+        $data = $request->all();
+        $data['government_issued_image_file'] = $this->verifyAndStoreImage($request, 'government_issued_image_file', 'personnels');
+
+        return response($data, 200);
     }
 
     public function review()
@@ -527,6 +537,16 @@ class PersonnelController extends Controller
             $personnelVersion->update([
                 'is_current' => true
             ]);
+        } elseif ($request->status == StatusSupport::STATUS_REJECTED) {
+            PersonnelVersion::where('personnel_id', $personnel->id)->update([
+                'is_current' => false,
+            ]);
+            $personnelVersion = PersonnelVersion::where('personnel_information_id', $personnelInformationId)->first();
+            $personnelVersion->update([
+                'is_current' => true
+            ]);
+
+            $personnelInformation->update(['reject_reason' => $request->reject_reason]);
         }
 
         $personnelInformation->update(['status' => $request->status, 'reviewed_by' => Auth::user()->id]);

@@ -2,6 +2,14 @@
 <div class="main-table-container-div">
 
     <div id="personal-info" class="project-details-div" style="width: 100%; border: 1px solid #939393; border-radius: 6px; padding: 50px 55px 20px 55px; margin-bottom: 30px;">
+            @can(App\Support\RoleSupport::PERMISSION_UPDATE_PERSONNEL)
+            <div style="display: grid; grid-template-columns: 1fr; grid-gap: 30px; margin-bottom: 25px;">
+                <a class="btn btn-info btn-fit" href="{{ route('personnel.edit', [ 'id' => $personnel->id ]) }}">Edit personnel</a>
+            </div>
+            @endcan
+            @if($personnel->status === \App\Support\StatusSupport::STATUS_REJECTED)
+                <h4 style="color:darkred">Rejection reason: {{$personnel->reject_reason}}</h4>
+            @endif
             @if($personnel->reviewed_by()->first())
             <h4>Last reviewed by: {{$personnel->reviewed_by()->first()->name}}</h4>
             @endif

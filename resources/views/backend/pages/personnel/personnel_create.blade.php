@@ -66,6 +66,44 @@
         var membership_data = [];
 
         let wait = false;
+
+        $(document).ready(function (e) {
+            $('#img-form').on('submit',(function(e) {
+                e.preventDefault();
+                var formData = new FormData();
+
+                var photo = $('#government_issued_image_file').prop('files')[0];
+                formData.append('government_issued_image_file', photo);
+
+                $.ajax({
+                    url: '{{ route('personnel.image_upload') }}',
+                    type: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        // "Content-Type": "multipart/form-data",
+                    },
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    enctype: 'multipart/form-data',
+                    data: formData,
+                    success: (response) => {
+                        $('#government_issued_image').val(response.government_issued_image_file);
+                        $('#govt_image').attr('src', `/${response.government_issued_image_file}`);
+                    },
+                    error: (response) => {
+                        console.log(response);
+                    }
+                });
+            }));
+
+            $("#government_issued_image_file").on("change", function() {
+                setTimeout(() => {
+                    $("#img-form").submit();
+                }, 300);
+            });
+        });
+
         function saveRecord(btn) {
             $(btn).attr('disabled', 'disabled');
             $(btn).text('Please wait...');

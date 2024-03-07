@@ -20,7 +20,7 @@
                 </div>
                 @can(App\Support\RoleSupport::PERMISSION_REVIEW_PERSONNEL_STATUS)
                     <button class="btn btn-success" onclick="saveStatus({{ App\Support\StatusSupport::STATUS_APPROVED }}, this)">Approve</button>
-                    <button class="btn btn-danger" onclick="saveStatus({{ App\Support\StatusSupport::STATUS_REJECTED }}, this)">Reject</button>
+                    <button class="btn btn-danger" onclick="rejectStatus({{ App\Support\StatusSupport::STATUS_REJECTED }}, this)">Reject</button>
                     <button class="btn btn-info" onclick="saveStatus({{ App\Support\StatusSupport::STATUS_ONHOLD }}, this)">Hold</button>
                 @endcan
             </div>

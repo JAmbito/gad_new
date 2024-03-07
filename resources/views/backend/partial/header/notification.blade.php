@@ -60,6 +60,11 @@
                        class="notif-mid-cont user-notifications">
                         @if (is_null($notification->read_at))<span class="badge badge-info">Unread</span>@endif
                         Personnel {{$notification->data['personnel_firstname']}} {{$notification->data['personnel_lastname']}} has been reviewed by {{$notification->data['personnel_reviewed_by']}} and was {{$notification->data['status']}}.
+                        @if($notification->data['status'] === 'rejected')
+                            <span>
+                                Reason: {{$notification->data['personnel_reject_reason'] ?? 'None'}}
+                            </span>
+                        @endif
                         <span>
                             {{$notification->created_at}}
                         </span>
@@ -73,7 +78,7 @@
 
     <div class="notif-header"
          style="border-bottom: none; border-top: 1px solid #E9E9E9; text-align: center; padding: 8px 20px; border-bottom-right-radius: 8px; border-bottom-left-radius: 8px;">
-        <a href="View_All_Notifications.php">View All Notifications</a>
+        <a href="{{ route('notification.index') }}">View All Notifications</a>
     </div>
 
 </div>

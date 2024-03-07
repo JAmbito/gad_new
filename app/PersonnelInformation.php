@@ -85,6 +85,7 @@ class PersonnelInformation extends Model
             'status',
             'created_by',
             'reviewed_by',
+            'reject_reason',
     ];
 
     public function academic_rank()

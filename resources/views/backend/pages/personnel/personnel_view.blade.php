@@ -105,7 +105,11 @@
 
                     $.each(data.personnel.government, function() {
                         $.each(this, function(k, v) {
-                            $('#'+k).text(v);
+                            if (k === 'government_issued_image' && v) {
+                                $('#'+k).attr('src', `/${v}`);
+                            } else {
+                                $('#'+k).text(v);
+                            }
                         });
                     });
 

@@ -50,6 +50,7 @@ class PersonnelReviewed extends Notification
             'personnel_id' => $this->personnel->id,
             'personnel_firstname' => $this->personnel->firstname,
             'personnel_lastname' => $this->personnel->lastname,
+            'personnel_reject_reason' => $this->personnel->reject_reason,
             'personnel_reviewed_by' => $this->reviewedByName,
             'status' => $this->status,
         ];

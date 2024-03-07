@@ -49,4 +49,9 @@ class LoginController extends Controller
 
         return '/dashboard';
     }
+
+    public function authenticated(Request $request, $user)
+    {
+        return redirect()->to($this->redirectTo());
+    }
 }

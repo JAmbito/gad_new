@@ -15,7 +15,7 @@ class CreatePersonnelQuestionairesTable extends Migration
     {
         Schema::create('personnel_questionaires', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('personnel_id');
+            $table->unsignedBigInteger('personnel_information_id');
             $table->string('question_34a')->nullable();
             $table->string('question_34b')->nullable();
             $table->string('question_34b_detail')->nullable();
@@ -41,7 +41,7 @@ class CreatePersonnelQuestionairesTable extends Migration
             $table->string('question_40c_detail')->nullable();
             $table->timestamps();
 
-            $table->foreign('personnel_id')
+            $table->foreign('personnel_information_id')
                 ->references('id')
                 ->on('personnels');
         });

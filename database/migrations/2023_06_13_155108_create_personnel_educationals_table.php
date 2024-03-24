@@ -15,7 +15,7 @@ class CreatePersonnelEducationalsTable extends Migration
     {
         Schema::create('personnel_educationals', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('personnel_id');
+            $table->unsignedBigInteger('personnel_information_id');
             $table->string('education_level')->nullable();
             $table->string('educational_school_name')->nullable();
             $table->string('educational_course')->nullable();
@@ -26,7 +26,7 @@ class CreatePersonnelEducationalsTable extends Migration
             $table->string('educational_scholarship_class')->nullable();
             $table->timestamps();
 
-            $table->foreign('personnel_id')
+            $table->foreign('personnel_information_id')
                 ->references('id')
                 ->on('personnels');
         });

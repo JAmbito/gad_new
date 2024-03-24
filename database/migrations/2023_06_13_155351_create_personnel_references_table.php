@@ -15,13 +15,13 @@ class CreatePersonnelReferencesTable extends Migration
     {
         Schema::create('personnel_references', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('personnel_id');
+            $table->unsignedBigInteger('personnel_information_id');
             $table->string('reference_name')->nullable();
             $table->string('reference_address')->nullable();
             $table->string('reference_tel_no')->nullable();
             $table->timestamps();
 
-            $table->foreign('personnel_id')
+            $table->foreign('personnel_information_id')
                 ->references('id')
                 ->on('personnels');
         });

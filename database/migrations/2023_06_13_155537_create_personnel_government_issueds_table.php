@@ -15,7 +15,7 @@ class CreatePersonnelGovernmentIssuedsTable extends Migration
     {
         Schema::create('personnel_government_issueds', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('personnel_id');
+            $table->unsignedBigInteger('personnel_information_id');
             $table->string('government_issued_id')->nullable();
             $table->string('government_issued_passport')->nullable();
             $table->string('government_date_issuance')->nullable();
@@ -24,7 +24,7 @@ class CreatePersonnelGovernmentIssuedsTable extends Migration
             $table->string('government_issued_appointment')->nullable();
             $table->timestamps();
 
-            $table->foreign('personnel_id')
+            $table->foreign('personnel_information_id')
                 ->references('id')
                 ->on('personnels');
         });

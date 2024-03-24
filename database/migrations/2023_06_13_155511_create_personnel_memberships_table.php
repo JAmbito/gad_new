@@ -15,11 +15,11 @@ class CreatePersonnelMembershipsTable extends Migration
     {
         Schema::create('personnel_memberships', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('personnel_id')->nullable();
+            $table->unsignedBigInteger('personnel_information_id')->nullable();
             $table->string('membership');
             $table->timestamps();
 
-            $table->foreign('personnel_id')
+            $table->foreign('personnel_information_id')
                 ->references('id')
                 ->on('personnels');
         });

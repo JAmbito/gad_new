@@ -15,7 +15,7 @@ class CreatePersonnelWorksTable extends Migration
     {
         Schema::create('personnel_works', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('personnel_id');
+            $table->unsignedBigInteger('personnel_information_id');
             $table->string('work_from')->nullable();
             $table->string('work_to')->nullable();
             $table->string('work_position')->nullable();
@@ -26,7 +26,7 @@ class CreatePersonnelWorksTable extends Migration
             $table->string('work_gov_service')->nullable();
             $table->timestamps();
 
-            $table->foreign('personnel_id')
+            $table->foreign('personnel_information_id')
                 ->references('id')
                 ->on('personnels');
         });

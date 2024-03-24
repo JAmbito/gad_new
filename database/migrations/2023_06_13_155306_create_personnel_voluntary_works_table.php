@@ -15,7 +15,7 @@ class CreatePersonnelVoluntaryWorksTable extends Migration
     {
         Schema::create('personnel_voluntary_works', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('personnel_id');
+            $table->unsignedBigInteger('personnel_information_id');
             $table->string('voluntary_name')->nullable();
             $table->string('voluntary_address')->nullable();
             $table->string('voluntary_from')->nullable();
@@ -24,7 +24,7 @@ class CreatePersonnelVoluntaryWorksTable extends Migration
             $table->string('voluntary_position')->nullable();
             $table->timestamps();
 
-            $table->foreign('personnel_id')
+            $table->foreign('personnel_information_id')
                 ->references('id')
                 ->on('personnels');
         });

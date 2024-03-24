@@ -106,8 +106,10 @@ class CreatePermissionTables extends Migration
             }
         }
 
-        $superadmin = User::where('email', 'superadmin@gmail.com')->firstOrFail();
-        $superadmin->assignRole(Role::findByName(RoleSupport::ROLE_SUPERADMINISTRATOR));
+        $superadmin = User::where('email', 'superadmin@gmail.com')->first();
+        if ($superadmin) {
+            $superadmin->assignRole(Role::findByName(RoleSupport::ROLE_SUPERADMINISTRATOR));
+        }
 
         app('cache')
             ->store(config('permission.cache.store') != 'default' ? config('permission.cache.store') : null)

@@ -15,7 +15,7 @@ class CreatePersonnelLearningsTable extends Migration
     {
         Schema::create('personnel_learnings', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('personnel_id');
+            $table->unsignedBigInteger('personnel_information_id');
             $table->string('learning_training')->nullable();
             $table->string('learning_from')->nullable();
             $table->string('learning_to')->nullable();
@@ -24,7 +24,7 @@ class CreatePersonnelLearningsTable extends Migration
             $table->string('learning_sponsored')->nullable();
             $table->timestamps();
 
-            $table->foreign('personnel_id')
+            $table->foreign('personnel_information_id')
                 ->references('id')
                 ->on('personnels');
         });

@@ -15,7 +15,7 @@ class CreatePersonnelFamiliesTable extends Migration
     {
         Schema::create('personnel_families', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('personnel_id');
+            $table->unsignedBigInteger('personnel_information_id');
             $table->string('spouse_firstname')->nullable();
             $table->string('spouse_middlename')->nullable();
             $table->string('spouse_lastname')->nullable();
@@ -35,7 +35,7 @@ class CreatePersonnelFamiliesTable extends Migration
             $table->string('mother_extension')->nullable();
             $table->timestamps();
 
-            $table->foreign('personnel_id')
+            $table->foreign('personnel_information_id')
                 ->references('id')
                 ->on('personnels');
         });

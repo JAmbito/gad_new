@@ -15,14 +15,14 @@ class CreatePersonnelChildrensTable extends Migration
     {
         Schema::create('personnel_childrens', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('personnel_id');
+            $table->unsignedBigInteger('personnel_information_id');
             $table->string('children_name')->nullable();
             $table->string('children_sex')->nullable();
             $table->string('children_birthday')->nullable();
             $table->string('children_disability')->nullable();
             $table->timestamps();
 
-            $table->foreign('personnel_id')
+            $table->foreign('personnel_information_id')
                 ->references('id')
                 ->on('personnels');
         });

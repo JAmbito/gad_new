@@ -15,7 +15,7 @@ class CreatePersonnelServicesTable extends Migration
     {
         Schema::create('personnel_services', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('personnel_id');
+            $table->unsignedBigInteger('personnel_information_id');
             $table->string('service_career')->nullable();
             $table->string('service_rating')->nullable();
             $table->string('service_exam_date')->nullable();
@@ -24,7 +24,7 @@ class CreatePersonnelServicesTable extends Migration
             $table->string('service_license_date')->nullable();
             $table->timestamps();
 
-            $table->foreign('personnel_id')
+            $table->foreign('personnel_information_id')
                 ->references('id')
                 ->on('personnels');
         });

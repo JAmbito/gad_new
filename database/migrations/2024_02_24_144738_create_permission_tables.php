@@ -2,6 +2,7 @@
 
 use App\Support\RoleSupport;
 use App\User;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -107,9 +108,18 @@ class CreatePermissionTables extends Migration
         }
 
         $superadmin = User::where('email', 'superadmin@gmail.com')->first();
-        if ($superadmin) {
-            $superadmin->assignRole(Role::findByName(RoleSupport::ROLE_SUPERADMINISTRATOR));
+        if (!$superadmin) {
+            DB::table('users')->insert([
+                [
+                    'name' => 'Super Admin',
+                    'email' => 'superadmin@gmail.com',
+                    'password' => Hash::make('P@ssw0rd')
+                ],
+            ]);
+            $superadmin = User::where('email', 'superadmin@gmail.com')->first();
         }
+
+        $superadmin->assignRole(Role::findByName(RoleSupport::ROLE_SUPERADMINISTRATOR));
 
         app('cache')
             ->store(config('permission.cache.store') != 'default' ? config('permission.cache.store') : null)

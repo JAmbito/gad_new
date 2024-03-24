@@ -1,5 +1,6 @@
 <?php
 
+use App\User;
 use Illuminate\Database\Seeder;
 
 class UserTableSeeder extends Seeder
@@ -11,12 +12,16 @@ class UserTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('users')->insert([
-            [
-                'name' => 'Super Admin',
-                'email' => 'superadmin@gmail.com',
-                'password' => Hash::make('P@ssw0rd')
-            ],
-        ]);
+        $superadmin = User::where('email', 'superadmin@gmail.com')->first();
+        if (!$superadmin) {
+            DB::table('users')->insert([
+                [
+                    'name' => 'Super Admin',
+                    'email' => 'superadmin@gmail.com',
+                    'password' => Hash::make('P@ssw0rd')
+                ],
+            ]);
+        }
+
     }
 }

@@ -43,7 +43,7 @@
 
                         <span class="id-count-class">
                             <span
-                                style="padding: 2px 7px; border-radius: 50px; background-color: #C30000!important; color: #fff!important; border-bottom: none; font-size: 12px;">
+                                style="padding: 2px 7px; border-radius: 50px; background-color: #C30000!important; color: #fff!important; border-bottom: none; font-size: 12px;" id="entity-count">
                                 {{ App\ManagementType::count() }}
                             </span>
                         </span>
@@ -117,6 +117,18 @@
         var action = 'save';
         var hold_id = null;
 
+        function updatePageCount() {
+            $.ajax({
+                url: '/management_type/get',
+                method: 'get',
+                data: {},
+                success: function({data}) {
+                    $('#entity-count').text(data.length ?? 0);
+                }
+            });
+        }
+        updatePageCount();
+
         function edit(id) {
             action = 'update';
             hold_id = id;
@@ -152,6 +164,7 @@
             $('.error-message').remove();
 
             $.post('/management_type/save', data).done(function (response) {
+                updatePageCount();
                 clearField();
                 $('#management_modal').hide();
                 toastr.success('Record saved');
@@ -188,6 +201,7 @@
             $.get('/management_type/destroy/' + hold_id).done(function (response) {
                 $('#confirmModal').hide();
                 clearField();
+                updatePageCount();
                 table.clear().draw();
             });
         }

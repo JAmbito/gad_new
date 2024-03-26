@@ -64,7 +64,6 @@
                     </div>
                     <select id="designation_id" name="designation_id" style="height: 38px; margin-bottom: 25px;"
                             required>
-                        <option style="display: none;" value="">-SELECT Designation-</option>
                         @foreach ($designations as $designation)
                             <option value="{{ $designation->id }}">{{ $designation->designation }}</option>
                         @endforeach
@@ -75,7 +74,6 @@
                         <label>Department</label><span class="additional-span">( REQUIRED )</span>
                     </div>
                     <select id="department_id" name="department_id" style="height: 38px; margin-bottom: 25px;" required>
-                        <option style="display: none;" value="">-SELECT Department-</option>
                         @foreach ($departments as $department)
                             <option value="{{ $department->id }}">{{ $department->department }}</option>
                         @endforeach
@@ -91,7 +89,6 @@
                     </div>
                     <select id="academic_rank_id" name="academic_rank_id" style="height: 38px; margin-bottom: 25px;"
                             required>
-                        <option style="display: none;" value="">-SELECT RANK-</option>
                         @foreach ($academic_ranks as $academic_rank)
                             <option value="{{ $academic_rank->id }}">{{ $academic_rank->academic_rank }}</option>
                         @endforeach
@@ -103,7 +100,6 @@
                     </div>
                     <select id="administrative_rank_id" name="administrative_rank_id"
                             style="height: 38px; margin-bottom: 25px;" required>
-                        <option style="display: none;" value="">-SELECT RANK-</option>
                         @foreach ($administrative_ranks as $administrative_rank)
                             <option
                                 value="{{ $administrative_rank->id }}">{{ $administrative_rank->administrative_rank }}</option>
@@ -132,7 +128,6 @@
                         <label>CAMPUS</label><span class="additional-span">( REQUIRED )</span>
                     </div>
                     <select id="campus_id" name="campus_id" style="height: 38px; margin-bottom: 25px;" required>
-                        <option style="display: none;" value="">-SELECT CAMPUS-</option>
                         @foreach ($campuses as $campus)
                             <option value="{{ $campus->id }}"
                                     @if(Auth::user()->campus && Auth::user()->campus->id === $campus->id) selected @endif>{{ $campus->campus_name }}</option>
@@ -168,7 +163,7 @@
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; grid-gap: 15px;">
                 <div>
-                    <label>HEIGHT (m)</label>
+                    <label>HEIGHT (cm)</label>
                     <input type="text" id="height" name="height" placeholder="----" style="margin-bottom: 23px;"
                            value="">
                 </div>
@@ -330,7 +325,7 @@
                                style="width: 12px!important; cursor: pointer;">
                     </div>
                     <div style="margin-top: -15px">
-                        <span class="additional-span" style="text-transform: uppercase; color: #AEAEAE">(Same as Residetial Address)</span>
+                        <span class="additional-span" style="text-transform: uppercase; color: #AEAEAE">(Same as Residential Address)</span>
                     </div>
                 </div>
             </div>

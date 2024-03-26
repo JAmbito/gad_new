@@ -33,7 +33,7 @@
                     <div class="table-header" id="header">
 
                         <span class="id-count-class">
-                            <span style="padding: 2px 7px; border-radius: 50px; background-color: #C30000!important; color: #fff!important; border-bottom: none; font-size: 12px;">
+                            <span style="padding: 2px 7px; border-radius: 50px; background-color: #C30000!important; color: #fff!important; border-bottom: none; font-size: 12px;" id="entity-count">
                                 {{ App\Campus::count() }}
                             </span>
                         </span>
@@ -185,6 +185,19 @@
         var action = 'save';
         var hold_id = null;
 
+        function updatePageCount() {
+            $.ajax({
+                url: '/campus/get',
+                method: 'get',
+                data: {},
+                success: function({data}) {
+                    $('#entity-count').text(data.length ?? 0);
+                }
+            });
+        }
+        updatePageCount();
+
+
         function edit(id){
             action = 'update';
             hold_id = id;
@@ -241,6 +254,8 @@
                     $('.'+field).append('<span id="'+field+'_error_message" class="error-message">'+response.responseJSON.errors[field][0]+'</span>');
                 }
             });
+
+            updatePageCount();
         }
 
         function clearField() {
@@ -264,6 +279,7 @@
             $.get('/campus/destroy/' + hold_id).done(function(response) {
                 $('#confirmModal').hide();
                 clearField();
+                updatePageCount();
                 table.clear().draw();
             });
         }
@@ -357,6 +373,7 @@
                         table.clear().draw();
                         $('#campus_modal').hide();
                         toastr.success('Record saved');
+                        updatePageCount();
                     },
                     error: function(data){
                         toastr.error('Record not saved');

@@ -50,7 +50,6 @@
                 </div>
                 <div>
                     <select id="administrative_rank_id" name="administrative_rank_id" class="province_class" style="margin-bottom: 23px;">
-                        <option style="display: none;" value="">--SELECT ADMINISTRATIVE RANK--</option>
                         @foreach ($administrative_ranks as $administrative_rank)
                             <option value="{{ $administrative_rank->id }}">{{ $administrative_rank->administrative_rank }}</option>
                         @endforeach
@@ -78,7 +77,6 @@
                 </div>
                 <div>
                     <select id="department_id" name="department_id" class="province_class" style="margin-bottom: 23px;">
-                        <option style="display: none;" value="">--SELECT DEPARTMENT--</option>
                         @foreach ($departments as $department)
                             <option value="{{ $department->id }}">{{ $department->department }}</option>
                         @endforeach

@@ -68,6 +68,26 @@
         let wait = false;
 
         $(document).ready(function (e) {
+            $('#same-address-checkbox').change(() => {
+                if ($('#same-address-checkbox').is(':checked')) {
+                    $('#permanent_lot_no').val($('#residential_lot_no').val());
+                    $('#permanent_street').val($('#residential_street').val());
+                    $('#permanent_subdivision').val($('#residential_subdivision').val());
+                    $('#permanent_barangay').val($('#residential_barangay').val());
+                    $('#permanent_city').val($('#residential_city').val());
+                    $('#permanent_province').val($('#residential_province').val());
+                    $('#permanent_zipcode').val($('#residential_zipcode').val());
+                } else {
+                    $('#permanent_lot_no').val('');
+                    $('#permanent_street').val('');
+                    $('#permanent_subdivision').val('');
+                    $('#permanent_barangay').val('');
+                    $('#permanent_city').val('');
+                    $('#permanent_province').val('');
+                    $('#permanent_zipcode').val('');
+                }
+            });
+
             $('#img-form').on('submit',(function(e) {
                 e.preventDefault();
                 var formData = new FormData();

@@ -33,7 +33,7 @@
                     <div class="table-header" id="header">
 
                         <span class="id-count-class">
-                            <span style="padding: 2px 7px; border-radius: 50px; background-color: #C30000!important; color: #fff!important; border-bottom: none; font-size: 12px;">
+                            <span style="padding: 2px 7px; border-radius: 50px; background-color: #C30000!important; color: #fff!important; border-bottom: none; font-size: 12px;" id="entity-count">
                                 {{ App\Department::count() }}
                             </span>
                         </span>
@@ -88,6 +88,18 @@
         var action = 'save';
         var hold_id = null;
 
+        function updatePageCount() {
+            $.ajax({
+                url: '/department/get',
+                method: 'get',
+                data: {},
+                success: function({data}) {
+                    $('#entity-count').text(data.length ?? 0);
+                }
+            });
+        }
+        updatePageCount();
+
         function edit(id){
             action = 'update';
             hold_id = id;
@@ -125,6 +137,7 @@
                 clearField();
                 $('#department_modal').hide();
                 toastr.success('Record saved');
+                updatePageCount();
                 table.clear().draw();
             }).fail(function(response) {
                 toastr.error('Record not saved');
@@ -156,6 +169,7 @@
             $.get('/department/destroy/' + hold_id).done(function(response) {
                 $('#confirmModal').hide();
                 clearField();
+                updatePageCount();
                 table.clear().draw();
             });
         }

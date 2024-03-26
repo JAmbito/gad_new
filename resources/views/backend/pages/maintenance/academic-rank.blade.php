@@ -33,7 +33,7 @@
                     <div class="table-header" id="header">
 
                         <span class="id-count-class">
-                            <span style="padding: 2px 7px; border-radius: 50px; background-color: #C30000!important; color: #fff!important; border-bottom: none; font-size: 12px;">
+                            <span style="padding: 2px 7px; border-radius: 50px; background-color: #C30000!important; color: #fff!important; border-bottom: none; font-size: 12px;" id="entity-count">
                                 {{ App\AcademicRank::count() }}
                             </span>
                         </span>
@@ -88,6 +88,18 @@
         var action = 'save';
         var hold_id = null;
 
+        function updatePageCount() {
+            $.ajax({
+                url: '/academic_rank/get',
+                method: 'get',
+                data: {},
+                success: function({data}) {
+                    $('#entity-count').text(data.length ?? 0);
+                }
+            });
+        }
+        updatePageCount();
+
         function edit(id){
             action = 'update';
             hold_id = id;
@@ -124,6 +136,7 @@
             $.post('/academic_rank/save', data).done(function(response){
                 clearField();
                 $('#academic_modal').hide();
+                updatePageCount();
                 toastr.success('Record saved');
                 table.clear().draw();
             }).fail(function(response) {
@@ -155,6 +168,7 @@
         function deleteRecord() {
             $.get('/academic_rank/destroy/' + hold_id).done(function(response) {
                 $('#confirmModal').hide();
+                updatePageCount();
                 clearField();
                 table.clear().draw();
             });

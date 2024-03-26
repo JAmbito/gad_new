@@ -17,7 +17,12 @@ Please drop the existing database or all the tables then proceed with the steps 
 
 ## Optional seeders (For development)
 php artisan db:seed --class=DepartmentsTableSeeder
+
 php artisan db:seed --class=CampusesTableSeeder
+
 php artisan db:seed --class=AdministrativeRanksTableSeeder
-php artisan db:seed --class=AcademicRanksTableSeeder      
+
+php artisan db:seed --class=AcademicRanksTableSeeder 
+
 php artisan db:seed --class=DesignationsTableSeeder
+

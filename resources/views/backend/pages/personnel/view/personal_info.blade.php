@@ -63,12 +63,12 @@
                 <div>
                     <label>Designation</label>
                     <br/>
-                    <span id="" style="margin-bottom: 23px;">{{ $designations->find($personnel->designation_id)->designation }}</span>
+                    <span id="" style="margin-bottom: 23px;">{{ $designations->find($personnel->designation_id) ? $designations->find($personnel->designation_id)->designation : '-' }}</span>
                 </div>
                 <div>
                     <label>Department</label>
                     <br/>
-                    <span id="" style="margin-bottom: 23px;">{{ $departments->find($personnel->department_id)->department }}</span>
+                    <span id="" style="margin-bottom: 23px;">{{ $departments->find($personnel->department_id) ? $departments->find($personnel->department_id)->department : '-' }}</span>
                 </div>
             </div>
 
@@ -76,12 +76,12 @@
                 <div>
                     <label>ACADEMIC RANK</label>
                     <br/>
-                    <span id="" style="margin-bottom: 23px;">{{ $academic_ranks->find($personnel->academic_rank_id)->academic_rank }}</span>
+                    <span id="" style="margin-bottom: 23px;">{{ $academic_ranks->find($personnel->academic_rank_id) ? $academic_ranks->find($personnel->academic_rank_id)->academic_rank : '-' }}</span>
                 </div>
                 <div>
                     <label>ADMINISTRATIVE RANK</label>
                     <br/>
-                    <span id="" style="margin-bottom: 23px;">{{ $administrative_ranks->find($personnel->administrative_rank_id)->administrative_rank }}</span>
+                    <span id="" style="margin-bottom: 23px;">{{ $administrative_ranks->find($personnel->administrative_rank_id) ? $administrative_ranks->find($personnel->administrative_rank_id)->administrative_rank : '-' }}</span>
                     <span id="birthday" style="margin-bottom: 23px;"></span>
                 </div>
                 <div>
@@ -92,7 +92,7 @@
                 <div>
                     <label>CAMPUS</label>
                     <br/>
-                    <span id="" style="margin-bottom: 23px;">{{ $campuses->find($personnel->campus_id)->campus_name }}</span>
+                    <span id="" style="margin-bottom: 23px;">{{ $campuses->find($personnel->campus_id) ? $campuses->find($personnel->campus_id)->campus_name : '-' }}</span>
                 </div>
             </div>
 
@@ -108,7 +108,7 @@
                     <span id="civil_status" style="margin-bottom: 23px;"></span>
                 </div>
                 <div>
-                    <label>HEIGHT (m)</label>
+                    <label>HEIGHT (cm)</label>
                     <br/>
                     <span id="height" style="margin-bottom: 23px;"></span>
                 </div>

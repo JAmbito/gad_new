@@ -4,10 +4,9 @@
     <div style="padding: 30px 25px 0px 27px;">
         <div class="bhc-img" style="overflow-x: hidden;">
             <img src="{{ asset('gad/Super_Admin/img/log123.png') }}">
-            <h2 style="white-space: normal;"></h2>
+            <h2 style="white-space: normal;">{{ Auth::user()->campus ? Auth::user()->campus->campus_name : 'All Campuses' }}</h2>
         </div>
     </div>
-
     <div class="padd-cont" style="margin-top: -70px;">
 
         <ul class="side-menu top">

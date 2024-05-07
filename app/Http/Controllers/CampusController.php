@@ -38,7 +38,6 @@ class CampusController extends Controller
             'email' => ['required', 'max:250'],
             'tel_no' => ['required', 'max:250'],
             'mobile_no' => ['required', 'max:250'],
-            'image' => ['required', 'max:250'],
         ]);
 
         $request->request->add(['created_user' => Auth::user()->id]);

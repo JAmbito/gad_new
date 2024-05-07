@@ -3,7 +3,7 @@
 ## Fresh set up?
 Run the steps below:
 1. Run composer install - This will download all PHP dependency packages
-2. Copy `.env.example` to `.env` - This is used for ENVIRONMENT variables read by Laravel
+2. Copy `.env.example` to `.env` - This is used for ENVIRONMENT variables read by Laravel (If running on a live server, change `APP_ENV` variable to `production` instead of `local`)
 3. Run php artisan key:generate - This will create an application key inside .env
 4. Run php artisan storage:link - This will create symlink to public/storage directory
 5. Run php artisan migrate - This will create the tables and all necessary sql scripts

@@ -136,7 +136,14 @@
                     @endcan
                     {data: 'personnel_information.firstname', title: 'firstname'},
                     {data: 'personnel_information.lastname', title: 'lastname'},
-                    {data: 'personnel_information.campus.campus_name', title: 'Campus'},
+                    {data: 'personnel_information.campus.campus_name', title: 'Campus', render: function (data, type, row, meta) {
+                            if (data) {
+                                return data;
+                            }
+
+                            return '';
+                        }
+                    },
                     {
                         data: 'personnel_information.created_by.name', title: 'Created by', render: function (data, type, row, meta) {
                             if (data) {

@@ -166,11 +166,46 @@
                     @endcanany
                     {data: 'personnel_information.firstname', title: 'firstname'},
                     {data: 'personnel_information.lastname', title: 'lastname'},
-                    {data: 'personnel_information.academic_rank.academic_rank', title: 'Academic Rank'},
-                    {data: 'personnel_information.administrative_rank.administrative_rank', title: 'Administrative Rank'},
-                    {data: 'personnel_information.designation.designation', title: 'Position'},
-                    {data: 'personnel_information.department.department', title: 'Department'},
-                    {data: 'personnel_information.campus.campus_name', title: 'Campus'},
+                    {data: 'personnel_information.academic_rank.academic_rank', title: 'Academic Rank', render: function (data, type, row, meta) {
+                            if (data) {
+                                return data;
+                            }
+
+                            return '';
+                        }
+                    },
+                    {data: 'personnel_information.administrative_rank.administrative_rank', title: 'Administrative Rank', render: function (data, type, row, meta) {
+                            if (data) {
+                                return data;
+                            }
+
+                            return '';
+                        }
+                    },
+                    {data: 'personnel_information.designation.designation', title: 'Position', render: function (data, type, row, meta) {
+                            if (data) {
+                                return data;
+                            }
+
+                            return '';
+                        }
+                    },
+                    {data: 'personnel_information.department.department', title: 'Department', render: function (data, type, row, meta) {
+                            if (data) {
+                                return data;
+                            }
+
+                            return '';
+                        }
+                    },
+                    {data: 'personnel_information.campus.campus_name', title: 'Campus', render: function (data, type, row, meta) {
+                            if (data) {
+                                return data;
+                            }
+
+                            return '';
+                        }
+                    },
                     {data: 'personnel_information.employee_status', title: 'Employment Status'},
                     {
                         data: 'personnel_information.created_by.name', title: 'Created by', render: function (data, type, row, meta) {

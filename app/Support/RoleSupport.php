@@ -76,6 +76,7 @@ class RoleSupport
             case self::ROLE_ENCODER:
                 return [
                     self::PERMSSION_READ_DASHBOARD,
+                    self::PERMISSION_UPDATE_PERSONNEL,
                     self::PERMISSION_READ_PERSONNEL,
                     self::PERMISSION_CREATE_PERSONNEL,
                 ];

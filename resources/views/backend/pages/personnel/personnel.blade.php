@@ -152,7 +152,7 @@
                                 html += '<a data-id="1" class="btn-update" href="/personnel/edit/' + data.personnel_information.id + '">Edit</a>';
                                 html += '</div>';
                                 @endcan
-                                    @can(RoleSupport::PERMISSION_UPDATE_PERSONNEL)
+                                    @can(RoleSupport::PERMISSION_DELETE_PERSONNEL)
                                     html += '<div style="text-align: left;">';
                                 html += '<button data-id="2" class="btn-delete" onclick="confirmDelete(' + data.personnel_information.id + ')">Delete</button>';
                                 html += '</div>';

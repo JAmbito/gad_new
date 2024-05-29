@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Campus;
+use App\EmploymentStatus;
 use App\ManagementType;
 use App\PersonnelInformation;
 use App\PersonnelEducational;
@@ -149,12 +150,15 @@ class ReportGeneratorService
     {
         $maleByEmploymentStatus = [];
         $femaleByEmploymentStatus = [];
-        foreach (PersonnelInformation::EMPLOYEE_STATUSES as $employmentStatus) {
-            $maleByEmploymentStatus[$employmentStatus] = PersonnelVersion::where('is_current', true)->whereHas('personnel_information', function ($q) use ($employmentStatus) {
-                $this->filterByCampus($q->where('employee_status', $employmentStatus)->where('sex', 'MALE'));
+        $employmentStatuses = EmploymentStatus::orderBy('id')->get();
+
+        foreach ($employmentStatuses as $employmentStatus) {
+            $employmentStatusName = strtoupper($employmentStatus->employment_status);
+            $maleByEmploymentStatus[$employmentStatusName] = PersonnelVersion::where('is_current', true)->whereHas('personnel_information', function ($q) use ($employmentStatusName) {
+                $this->filterByCampus($q->where('employee_status', $employmentStatusName)->where('sex', 'MALE'));
             })->count();
-            $femaleByEmploymentStatus[$employmentStatus] = PersonnelVersion::where('is_current', true)->whereHas('personnel_information', function ($q) use ($employmentStatus) {
-                $this->filterByCampus($q->where('employee_status', $employmentStatus)->where('sex', 'FEMALE'));
+            $femaleByEmploymentStatus[$employmentStatusName] = PersonnelVersion::where('is_current', true)->whereHas('personnel_information', function ($q) use ($employmentStatusName) {
+                $this->filterByCampus($q->where('employee_status', $employmentStatusName)->where('sex', 'FEMALE'));
             })->count();
         }
         return array(

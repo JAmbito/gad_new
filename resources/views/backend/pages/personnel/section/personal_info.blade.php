@@ -117,8 +117,9 @@
                     <select id="employee_status" name="employee_status" style="height: 38px; margin-bottom: 25px;"
                             required>
                         <option style="display: none;" value="">-SELECT STATUS-</option>
-                        @foreach(PersonnelInformation::EMPLOYEE_STATUSES as $employeeStatus)
-                            <option value="{{ $employeeStatus }}">{{ $employeeStatus }}</option>
+                        @foreach ($employment_statuses as $employment_status)
+                            <option
+                                value="{{ $employment_status->id }}">{{ $employment_status->employment_status }}</option>
                         @endforeach
 
                     </select>
@@ -184,6 +185,10 @@
                         <option value="O+">O+</option>
                         <option value="B+">B+</option>
                         <option value="AB+">AB+</option>
+                        <option value="A">A</option>
+                        <option value="O">O</option>
+                        <option value="B">B</option>
+                        <option value="AB">AB</option>
                         <option value="A-">A-</option>
                         <option value="O-">O-</option>
                         <option value="B-">B-</option>

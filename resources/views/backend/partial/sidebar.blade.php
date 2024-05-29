@@ -45,7 +45,7 @@
                         <input type="text" class="data_management_class" hidden>
                     </a>
                 </li>
-                <ul id="dash-dropdown" class="{{ (request()->is('campus*', 'designation*', 'management_type*', 'administrative*', 'academic_rank*', 'department*')) ? 'drop-dash' : '' }}">
+                <ul id="dash-dropdown" class="{{ (request()->is('campus*', 'designation*', 'management_type*', 'administrative*', 'academic_rank*', 'department*', 'employment_status*')) ? 'drop-dash' : '' }}">
                     <li class="emp-down-li emp-ac emp-paydas">
                         <a href="{{ url('campus') }}">
                             <h4 style="color: #D5D5D5; margin-right: 8px">—</h4>
@@ -98,6 +98,13 @@
                         <a href="{{ url('department') }}">
                             <h4 style="color: #D5D5D5; margin-right: 8px">—</h4>
                             <span class="text ">&nbsp;Department</span>
+                            <input type="text" name="units" class="units_class" hidden>
+                        </a>
+                    </li>
+                    <li class="emp-down-li emp-ac emp-paydas">
+                        <a href="{{ url('employment_status') }}">
+                            <h4 style="color: #D5D5D5; margin-right: 8px">—</h4>
+                            <span class="text ">&nbsp;Employment Status</span>
                             <input type="text" name="units" class="units_class" hidden>
                         </a>
                     </li>

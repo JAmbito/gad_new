@@ -89,11 +89,11 @@
             </thead>
             <tbody>
 
-            @foreach(PersonnelInformation::EMPLOYEE_STATUSES as $employmentStatus)
+            @foreach($employment_statuses as $employment_status)
                 <tr>
-                    <td class="emp_status">{{ $employmentStatus }} EMPLOYMENT</td>
-                    <td id="MALE_{{ str_replace(' ', '_', $employmentStatus) }}">0</td>
-                    <td id="FEMALE_{{ str_replace(' ', '_', $employmentStatus) }}">0</td>
+                    <td class="emp_status" style="text-transform: uppercase;">{{ strtoupper($employment_status->employment_status) }} EMPLOYMENT</td>
+                    <td id="MALE_{{ str_replace(' ', '_', strtoupper($employment_status->employment_status)) }}">0</td>
+                    <td id="FEMALE_{{ str_replace(' ', '_', strtoupper($employment_status->employment_status)) }}">0</td>
                 </tr>
             @endforeach
             </tbody>

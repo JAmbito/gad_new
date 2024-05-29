@@ -136,6 +136,29 @@
                         });
                     });
 
+                    // Uncomment if hiding text field is needed
+                    // $.each(data.personnel.question, function() {
+                    //     $.each(this, function(k, v) {
+                    //         if(v == "yes" || v == "no") {
+                    //             $("input[name="+ k +"]").change(function() {
+                    //                 const value = $(this).val();
+                    //                 if (value === 'yes') {
+                    //                     $("input[name="+ k +"_detail]").show();
+                    //                 } else {
+                    //                     $("input[name="+ k +"_detail]").hide();
+                    //                     $("input[name="+ k +"_detail]").val('');
+                    //                 }
+                    //             });
+                    //
+                    //             $("input[name="+ k +"][value='" + v + "']").prop("checked",true);
+                    //             $("input[name="+ k +"][value='" + v + "']").trigger('change');
+                    //         } else {
+                    //             $('#'+k).val(v);
+                    //             $("input[name="+ k.replace('_detail', '') +"]:checked").trigger('change');
+                    //         }
+                    //     });
+                    // });
+
                     $.each(data.personnel.reference, function() {
                         $.each(this, function(k, v) {
                             $('#'+k).val(v);

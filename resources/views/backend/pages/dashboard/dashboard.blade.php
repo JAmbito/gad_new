@@ -23,7 +23,7 @@
             @elseif(Auth::user()->hasRole(App\Support\RoleSupport::ROLE_APPROVER))
                 @include('backend.pages.dashboard.partial.approver')
             @elseif(Auth::user()->hasRole([App\Support\RoleSupport::ROLE_SUPERADMINISTRATOR, App\Support\RoleSupport::ROLE_ADMINISTRATOR]))
-                @include('backend.pages.dashboard.partial.administrator')
+                @include('backend.pages.dashboard.partial.administrator', ['employment_statuses' => $employment_statuses])
             @endif
         </div>
 

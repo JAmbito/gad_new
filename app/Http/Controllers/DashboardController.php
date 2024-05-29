@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Campus;
+use App\EmploymentStatus;
 use App\PersonnelVersion;
 use App\Services\ReportGeneratorService;
 use App\Support\RoleSupport;
@@ -20,6 +21,8 @@ class DashboardController extends Controller
     {
         $roleName = Auth::user()->getRoleNames()[0];
         $variables = [];
+        $employment_statuses = EmploymentStatus::orderBy('id')->get();
+        $variables = compact('employment_statuses');
         if ($roleName === RoleSupport::ROLE_ENCODER) {
             $total_employees_encoded_by_status = $reportGeneratorService->getTotalEmployeesEncodedByStatusByUser(Auth::user());
             $total_employees_encoded = PersonnelVersion::whereHas('personnel_information', function ($q) {
@@ -27,14 +30,14 @@ class DashboardController extends Controller
                     ['created_by', '=', Auth::user()->id],
                 ]);
             })->count();
-            $variables = compact('total_employees_encoded_by_status', 'total_employees_encoded');
+            $variables = compact('total_employees_encoded_by_status', 'total_employees_encoded', 'employment_statuses');
         } elseif ($roleName === RoleSupport::ROLE_APPROVER) {
             $total_employees_reviewed_by_status = $reportGeneratorService->getTotalEmployeesReviewedByStatusByUser(Auth::user());
             $total_employees_awaiting_review = $reportGeneratorService->getTotalEmployeesAwaitingReviewByCampus(Auth::user()->campus->id);
             $total_employees_reviewed = PersonnelVersion::whereHas('personnel_information', function ($q) {
                 $q->where('reviewed_by', Auth::user()->id)->whereIn('status', [StatusSupport::STATUS_APPROVED, StatusSupport::STATUS_ONHOLD, StatusSupport::STATUS_REJECTED]);
             })->count();
-            $variables = compact('total_employees_reviewed_by_status', 'total_employees_awaiting_review', 'total_employees_reviewed');
+            $variables = compact('total_employees_reviewed_by_status', 'total_employees_awaiting_review', 'total_employees_reviewed', 'employment_statuses');
         }
 
         return view('backend.pages.dashboard.dashboard', $variables);

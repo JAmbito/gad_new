@@ -111,14 +111,14 @@
                             if (v == "yes" || v == "no") {
                                 $("#" + k).text(v);
                             } else {
-                                $('#' + k).html(v || '<i>No answer</i>');
+                                $('#' + k).html(v || '');
                             }
                         });
                     });
 
                     $.each(data.personnel.reference, function () {
                         $.each(this, function (k, v) {
-                            $('#' + k).html(v || '<i>No answer</i>');
+                            $('#' + k).html(v || '');
                         });
                     });
 

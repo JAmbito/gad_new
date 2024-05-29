@@ -7,7 +7,7 @@
             <label style="font-size: 16.6px; text-decoration: underline;">II. FAMILY BACKGROUND</label>
         </div>
 
-        <div style="margin-bottom: 10px; border-top: 1px solid #939393; padding-top: 22px">
+        <div style="margin-bottom: 10px; border-top: 1px solid #939393; padding-top: 22px; text-transform: uppercase">
             <div style="margin-bottom: 15px">
                 <label style="font-size: 13px; text-decoration: underline;">(SPOUSE'S)</label>
             </div>

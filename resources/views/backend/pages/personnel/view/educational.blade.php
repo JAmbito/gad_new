@@ -1,6 +1,6 @@
 @php use App\PersonnelEducational; @endphp
 <div class="main-table-container-div" style="margin-top: 20px;">
-    <div id="educational-background" class="project-details-div" style="">
+    <div id="educational-background" class="project-details-div" style="text-transform: uppercase">
 
         <table class="table table-responsive-block"
                style="width: 100%; border: 1px solid #939393; border-radius: 6px; padding: 25px 30px 10px 30px; margin-bottom: 30px;"

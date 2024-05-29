@@ -1,6 +1,6 @@
 <!-- VIII. OTHER INFORMATION -->
 <div class="main-table-container-div" style="margin-top: 20px;">
-    <div id="other-information" class="project-details-div" style="width: 100%; border: 1px solid #939393; border-radius: 6px; padding: 50px 55px 50px 55px; margin-bottom: 30px;">
+    <div id="other-information" class="project-details-div" style="width: 100%; border: 1px solid #939393; border-radius: 6px; padding: 50px 55px 50px 55px; margin-bottom: 30px; text-transform: uppercase">
         <div style="margin-bottom:10px;">
             <label style="font-size: 16.6px; text-decoration: underline;">VIII. OTHER INFORMATION</label>
         </div>

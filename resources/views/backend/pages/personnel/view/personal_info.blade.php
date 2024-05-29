@@ -23,7 +23,7 @@
         </div>
 
         <!-- INPUTS PARENT -->
-        <div style="margin-bottom: 10px; border-top: 1px solid #939393; padding-top: 22px">
+        <div style="margin-bottom: 10px; border-top: 1px solid #939393; padding-top: 22px; text-transform: uppercase">
             <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; grid-gap: 15px;">
                 <div>
                     <label>Surname</label>

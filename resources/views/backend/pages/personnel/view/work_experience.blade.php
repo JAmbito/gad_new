@@ -3,7 +3,7 @@
 
     <div id="work-experience" class="project-details-div">
 
-        <table class="table table-responsive-block" style="width: 100%; border: 1px solid #939393; border-radius: 6px; padding: 25px 30px 10px 30px; margin-bottom: 30px;" id="work_table_id">
+        <table class="table table-responsive-block" style="width: 100%; border: 1px solid #939393; border-radius: 6px; padding: 25px 30px 10px 30px; margin-bottom: 30px; text-transform: uppercase" id="work_table_id">
 
             <thead>
                 <th class="name-border" style="font-size: 16.6px!important; text-decoration: underline; border: none; text-transform: uppercase; padding-bottom: 15px; padding-top: 0px;">V. WORK EXPERIENCE</th>

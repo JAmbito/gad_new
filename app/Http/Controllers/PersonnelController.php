@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\EmploymentStatus;
 use App\Http\StoreImageTrait;
 use App\Notifications\PersonnelCreated;
 use App\Notifications\PersonnelReviewed;
@@ -49,7 +50,8 @@ class PersonnelController extends Controller
         $administrative_ranks = Administrative_rank::orderBy('id')->get();
         $designations = Designation::orderBy('id')->get();
         $departments = Department::orderBy('id')->get();
-        return view('backend.pages.personnel.personnel_create', compact('academic_ranks', 'administrative_ranks', 'designations', 'departments', 'campuses'));
+        $employment_statuses = EmploymentStatus::orderBy('id')->get();
+        return view('backend.pages.personnel.personnel_create', compact('academic_ranks', 'administrative_ranks', 'designations', 'departments', 'campuses', 'employment_statuses'));
     }
 
     public function index()

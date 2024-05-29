@@ -76,6 +76,15 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/destroy/{id}', 'AcademicRankController@destroy')->name('delete');
     });
 
+    Route::group(['prefix' => 'employment_status', 'middleware' => ["role:". RoleSupport::ROLE_SUPERADMINISTRATOR]], function () {
+        Route::get('/', 'EmploymentStatusController@index')->name('get');
+        Route::post('/save', 'EmploymentStatusController@store')->name('save');
+        Route::get('/edit/{id}', 'EmploymentStatusController@edit')->name('edit');
+        Route::get('/get', 'EmploymentStatusController@get')->name('get');
+        Route::post('/update/{id}', 'EmploymentStatusController@update')->name('update');
+        Route::get('/destroy/{id}', 'EmploymentStatusController@destroy')->name('delete');
+    });
+
     Route::group(['prefix' => 'personnel'], function () {
         Route::get('/', 'PersonnelController@index')->name('personnel.index');
         Route::get('/create', 'PersonnelController@create')->name('personnel.create')->middleware('can:'.RoleSupport::PERMISSION_CREATE_PERSONNEL);

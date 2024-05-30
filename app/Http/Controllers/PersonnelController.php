@@ -447,6 +447,7 @@ class PersonnelController extends Controller
         $administrative_ranks = Administrative_rank::orderBy('id')->get();
         $designations = Designation::orderBy('id')->get();
         $departments = Department::orderBy('id')->get();
+        $employment_statuses = EmploymentStatus::orderBy('id')->get();
 
         $campus = Auth::user()->campus;
         if ($campus) {
@@ -454,7 +455,7 @@ class PersonnelController extends Controller
         } else {
             $campuses = Campus::orderBy('id')->get();
         }
-        return view('backend.pages.personnel.personnel_edit', compact('personnel', 'academic_ranks', 'administrative_ranks', 'designations', 'departments', 'campuses'));
+        return view('backend.pages.personnel.personnel_edit', compact('personnel', 'academic_ranks', 'administrative_ranks', 'designations', 'departments', 'campuses', 'employment_statuses'));
     }
 
     public function edit_personnel($id)

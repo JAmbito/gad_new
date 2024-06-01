@@ -435,8 +435,8 @@
 			    var html = '<tr>' +
 			      '<td>' +
 			      '<input type="hidden" name="work_id[]" class="work_id_class" placeholder="----" autocomplete="off" style="width: 180px; margin-right: 10px">' +
-			      '<input type="date" name="work_inclusive_date_from[]" class="work_from_class" placeholder="----" autocomplete="off" style="width: 180px; margin-right: 10px">' +
-			      '<input type="date" name="work_inclusive_date_to[]" class="work_to_class" placeholder="----" autocomplete="off" style="width: 180px">' +
+			      '<input type="text" name="work_inclusive_date_from[]" class="work_from_class" placeholder="----" autocomplete="off" style="width: 180px; margin-right: 10px">' +
+			      '<input type="text" name="work_inclusive_date_to[]" class="work_to_class" placeholder="----" autocomplete="off" style="width: 180px">' +
 			      '</td>' +
 			      '<td>' +
 			      '<input type="text" name="work_position[]" class="work_position_class" placeholder="----" autocomplete="off" style="width: 350px">' +

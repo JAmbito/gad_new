@@ -5,9 +5,11 @@
         <div style="margin-bottom: 25px; text-align: center">
             @if($personnel_version->version > 1)
                 <h4>Revision information version: v{{ $personnel_version->version }}</h4>
-                <a href="{{ route('personnel.view', ['id' => $latest_personnel_version->personnel_information_id]) }}">View current version</a>
-                <br/>
-                <br/>
+                @if($latest_personnel_version)
+                    <a href="{{ route('personnel.view', ['id' => $latest_personnel_version->personnel_information_id]) }}">View current version</a>
+                    <br/>
+                    <br/>
+                @endif
             @else
                 <h4>Information version: v{{ $personnel_version->version }}</h4>
             @endif
